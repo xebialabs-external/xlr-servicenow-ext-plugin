@@ -1,0 +1,120 @@
+/* Gradle plugins used in this project */
+buildscript {
+    repositories {
+        mavenLocal()
+        ["releases", "alphas"].each { r ->
+            maven {
+                url "${nexusBaseUrl}/repositories/${r}"
+                credentials {
+                    username nexusUserName
+                    password nexusPassword
+                }
+            }
+        }
+    }
+    dependencies {
+        // xl plugins plugin is required by xl-release-plugin-plugin
+        // it also pulls in release plugin and  opinion plugins that configure repositories and such
+        classpath "com.xebialabs.gradle.plugins:gradle-xl-plugins-plugin:${xlPluginsPluginVersion}"
+        classpath "com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:${xlReleasePluginPluginVersion}"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.moowork.node' version '0.12'
+    id "com.github.rzabini.gradle-jython" version "1.0.0"
+}
+
+apply plugin: 'xebialabs.root.opinions'
+apply plugin: 'xebialabs.opinions'
+apply plugin: 'com.xebialabs.dependency'
+
+apply plugin: 'com.xebialabs.xl-release.plugin'
+apply plugin: 'java'
+apply plugin: 'maven'
+
+/* Configuration of Node */
+node {
+    version = '6.3.1'
+    npmVersion = '3.6.0'
+    download = true
+}
+def distName = "xl-release"
+
+def xlrBase = "xl-release-server"
+
+tasks.release.dependsOn tasks.clean
+tasks.prepare.mustRunAfter tasks.clean
+
+configurations {
+    xlrDist
+}
+
+dependencies {
+    compile "com.xebialabs.deployit:udm-plugin-api"
+    xlrDist "com.xebialabs.xlrelease:${distName}-base:${xlReleaseVersion}:server@zip"
+}
+
+task copyXlrDist(type: Copy) {
+    from configurations.xlrDist
+    into file("${xlrBase}")
+}
+
+task unzipDist(type: Copy) {
+    from zipTree(file("${xlrBase}/${distName}-base-${xlReleaseVersion}-server.zip"))
+    into file("${xlrBase}")
+}
+
+/* Configure XL Release Gradle plugin */
+xlReleasePlugin {
+    // This enables or disables hot reloading of web and Jython sources
+    useSourcesDirectly = true
+    xlReleaseHome = "./xl-release-server/${distName}-${xlReleaseVersion}-server"
+}
+
+/* Configure this project */
+group 'com.xebialabs.xlrelease.plugins'
+
+task npmPrune(type: NpmTask) {
+    npmCommand = ['prune']
+    inputs.file 'package.json'
+    outputs.dir 'node_modules'
+}
+
+npmInstall.mustRunAfter npmPrune
+
+task npmDependencies(dependsOn: [npmPrune, npmInstall])
+
+unzipDist.dependsOn copyXlrDist
+startXLRelease.dependsOn npmDependencies, unzipDist
+
+task testEnd2End(type: NpmTask, dependsOn: startXLRelease) {
+    args = ['run', 'protractor']
+}
+
+testEnd2End.finalizedBy stopXLRelease
+
+compileJava.dependsOn unzipDist
+sourceSets.main.resources.srcDirs = ["src/main/resources"]
+sourceSets.test.resources.srcDirs = ["src/test/resources"]
+
+// Uncomment following line if you implement Java/Scala code depending on XL Release classes
+//configurations.compile.extendsFrom configurations.xlReleaseJars
+
+// Uncomment following line if your plugin depends on additional libraries
+dependencies {
+    xlReleaseAdditionalClasspath('com.xebialabs.deployit:udm-plugin-api:2015.2.13')
+}
+
+uploadArchives {
+    repositories {
+        maven {
+            credentials {
+                username nexusUserName
+                password nexusPassword
+            }
+            url "${nexusBaseUrl}/repositories/releases/"
+        }
+    }
+}

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<synthetic xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd"
+           xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <type type="servicenowxl.Server" label="ServiceNow: Server" extends="configuration.HttpConnection">
+        <property name="scriptLocation" default="servicenow/checkconnection.py" hidden="true"/>
+        <property name="changeRecordTableName" label="Change Record Table Name (Required for Generate Release)"
+                  required="true" default="change_request"/>
+        <property name="changeTaskTableName" label="Change Task Table Name (Required for Generate Release)"
+                  required="true" default="change_task"/>
+        <property name="sysparmDisplayValue" label="Retrieve display value" required="true" default="True"
+                  kind="boolean" description="If true returns display values for all of the fields"/>
+        <property name="sysparmInputDisplayValue" label="Input values are display values" required="true" default="True"
+                  kind="boolean" description="If true treats input values as display values"/>
+        <property name="useOAuth" label="Use ServiceNow OAuth Resource Server"
+                  description="Use OAuth instead of basic authentcation" required="false" category="OAuth"
+                  kind="boolean"/>
+        <property name="oauthUsername" label="Username" description="Mandatory if OAuth is enabled" required="false"
+                  category="OAuth"/>
+        <property name="oauthPassword" label="Password" description="Mandatory if OAuth is enabled" required="false"
+                  password="true" category="OAuth"/>
+        <property name="clientId" label="Client Id" description="Mandatory if OAuth is enabled" required="false"
+                  category="OAuth"/>
+        <property name="clientSecret" label="Client Secret" description="Mandatory if OAuth is enabled" required="false"
+                  password="true" category="OAuth"/>
+    </type>
+
+</synthetic>
+
