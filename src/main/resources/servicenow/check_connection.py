@@ -1,4 +1,4 @@
-from servicenow.ServiceNowClient import ServiceNowClient
+from servicenow.client.ServiceNowClient import ServiceNowClient
 params = {
     'url': configuration.url, 'username': configuration.username
     , 'password': configuration.password, 'useOAuth': configuration.useOAuth
