@@ -4,7 +4,7 @@
            xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <type type="servicenowxl.Server" label="ServiceNow: Server" extends="configuration.HttpConnection">
-        <property name="scriptLocation" default="servicenow/check_connection.py" hidden="true"/>
+        <property name="scriptLocation" default="servicenowxl/check_connection.py" hidden="true"/>
         <property name="changeRecordTableName" label="Change Record Table Name (Required for Generate Release)"
                   required="true" default="change_request"/>
         <property name="changeTaskTableName" label="Change Task Table Name (Required for Generate Release)"
@@ -27,7 +27,7 @@
     </type>
 
     <type type="servicenowxl.Task" extends="xlrelease.PythonScript" virtual="true">
-        <property name="iconLocation" default="servicenow/servicenow-icon.png" hidden="true"/>
+        <property name="iconLocation" default="servicenowxl/servicenow-icon.png" hidden="true"/>
         <property name="servicenowServer" category="input" label="Server" referenced-type="servicenowxl.Server" required="true"
                   kind="ci"/>
         <property name="username" category="input" required="false"/>
@@ -36,7 +36,7 @@
     </type>
 
     <type type="servicenowxl.CreateRecord" extends="servicenowxl.Task" label="ServiceNow: Create Record">
-        <property name="scriptLocation" default="servicenow/create_record.py" hidden="true"/>
+        <property name="scriptLocation" default="servicenowxl/create_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
         <property name="shortDescription" category="input" label="Short Description" required="true"/>
@@ -46,7 +46,7 @@
     </type>
 
     <type type="servicenowxl.CreateNewRecord" extends="servicenowxl.Task" label="ServiceNow: Create New Record">
-        <property name="scriptLocation" default="servicenow/create_new_record.py" hidden="true"/>
+        <property name="scriptLocation" default="servicenowxl/create_new_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
         <property name="content" category="input" label="Request Content" required="true" size="large"/>
@@ -55,7 +55,7 @@
     </type>
 
     <type type="servicenowxl.UpdateRecord" extends="servicenowxl.Task" label="ServiceNow: Update Record">
-        <property name="scriptLocation" default="servicenow/update_record.py" hidden="true"/>
+        <property name="scriptLocation" default="servicenowxl/update_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
         <property name="sysId" category="input" required="true"/>
@@ -63,7 +63,7 @@
     </type>
 
     <type type="servicenowxl.FindRecordByTicket" extends="servicenowxl.Task" label="ServiceNow: Find Record By Ticket">
-        <property name="scriptLocation" default="servicenow/find_record.py" hidden="true"/>
+        <property name="scriptLocation" default="servicenowxl/find_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
         <property name="ticket" category="input" required="true"/>

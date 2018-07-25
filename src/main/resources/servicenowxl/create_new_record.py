@@ -1,5 +1,5 @@
-from servicenow.client.ServiceNowClient import ServiceNowClient
-from servicenow.helper.helper import assert_not_null
+from servicenowxl.client.ServiceNowClient import ServiceNowClient
+from servicenowxl.helper.helper import assert_not_null
 
 assert_not_null(servicenowServer, "Server is mandatory")
 assert_not_null(tableName, "TableName is mandatory")
