@@ -11,7 +11,7 @@ var firefoxBinary = process.env.FIREFOX_BINARY || undefined;
 
 exports.config = {
     capabilities: {
-        "browserName": (process.env.SELENIUM_TEST_BROWSER || "firefox").toLowerCase(),
+        "browserName": (process.env.SELENIUM_TEST_BROWSER || "chrome").toLowerCase(),
         "platform": (process.env.SELENIUM_TEST_PLATFORM || "linux").toLowerCase(),
         "requireWindowFocus": true,
         "firefox_binary": firefoxBinary,
@@ -47,28 +47,28 @@ exports.config = {
 
         let dslFiles = require("glob").sync("../../../build/e2e-dsl/**/*.js", {cwd: __dirname});
         _.each(dslFiles, require);
-
+        By.addLocator("$", function () {
+            var selector = arguments[0];
+            var using = arguments[1] || document;
+            var results = $(using).find(selector);
+            var matches = [];
+            if (!$.isArray(results)) {
+                matches.push(results.get(0));
+            } else {
+                for (var i = 0; i < results.length; ++i) {
+                    matches.push(results[i][0]);
+                }
+            }
+            return matches; // Return the whole array for webdriver.findElements.
+        });
         Browser.open();
-        Browser.setSize(1024, 1024);
+        Browser.setSize(1200, 800);
         browser.manage().timeouts().setScriptTimeout(60 * 1000);
 
-        by.addLocator('dataTest', function(value, parentElement) {
-              parentElement = parentElement || document;
-              var nodes = parentElement.querySelectorAll('[data-test]');
-              return Array.prototype.filter.call(nodes, function(node) {
-                    return (node.getAttribute('data-test') === value);
-                 });
-         });
-
-         by.addLocator('title', function(value, parentElement) {
-               parentElement = parentElement || document;
-               var nodes = parentElement.querySelectorAll('[title]');
-               return Array.prototype.filter.call(nodes, function(node) {
-                     return (node.getAttribute('title') === value);
-                  });
-          });
     },
     params: {
+        scale: 'true',
+        cleanFixtures: 'true',
         servicenow: {
             address: 'https://dev19998.service-now.com/',
             username: 'admin',

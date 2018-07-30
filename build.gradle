@@ -17,6 +17,7 @@ buildscript {
         // it also pulls in release plugin and  opinion plugins that configure repositories and such
         classpath "com.xebialabs.gradle.plugins:gradle-xl-plugins-plugin:${xlPluginsPluginVersion}"
         classpath "com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:${xlReleasePluginPluginVersion}"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
     }
 }
 
@@ -36,9 +37,9 @@ apply plugin: 'maven'
 
 /* Configuration of Node */
 node {
-    version = '6.3.1'
-    npmVersion = '3.6.0'
+    yarnVersion = '0.22.0'
     download = true
+    nodeModulesDir = file("${rootProject.projectDir}")
 }
 def distName = "xl-release"
 
@@ -56,6 +57,10 @@ dependencies {
     compile "com.xebialabs.deployit:udm-plugin-api"
     xlrDist "com.xebialabs.xlrelease:${distName}-base:${xlReleaseVersion}:server@zip"
     xlDslJs "com.xebialabs.xlrelease:e2e-dsl:${xlReleaseVersion}:@zip"
+}
+
+task yarnRunBuild(type: YarnTask) {
+    args = ['run', 'build']
 }
 
 task copyXlrDist(type: Copy) {
@@ -102,12 +107,13 @@ task npmDependencies(dependsOn: [npmPrune, npmInstall])
 unzipDist.dependsOn copyXlrDist
 startXLRelease.dependsOn npmDependencies, unzipDist
 
-task testEnd2End(type: NpmTask, dependsOn: startXLRelease) {
+task testEnd2End(type: YarnTask, dependsOn: startXLRelease) {
     args = ['run', 'protractor']
 }
 
 testEnd2End.dependsOn overwriteLocalXldDsl
 testEnd2End.finalizedBy stopXLRelease
+yarnRunBuild.dependsOn yarn_install
 
 compileJava.dependsOn unzipDist
 sourceSets.main.resources.srcDirs = ["src/main/resources"]
