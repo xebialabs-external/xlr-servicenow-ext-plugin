@@ -36,6 +36,7 @@
     "moment": "2.10.3",
     "protractor": "5.1.1",
     "request-promise": "0.4.2",
-    "webpack": "2.3.2"
+    "webpack": "2.3.2",
+    "babel-polyfill": "6.8.0"
   }
 }

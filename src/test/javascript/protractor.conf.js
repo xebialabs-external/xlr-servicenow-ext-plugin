@@ -31,6 +31,7 @@ exports.config = {
     framework: 'jasmine2',
     seleniumAddress: (process.env.SELENIUM_TEST_ADDR || null),
     onPrepare: function () {
+        require('babel-polyfill');
         require('babel-register')({
             presets: ['es2015', 'stage-0']
         });

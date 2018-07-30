@@ -1,4 +1,4 @@
-describe('Service Item', function () {
+describe('Change Request', function () {
     globalForEach();
 
     beforeEach(function () {
@@ -12,8 +12,8 @@ describe('Service Item', function () {
         });
 
         fixtures().release({
-            id: 'ReleaseCreateServiceItem',
-            title: 'Create Service Item',
+            id: 'ReleaseCreateChangeRequest',
+            title: 'Create Change Request',
             status: 'planned',
             scheduledStartDate: moment().subtract(3, 'days'),
             dueDate: moment().add(8, 'days'),
@@ -21,23 +21,23 @@ describe('Service Item', function () {
                 title: 'Prod',
                 status: 'planned',
                 tasks: [{
-                    title: 'Create Service item',
+                    title: 'Create Change Request',
                     type: 'xlrelease.CustomScriptTask',
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateRequestItem',
+                        type: 'servicenowxl.CreateChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         shortDescription : 'description',
                         comments: 'comments'
                     }
                 }, {
-                    title: 'Create New Service item',
+                    title: 'Create New Change Request',
                     type: 'xlrelease.CustomScriptTask',
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateNewRequestItem',
+                        type: 'servicenowxl.CreateNewChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content : '{"short_description":"New","comments":"New"}'
                     }
@@ -47,23 +47,23 @@ describe('Service Item', function () {
                     status: 'planned',
                     owner: 'admin'
                 }, {
-                    title: 'Update Service item',
+                    title: 'Update Change Request',
                     type: 'xlrelease.CustomScriptTask',
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.UpdateRequestItem',
+                        type: 'servicenowxl.UpdateChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content : '{"short_description":"Updated","comments":"Updated"}',
                         sysId: ''
                     }
                 }, {
-                    title: 'Find Service item',
+                    title: 'Find Change Request',
                     type: 'xlrelease.CustomScriptTask',
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.FindRequestItemByTicket',
+                        type: 'servicenowxl.FindChangeRequestByTicket',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         ticket : ''
                     }
@@ -73,21 +73,21 @@ describe('Service Item', function () {
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find service request item', async () => {
-        let release = Page.openRelease('ReleaseCreateServiceItem');
-        release.start().waitForTaskCompleted('Create New Service item');
+    it('should create update find change request', async () => {
+        let release = Page.openRelease('ReleaseCreateChangeRequest');
+        release.start().waitForTaskCompleted('Create New Change Request');
 
-        let task = release.openCustomScriptDetails('Create New Service item');
+        let task = release.openCustomScriptDetails('Create New Change Request');
         var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
         var ticket = await task.taskDetails.element(By.$(`#ticket .field-readonly`)).getText();
         task.close();
 
-        task = release.openCustomScriptDetails('Update Service item');
+        task = release.openCustomScriptDetails('Update Change Request');
         Browser.waitFor(".modal:visible #servicenowServer");
         new InlineEditor('.modal:visible #sysId').set(sysId);
         task.close();
 
-        task = release.openCustomScriptDetails('Find Service item');
+        task = release.openCustomScriptDetails('Find Change Request');
         Browser.waitFor(".modal:visible #servicenowServer");
         new InlineEditor('.modal:visible #ticket').set(ticket);
         task.close();
