@@ -2,7 +2,7 @@ import sys
 import urllib
 import com.xhaus.jyson.JysonCodec as json
 from xlrelease.HttpRequest import HttpRequest
-
+import time
 SUCCESS_STATUS_CODE = 200
 RECORD_CREATED_STATUS = 201
 
@@ -75,6 +75,21 @@ class ServiceNowClient(object):
             outStr = "%s%s" % (outStr, myObj)
         return outStr
 
+    def print_table(self, headers, rows):
+        print "\n|", "|".join(headers), "|"
+        print "|", " ------ |" * len(headers)
+        for r in rows:
+            print "| ", "  |".join(r), " |"
+        print "\n"
+
+    def print_error(self, response):
+        if type(response) is dict:
+            outStr =   "| Status  | %s |\n" % ( response["status"] )
+            outStr = "%s| Message | %s |\n" % ( outStr, response["error"]["message"] )
+            outStr = "%s| Detail  | %s |\n" % ( outStr, response["error"]["detail"] )
+            return outStr
+        return response
+
     def get_change_request_states(self):
         servicenow_api_url = '/api/now/v1/table/%s?element=state&name=task&sysparm_fields=%s&%s' % (
         'sys_choice', 'value,label', self.sysparms)
@@ -91,6 +106,40 @@ class ServiceNowClient(object):
     def update_record(self, table_name, sysId, content):
         servicenow_api_url = '/api/now/v1/table/%s/%s?%s' % (table_name, sysId, self.sysparms)
         return self.request(method='PUT', url=servicenow_api_url, body=content, headers=self.headers)
+
+    def get_change_request(self, table_name, sys_id):
+        servicenow_api_url = '/api/now/v1/table/{}/{}?{}'.format(table_name, sys_id, self.sysparms)
+        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
+
+    def get_change_request_with_fields(self, table_name, number, fields):
+        servicenow_api_url = '/api/now/v1/table/%s?number=%s&sysparm_fields=%s&%s' % (table_name, number, ",".join(fields), self.sysparms)
+        response = self.httpRequest.get(servicenow_api_url, contentType='application/json', headers = self.headers)
+        if self.useOAuth :self.revoke_token()
+
+        if response.getStatus() == SUCCESS_STATUS_CODE:
+            data = json.loads(response.getResponse())
+            if len(data['result']) == 1:
+                return data['result'][0]
+        self.throw_error(response)
+
+    def wait_for_approval(self, table_name, sys_id):
+        is_clear = False
+        while not is_clear:
+            try:
+                data = self.get_change_request(table_name, sys_id)
+                status = data["approval"]
+                print "Found %s in Service Now as %s" % (data['number'], status)
+                if "Approved" == status:
+                    is_clear = True
+                    print "ServiceNow approval received."
+                elif "rejected" == status:
+                    print "Failed to get approval from ServiceNow"
+                    sys.exit(1)
+                else:
+                    time.sleep(5)
+            except:
+                print json.dumps(data, indent=4, sort_keys=True)
+                print "Error finding status for {}".format(sys_id)
 
     def request(self, method, url, headers, content_type='application/json', body=None):
         print "Service Now URL = %s \n" % (url)

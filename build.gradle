@@ -49,11 +49,13 @@ tasks.prepare.mustRunAfter tasks.clean
 
 configurations {
     xlrDist
+    xlDslJs
 }
 
 dependencies {
     compile "com.xebialabs.deployit:udm-plugin-api"
     xlrDist "com.xebialabs.xlrelease:${distName}-base:${xlReleaseVersion}:server@zip"
+    xlDslJs "com.xebialabs.xlrelease:e2e-dsl:${xlReleaseVersion}:@zip"
 }
 
 task copyXlrDist(type: Copy) {
@@ -64,6 +66,16 @@ task copyXlrDist(type: Copy) {
 task unzipDist(type: Copy) {
     from zipTree(file("${xlrBase}/${distName}-base-${xlReleaseVersion}-server.zip"))
     into file("${xlrBase}")
+}
+
+task fetchE2eDsl(type: Copy) {
+    from zipTree(configurations.xlDslJs.singleFile)
+    into "${buildDir}/e2e-dsl"
+}
+
+task overwriteLocalXldDsl(type: Copy, dependsOn: fetchE2eDsl){
+    from "${projectDir}/src/test/resources/e2e-dsl"
+    into "${buildDir}/e2e-dsl"
 }
 
 /* Configure XL Release Gradle plugin */
@@ -86,6 +98,7 @@ npmInstall.mustRunAfter npmPrune
 
 task npmDependencies(dependsOn: [npmPrune, npmInstall])
 
+
 unzipDist.dependsOn copyXlrDist
 startXLRelease.dependsOn npmDependencies, unzipDist
 
@@ -93,11 +106,13 @@ task testEnd2End(type: NpmTask, dependsOn: startXLRelease) {
     args = ['run', 'protractor']
 }
 
+testEnd2End.dependsOn overwriteLocalXldDsl
 testEnd2End.finalizedBy stopXLRelease
 
 compileJava.dependsOn unzipDist
 sourceSets.main.resources.srcDirs = ["src/main/resources"]
 sourceSets.test.resources.srcDirs = ["src/test/resources"]
+
 
 // Uncomment following line if you implement Java/Scala code depending on XL Release classes
 //configurations.compile.extendsFrom configurations.xlReleaseJars
@@ -106,6 +121,8 @@ sourceSets.test.resources.srcDirs = ["src/test/resources"]
 dependencies {
     xlReleaseAdditionalClasspath('com.xebialabs.deployit:udm-plugin-api:2015.2.13')
 }
+
+
 
 uploadArchives {
     repositories {
