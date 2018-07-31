@@ -67,6 +67,38 @@ describe('Change Request', function () {
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         ticket : ''
                     }
+                }, {
+                    title: 'Poll Change Request status',
+                    type: 'xlrelease.CustomScriptTask',
+                    status: 'planned',
+                    owner: 'admin',
+                    pythonScript: {
+                        type: 'servicenowxl.PollingCheckStatus',
+                        servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
+                        sysId : '',
+                        checkForStatus : "New"
+                    }
+                }, {
+                    title: 'Get Change Request',
+                    type: 'xlrelease.CustomScriptTask',
+                    status: 'planned',
+                    owner: 'admin',
+                    pythonScript: {
+                        type: 'servicenowxl.GetChangeRequest',
+                        servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
+                        number : '',
+                        fieldNames : ['state']
+                    }
+                }, {
+                    title: 'Check Change Request',
+                    type: 'xlrelease.CustomScriptTask',
+                    status: 'planned',
+                    owner: 'admin',
+                    pythonScript: {
+                        type: 'servicenowxl.CheckChangeRequest',
+                        servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
+                        number : ''
+                    }
                 }]
             }]
         });
@@ -90,6 +122,21 @@ describe('Change Request', function () {
         task = release.openCustomScriptDetails('Find Change Request');
         Browser.waitFor(".modal:visible #servicenowServer");
         new InlineEditor('.modal:visible #ticket').set(ticket);
+        task.close();
+
+        task = release.openCustomScriptDetails('Poll Change Request status');
+        Browser.waitFor(".modal:visible #servicenowServer");
+        new InlineEditor('.modal:visible #sysId').set(sysId);
+        task.close();
+
+        task = release.openCustomScriptDetails('Get Change Request');
+        Browser.waitFor(".modal:visible #servicenowServer");
+        new InlineEditor('.modal:visible #number').set(ticket);
+        task.close();
+
+        task = release.openCustomScriptDetails('Check Change Request');
+        Browser.waitFor(".modal:visible #servicenowServer");
+        new InlineEditor('.modal:visible #number').set(ticket);
         task.close();
 
         release.openManualTaskDetails('Manual Task').skipTask("WAIT DONE");
