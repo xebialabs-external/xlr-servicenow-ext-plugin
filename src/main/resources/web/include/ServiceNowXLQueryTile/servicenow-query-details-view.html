@@ -1,0 +1,9 @@
+<div data-ng-controller="serviceNowXL.ServiceNowXLQueryTileViewController as serviceNowXLQueryTile" class="service-now-query-tile">
+    <div ng-click="serviceNowXLQueryTile.refresh()" title="Refresh" class="button primary">
+        <i class="glyphicon glyphicon-refresh"></i> Refresh
+    </div>
+    <div data-ng-if="serviceNowXLQueryTile.gridOptions && !serviceNowXLQueryTile.loading" ui-grid="serviceNowXLQueryTile.gridOptions" class="grid-container" />
+    <div data-ng-if="serviceNowXLQueryTile.loading" class="spinner" style="text-align: center">
+        <img src="static/@project.version@/styles/img/big-ajax-loader.gif" alt="Loading..." />
+    </div>
+</div>

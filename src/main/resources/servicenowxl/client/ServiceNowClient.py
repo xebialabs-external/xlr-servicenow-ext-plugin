@@ -14,6 +14,7 @@ class ServiceNowClient(object):
         self.refreshToken = None
         self.httpConnection = httpConnection
         self.useOAuth = httpConnection['useOAuth']
+        self.service_now_url = httpConnection['url'].rstrip("/")
         if username:
             self.httpConnection['username'] = username
         if password:
@@ -106,6 +107,9 @@ class ServiceNowClient(object):
     def update_record(self, table_name, sysId, content):
         servicenow_api_url = '/api/now/v1/table/%s/%s?%s' % (table_name, sysId, self.sysparms)
         return self.request(method='PUT', url=servicenow_api_url, body=content, headers=self.headers)
+
+    def create_link(self, table_name, sys_id):
+        return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
 
     def get_change_request(self, table_name, sys_id):
         servicenow_api_url = '/api/now/v1/table/{}/{}?{}'.format(table_name, sys_id, self.sysparms)
