@@ -137,7 +137,7 @@
                     {
                         displayName: "Number",
                         field: "number",
-                        cellTemplate: "static/@project.version@/include/ServiceNowQueryTile/grid/number-cell-template.html",
+                        cellTemplate: "static/@project.version@/include/ServiceNowXLQueryTile/grid/number-cell-template.html",
                         filterHeaderTemplate: filterHeaderTemplate,
                         enableColumnMenu: true,
                         width: '18%'
