@@ -89,16 +89,6 @@ describe('Change Request', function () {
                         number : '',
                         fieldNames : ['state']
                     }
-                }, {
-                    title: 'Check Change Request',
-                    type: 'xlrelease.CustomScriptTask',
-                    status: 'planned',
-                    owner: 'admin',
-                    pythonScript: {
-                        type: 'servicenowxl.CheckChangeRequest',
-                        servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                        number : ''
-                    }
                 }]
             }]
         });
@@ -130,11 +120,6 @@ describe('Change Request', function () {
         task.close();
 
         task = release.openCustomScriptDetails('Get Change Request');
-        Browser.waitFor(".modal:visible #servicenowServer");
-        new InlineEditor('.modal:visible #number').set(ticket);
-        task.close();
-
-        task = release.openCustomScriptDetails('Check Change Request');
         Browser.waitFor(".modal:visible #servicenowServer");
         new InlineEditor('.modal:visible #number').set(ticket);
         task.close();
