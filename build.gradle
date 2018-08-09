@@ -113,7 +113,7 @@ task testEnd2End(type: YarnTask, dependsOn: startXLRelease) {
 
 testEnd2End.dependsOn overwriteLocalXldDsl
 testEnd2End.finalizedBy stopXLRelease
-yarnRunBuild.dependsOn yarn_install
+yarnRunBuild.dependsOn yarn_install, npmInstall
 
 compileJava.dependsOn unzipDist
 sourceSets.main.resources.srcDirs = ["src/main/resources"]
