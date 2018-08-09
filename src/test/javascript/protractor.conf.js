@@ -17,7 +17,7 @@ exports.config = {
         "firefox_binary": firefoxBinary,
         "elementScrollBehavior": 1,
     },
-    baseUrl: "http://localhost:" + (process.env.XL_RELEASE_PORT || "5516"),
+    baseUrl: "http://" + os.hostname() + ":" + (process.env.XL_RELEASE_PORT || "5516"),
     allScriptsTimeout: DEFAULT_TIMEOUT,
     rootElement: "body",
     getPageTimeout: DEFAULT_TIMEOUT,
@@ -39,10 +39,6 @@ exports.config = {
         global._ = require('lodash');
         global.moment = require('moment');
         global.EC = protractor.ExpectedConditions;
-
-
-        let SpecReporter = require('jasmine-spec-reporter');
-        jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: true}));
 
         require('./e2e/scenario/fixtures-ci-builder.js');
 
