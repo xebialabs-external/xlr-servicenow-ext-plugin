@@ -12,7 +12,7 @@ describe('Service Item', function () {
         });
 
         fixtures().release({
-            id: 'ReleaseCreateServiceItem',
+            id: 'ReleaseCreateServiceRequestItem',
             title: 'Create Service Item',
             status: 'planned',
             scheduledStartDate: moment().subtract(3, 'days'),
@@ -74,7 +74,7 @@ describe('Service Item', function () {
     });
 
     it('should create update find service request item', async () => {
-        let release = Page.openRelease('ReleaseCreateServiceItem');
+        let release = Page.openRelease('ReleaseCreateServiceRequestItem');
         release.start().waitForTaskCompleted('Create New Service item');
 
         let task = release.openCustomScriptDetails('Create New Service item');

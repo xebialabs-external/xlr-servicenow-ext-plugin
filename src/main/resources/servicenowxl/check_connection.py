@@ -5,8 +5,6 @@ params = {
     , 'oauthUsername': configuration.oauthUsername, 'oauthPassword': configuration.oauthPassword
     , 'clientId': configuration.clientId, 'clientSecret': configuration.clientSecret
     , 'proxyHost': configuration.proxyHost, 'proxyPort': configuration.proxyPort
-    , 'changeRecordTableName': configuration.changeRecordTableName
-    , 'changeTaskTableName': configuration.changeTaskTableName
     , 'sysparmDisplayValue': configuration.sysparmDisplayValue
     , 'sysparmInputDisplayValue': configuration.sysparmInputDisplayValue
 }
