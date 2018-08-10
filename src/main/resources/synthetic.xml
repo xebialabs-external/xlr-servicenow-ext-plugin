@@ -174,6 +174,35 @@
 
     <!--
        #######################################################################################################################
+       #    Change Request Tasks
+       #######################################################################################################################
+   -->
+    <type type="servicenowxl.CreateTask" extends="servicenowxl.Task" label="ServiceNow: Create Task">
+        <property name="scriptLocation" default="servicenowxl/create_task.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" required="true" default="change_task"
+                  hidden="true"/>
+        <property name="content" category="input" label="Task JSON Content" required="true" size="large"/>
+
+        <property name="taskId" category="output"/>
+        <property name="Task" category="output"/>
+    </type>
+
+    <type type="servicenowxl.UpdateTask" extends="servicenowxl.UpdateRecord" label="ServiceNow: Update Task">
+        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
+                  hidden="true"/>
+    </type>
+
+    <type type="servicenowxl.CheckStatus" extends="servicenowxl.Task" label="ServiceNow: Check Status">
+        <property name="scriptLocation" default="servicenowxl/check_status.py" hidden="true"/>
+        <property name="statusField" category="input" label="Status Field" required="true"/>
+        <property name="tableName" category="input" label="Table Name" required="true"/>
+        <property name="sysId" category="input" label="System ID" required="true"/>
+
+        <property name="status" category="output"/>
+    </type>
+
+    <!--
+       #######################################################################################################################
        #    Change Requests
        #######################################################################################################################
    -->
