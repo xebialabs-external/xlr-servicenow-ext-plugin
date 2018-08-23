@@ -2,7 +2,7 @@
 
 (function () {
 
-    var ServiceNowXLQueryTileViewController = function ($scope, ServiceNowXLQueryService, XlrTileHelper) {
+    var ServiceNowQueryTileViewController = function ($scope, ServiceNowQueryService, XlrTileHelper) {
         var vm = this;
         var tile;
         var config;
@@ -85,7 +85,7 @@
         function load(config) {
             if (tileConfigurationIsPopulated()) {
                 vm.loading = true;
-                ServiceNowXLQueryService.executeQuery(tile.id, config).then(
+                ServiceNowQueryService.executeQuery(tile.id, config).then(
                     function (response) {
                         var serviceNowIssueArray = [];
                         var issues = response.data.data;
@@ -137,7 +137,7 @@
                     {
                         displayName: "Number",
                         field: "number",
-                        cellTemplate: "static/@project.version@/include/ServiceNowXLQueryTile/grid/number-cell-template.html",
+                        cellTemplate: "static/@project.version@/include/ServiceNowQueryTile/grid/number-cell-template.html",
                         filterHeaderTemplate: filterHeaderTemplate,
                         enableColumnMenu: true,
                         width: '18%'
@@ -160,9 +160,9 @@
         vm.refresh = refresh;
     };
 
-    ServiceNowXLQueryTileViewController.$inject = ['$scope', 'xlrelease.serviceNowXL.ServiceNowXLQueryService', 'XlrTileHelper'];
+    ServiceNowQueryTileViewController.$inject = ['$scope', 'xlrelease.serviceNow.ServiceNowQueryService', 'XlrTileHelper'];
 
-    var ServiceNowXLQueryService = function (Backend) {
+    var ServiceNowQueryService = function (Backend) {
 
         function executeQuery(tileId, config) {
             return Backend.get("/tiles/" + tileId + "/data", config);
@@ -172,11 +172,11 @@
         };
     };
 
-    ServiceNowXLQueryService.$inject = ['Backend'];
+    ServiceNowQueryService.$inject = ['Backend'];
 
-    angular.module('xlrelease.ServiceNowXL.tile', []);
-    angular.module('xlrelease.ServiceNowXL.tile').service('xlrelease.serviceNowXL.ServiceNowXLQueryService', ServiceNowXLQueryService);
-    angular.module('xlrelease.ServiceNowXL.tile').controller('serviceNowXL.ServiceNowXLQueryTileViewController', ServiceNowXLQueryTileViewController);
+    angular.module('xlrelease.ServiceNow.tile', []);
+    angular.module('xlrelease.ServiceNow.tile').service('xlrelease.serviceNow.ServiceNowQueryService', ServiceNowQueryService);
+    angular.module('xlrelease.ServiceNow.tile').controller('serviceNow.ServiceNowQueryTileViewController', ServiceNowQueryTileViewController);
 
 })();
 

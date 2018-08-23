@@ -5,7 +5,7 @@ describe('Incident Request', function () {
         fixtures().ci({
             id: 'Configuration/Custom/ConfigurationServiceNow',
             title: 'Service Now Server',
-            type: 'servicenowxl.Server',
+            type: 'servicenow.Server',
             url: browser.params.servicenow.address,
             username: browser.params.servicenow.username,
             password: browser.params.servicenow.password
@@ -26,7 +26,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateTask',
+                        type: 'servicenow.CreateTask',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content: '{"short_description":"New","comments":"New"}'
                     }
@@ -41,7 +41,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.UpdateTask',
+                        type: 'servicenow.UpdateTask',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         sysId: '',
                         content: '{"short_description":"Update","comments":"Update"}'
@@ -52,7 +52,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CheckStatus',
+                        type: 'servicenow.CheckStatus',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         statusField : 'state',
                         tableName: 'change_task',

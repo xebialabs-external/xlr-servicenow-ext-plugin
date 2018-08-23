@@ -1,4 +1,4 @@
-describe('Update CMDB', function () {
+describe('Record', function () {
     globalForEach();
 
     beforeEach(function () {
@@ -12,8 +12,8 @@ describe('Update CMDB', function () {
         });
 
         fixtures().release({
-            id: 'ReleaseUpdateCMDB',
-            title: 'Update CMDB',
+            id: 'ReleaseRecord',
+            title: 'Create Record ',
             status: 'planned',
             scheduledStartDate: moment().subtract(3, 'days'),
             dueDate: moment().add(8, 'days'),
@@ -21,19 +21,26 @@ describe('Update CMDB', function () {
                 title: 'Prod',
                 status: 'planned',
                 tasks: [{
-                    title: 'Update CMDB',
+                    title: 'Create Record Request',
                     type: 'xlrelease.CustomScriptTask',
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenow.UpdateCMDB',
+                        type: 'servicenow.CreateRecord',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                        environment : 'testenv',
-                        applicationName: 'testapp',
-                        company: 'testcompany',
-                        configAdminGroup: 'testadmingroup',
-                        version: 'v1',
-                        virtualMachine: 'testvirtualMachine'
+                        shortDescription : 'description',
+                        comments: 'comments'
+                    }
+                }, {
+                    title: 'Create Request',
+                    type: 'xlrelease.CustomScriptTask',
+                    status: 'planned',
+                    owner: 'admin',
+                    pythonScript: {
+                        type: 'servicenow.CreateRequest',
+                        servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
+                        shortDescription : 'description',
+                        comments: 'comments'
                     }
                 }]
             }]
@@ -41,15 +48,10 @@ describe('Update CMDB', function () {
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update cmdb', async () => {
-        let release = Page.openRelease('ReleaseUpdateCMDB');
-        release.start().waitForTaskCompleted('Update CMDB');
+    it('should create record and request ', async () => {
 
-        let task = release.openCustomScriptDetails('Update CMDB');
-        var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
-        task.close();
-
-        return release.waitForCompletion();
+        let release = Page.openRelease('ReleaseRecord');
+        return release.start().waitForCompletion();
 
     });
 

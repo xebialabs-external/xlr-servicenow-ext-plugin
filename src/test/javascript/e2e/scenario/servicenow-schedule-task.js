@@ -5,7 +5,7 @@ describe('Schedule Task', function () {
         fixtures().ci({
             id: 'Configuration/Custom/ConfigurationServiceNow',
             title: 'Service Now Server',
-            type: 'servicenowxl.Server',
+            type: 'servicenow.Server',
             url: browser.params.servicenow.address,
             username: browser.params.servicenow.username,
             password: browser.params.servicenow.password
@@ -28,7 +28,7 @@ describe('Schedule Task', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.ScheduleTask',
+                        type: 'servicenow.ScheduleTask',
                         startField : 'start_date',
                         targetPhase: 'Prod',
                         targetTask: 'Update CMDB',
@@ -40,7 +40,7 @@ describe('Schedule Task', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.UpdateCMDB',
+                        type: 'servicenow.UpdateCMDB',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         environment : 'testenv',
                         applicationName: 'testapp',

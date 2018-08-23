@@ -1,7 +1,7 @@
 
 import urllib
-from servicenowxl.client.ServiceNowClient import ServiceNowClient
-from servicenowxl.helper.helper import assert_not_null
+from servicenow.client.ServiceNowClient import ServiceNowClient
+from servicenow.helper.helper import assert_not_null
 
 def get_row_data(item):
     row_map = {}

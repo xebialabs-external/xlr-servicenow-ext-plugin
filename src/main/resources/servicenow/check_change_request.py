@@ -1,6 +1,6 @@
 import sys
-from servicenowxl.client.ServiceNowClient import ServiceNowClient
-from servicenowxl.helper.helper import assert_not_null
+from servicenow.client.ServiceNowClient import ServiceNowClient
+from servicenow.helper.helper import assert_not_null
 
 assert_not_null(servicenowServer, "No server provided.")
 assert_not_null(number, "No number provided.")

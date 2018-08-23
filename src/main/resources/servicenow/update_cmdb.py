@@ -1,7 +1,7 @@
 import sys, string, time
 import json
-from servicenowxl.client.ServiceNowClient import ServiceNowClient
-from servicenowxl.helper.helper import assert_not_null
+from servicenow.client.ServiceNowClient import ServiceNowClient
+from servicenow.helper.helper import assert_not_null
 
 assert_not_null(servicenowServer, "No server provided.")
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)

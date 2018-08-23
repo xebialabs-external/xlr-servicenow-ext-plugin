@@ -5,7 +5,7 @@ describe('Change Request', function () {
         fixtures().ci({
             id: 'Configuration/Custom/ConfigurationServiceNow',
             title: 'Service Now Server',
-            type: 'servicenowxl.Server',
+            type: 'servicenow.Server',
             url: browser.params.servicenow.address,
             username: browser.params.servicenow.username,
             password: browser.params.servicenow.password
@@ -26,7 +26,7 @@ describe('Change Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateChangeRequest',
+                        type: 'servicenow.CreateChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         shortDescription : 'description',
                         comments: 'comments'
@@ -37,7 +37,7 @@ describe('Change Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateNewChangeRequest',
+                        type: 'servicenow.CreateNewChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content : '{"short_description":"New","comments":"New"}'
                     }
@@ -52,7 +52,7 @@ describe('Change Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.UpdateChangeRequest',
+                        type: 'servicenow.UpdateChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content : '{"short_description":"Updated","comments":"Updated"}',
                         sysId: ''
@@ -63,7 +63,7 @@ describe('Change Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.FindChangeRequestByTicket',
+                        type: 'servicenow.FindChangeRequestByTicket',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         ticket : ''
                     }
@@ -73,7 +73,7 @@ describe('Change Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.PollingCheckStatus',
+                        type: 'servicenow.PollingCheckStatus',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         sysId : '',
                         checkForStatus : "New"
@@ -84,7 +84,7 @@ describe('Change Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.GetChangeRequest',
+                        type: 'servicenow.GetChangeRequest',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         number : '',
                         fieldNames : ['state']
@@ -101,7 +101,7 @@ describe('Change Request', function () {
 
         let task = release.openCustomScriptDetails('Create New Change Request');
         var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
-        var ticket = await task.taskDetails.element(By.$(`#ticket .field-readonly`)).getText();
+        var ticket = await task.taskDetails.element(By.$(`#Ticket .field-readonly`)).getText();
         task.close();
 
         task = release.openCustomScriptDetails('Update Change Request');

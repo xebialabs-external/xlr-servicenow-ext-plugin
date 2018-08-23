@@ -5,7 +5,7 @@ describe('Incident Request', function () {
         fixtures().ci({
             id: 'Configuration/Custom/ConfigurationServiceNow',
             title: 'Service Now Server',
-            type: 'servicenowxl.Server',
+            type: 'servicenow.Server',
             url: browser.params.servicenow.address,
             username: browser.params.servicenow.username,
             password: browser.params.servicenow.password
@@ -26,7 +26,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateIncident',
+                        type: 'servicenow.CreateIncident',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         shortDescription : 'description',
                         comments: 'comments'
@@ -37,7 +37,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.CreateNewIncident',
+                        type: 'servicenow.CreateNewIncident',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content : '{"short_description":"New","comments":"New"}'
                     }
@@ -52,7 +52,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.UpdateIncident',
+                        type: 'servicenow.UpdateIncident',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         content : '{"short_description":"Updated","comments":"Updated"}',
                         sysId: ''
@@ -63,7 +63,7 @@ describe('Incident Request', function () {
                     status: 'planned',
                     owner: 'admin',
                     pythonScript: {
-                        type: 'servicenowxl.FindIncidentByTicket',
+                        type: 'servicenow.FindIncidentByTicket',
                         servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                         ticket : ''
                     }
@@ -79,7 +79,7 @@ describe('Incident Request', function () {
 
         let task = release.openCustomScriptDetails('Create New Incident Request');
         var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
-        var ticket = await task.taskDetails.element(By.$(`#ticket .field-readonly`)).getText();
+        var ticket = await task.taskDetails.element(By.$(`#Ticket .field-readonly`)).getText();
         task.close();
 
         task = release.openCustomScriptDetails('Update Incident');
