@@ -67,9 +67,9 @@ exports.config = {
         scale: 'true',
         cleanFixtures: 'true',
         servicenow: {
-            address: 'https://dev19998.service-now.com/',
-            username: 'admin',
-            password: 'qV5GjPPfPfw9'
+            address: 'https://ven02514.service-now.com',
+            username: 'adm.mpl',
+            password: 't\\~[#dmDUdR<77,7'
         }
     }
 };

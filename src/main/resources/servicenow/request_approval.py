@@ -17,11 +17,15 @@ sysId = None
 print "Sending content {}".format(content_json)
 
 try:
-    data = sn_client.create_record(tableName, content_json)
-    print "Returned DATA = {}".format(data)
-    print json.dumps(data, indent=4, sort_keys=True)
-    sysId = data["sys_id"]
-    ticket = data["number"]
+    # create a new record in service now using queue table
+    record_data = sn_client.create_record(tableName, json.loads(content_json))
+    print "Returned DATA = {}".format(record_data)
+    print json.dumps(record_data, indent=4, sort_keys=True)
+    sysId = record_data["target_sys_id"]
+    ticket = record_data["target_record_number"]
+
+    # find record using ticker number and show on UI
+    data = sn_client.find_record(table_name=tableName, query="number={}".format(ticket))[0]
     print "Created Ticket '{}' with sysId '{}' in Service Now. \n".format(ticket, sysId)
 except Exception, e:
     exc_info = sys.exc_info()

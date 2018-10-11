@@ -1,4 +1,6 @@
+import com.xhaus.jyson.JysonCodec as json
 import sys
+
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 
@@ -11,11 +13,14 @@ snClient = ServiceNowClient.create_client(servicenowServer, username, password)
 print "Sending content {}".format(content)
 
 try:
-    data = snClient.create_record(tableName, content)
-    taskId = data["sys_id"]
-    Task = data["number"]
-    print "Created {} in Service Now.".format(taskId)
-    print "Created {} in Service Now.".format(Task)
+    # create record in service now using queue table
+    record_data = snClient.create_record(tableName, json.loads(content))
+    taskId = record_data["target_sys_id"]
+    Task = record_data["target_record_number"]
+
+    # find record using ticker number and show on UI
+    data = snClient.find_record(table_name=tableName, query="number={}".format(Task))[0]
+    print "Created Ticket '{}' with sysId '{}' in Service Now. \n".format(Task, taskId)
     print "\n"
     print snClient.format_record(data)
 except Exception, e:
