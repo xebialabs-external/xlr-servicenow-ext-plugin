@@ -7,9 +7,10 @@ assert_not_null(shortDescription, "ShortDescription is mandatory")
 assert_not_null(comments, "Comments is mandatory")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
+xlr_task_id = task.getId()
 
 # create record in service now using queue table
-record_data = sn_client.create_record(tableName, {'short_description': shortDescription, 'comments': comments})
+record_data = sn_client.create_record(tableName, {'short_description': shortDescription, 'comments': comments}, xlr_task_id)
 sysId = record_data["target_sys_id"]
 Ticket = record_data["target_record_number"]
 

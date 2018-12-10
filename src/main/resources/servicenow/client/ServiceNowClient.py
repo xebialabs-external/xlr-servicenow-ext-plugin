@@ -92,8 +92,8 @@ class ServiceNowClient(object):
             return outStr
         return response
 
-    def create_payload_header(self, table_name, action, identifier):
-        return {"table": table_name, "action": action, "identifier": identifier}
+    def create_payload_header(self, table_name, action, identifier, xlr_task_id):
+        return {"table": table_name, "action": action, "identifier": identifier, "xlrTaskId": xlr_task_id}
 
     def create_payload(self, header, data):
         return json.dumps({"payload": json.dumps({'header': header, 'data': data})})
@@ -103,8 +103,8 @@ class ServiceNowClient(object):
         'sys_choice', 'value,label', self.sysparms)
         return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
 
-    def create_record(self, table_name, content):
-        payload_header = self.create_payload_header(table_name=table_name, action="create", identifier="")
+    def create_record(self, table_name, content, xlr_task_id):
+        payload_header = self.create_payload_header(table_name=table_name, action="create", identifier="", xlr_task_id=xlr_task_id)
         payload = self.create_payload(header=payload_header, data=content)
         data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
         if data["sys_row_error"] != "":
@@ -115,8 +115,8 @@ class ServiceNowClient(object):
         servicenow_api_url = '/api/now/v1/table/%s?%s&%s' % (table_name, query, self.sysparms)
         return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
 
-    def update_record(self, table_name, ticket, content):
-        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=ticket)
+    def update_record(self, table_name, ticket, content, xlr_task_id):
+        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=ticket, xlr_task_id=xlr_task_id)
         payload = self.create_payload(header=payload_header, data=content)
         data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
         if data["sys_row_error"] != "":

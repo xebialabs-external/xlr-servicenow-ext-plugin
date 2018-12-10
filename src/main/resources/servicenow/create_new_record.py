@@ -7,9 +7,10 @@ assert_not_null(servicenowServer, "Server is mandatory")
 assert_not_null(tableName, "TableName is mandatory")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
+xlr_task_id = task.getId()
 
 # create record in service now using queue table
-record_data = sn_client.create_record(tableName, json.loads(content))
+record_data = sn_client.create_record(tableName, json.loads(content), xlr_task_id)
 sysId = record_data["target_sys_id"]
 Ticket = record_data["target_record_number"]
 

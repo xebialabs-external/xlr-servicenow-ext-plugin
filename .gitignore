@@ -102,3 +102,5 @@ protractor-testresults/
 /node_modules
 /xl-release-server
 /src/main/resources/openshift/oc
+
+.gradletasknamecache

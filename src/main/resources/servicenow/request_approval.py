@@ -11,6 +11,8 @@ assert_not_null(shortDescription, "No shortDescription provided.")
 assert_not_null(description, "No description provided.")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
+xlr_task_id = task.getId()
+
 content_json = content % (shortDescription, description)
 sysId = None
 
@@ -18,7 +20,7 @@ print "Sending content {}".format(content_json)
 
 try:
     # create a new record in service now using queue table
-    record_data = sn_client.create_record(tableName, json.loads(content_json))
+    record_data = sn_client.create_record(tableName, json.loads(content_json), xlr_task_id)
     print "Returned DATA = {}".format(record_data)
     print json.dumps(record_data, indent=4, sort_keys=True)
     sysId = record_data["target_sys_id"]

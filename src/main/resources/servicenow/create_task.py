@@ -9,12 +9,13 @@ assert_not_null(tableName, "No tableName provided.")
 assert_not_null(content, "No content provided.")
 
 snClient = ServiceNowClient.create_client(servicenowServer, username, password)
+xlr_task_id = task.getId()
 
 print "Sending content {}".format(content)
 
 try:
     # create record in service now using queue table
-    record_data = snClient.create_record(tableName, json.loads(content))
+    record_data = snClient.create_record(tableName, json.loads(content), xlr_task_id)
     taskId = record_data["target_sys_id"]
     Task = record_data["target_record_number"]
 

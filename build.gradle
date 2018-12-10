@@ -17,6 +17,7 @@ buildscript {
         // it also pulls in release plugin and  opinion plugins that configure repositories and such
         classpath "com.xebialabs.gradle.plugins:gradle-xl-plugins-plugin:${xlPluginsPluginVersion}"
         classpath "com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:${xlReleasePluginPluginVersion}"
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${licenseGradlePluginVersion}"
         classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
     }
 }
