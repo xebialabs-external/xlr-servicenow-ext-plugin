@@ -371,5 +371,19 @@
         <property name="environment" category="input" required="false"/>
         <property name="version" category="input" required="false"/>
     </type>
+
+    <!--
+     #######################################################################################################################
+     #    ServiceNow Portal and KnowledgeBase
+     #######################################################################################################################
+    -->
+    <type type="servicenow.PublishArticle" extends="servicenow.VirtualApplication" label="ServiceNow: Publish Article">
+        <property name="scriptLocation" default="servicenow/kb/create_or_update_article.py" hidden="true"/>
+        <property name="articleCategory" category="input"/>
+        <property name="knowledgeBase" category="input"/>
+        <property name="shortDescription" category="input"/>
+        <property name="articleText" category="input" size="large"/>
+    </type>
+
 </synthetic>
 
