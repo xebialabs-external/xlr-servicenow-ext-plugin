@@ -338,5 +338,38 @@
     </type>
 
 
+    <!--
+       #######################################################################################################################
+       #    ServiceNow Business Applications
+       #######################################################################################################################
+   -->
+
+    <type type="servicenow.VirtualApplication" extends="xlrelease.PythonScript" virtual="true">
+        <property name="iconLocation" default="servicenow/servicenow-icon.png" hidden="true"/>
+        <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
+
+        <property name="servicenowServer" category="input" label="Server" referenced-type="servicenow.Server" required="true"
+                  kind="ci"/>
+        <property name="username" category="input" required="false"/>
+        <property name="password" password="true" category="input" required="false"/>
+
+    </type>
+
+    <type type="servicenow.Application" extends="servicenow.VirtualApplication" label="ServiceNow: Application">
+        <property name="ciName" label="CI Name" category="input"/>
+        <property name="environment" category="input" required="false"/>
+        <property name="version" category="input" required="false"/>
+        <property name="dependsOn" category="input" kind="set_of_string" required="false"/>
+        <property name="usedBy" category="input" kind="set_of_string" required="false"/>
+        <property name="runsOn" category="input" kind="set_of_string" required="false"/>
+        <property name="sysId" category="output"/>
+    </type>
+
+    <type type="servicenow.UpdateApplicationVersion" extends="servicenow.VirtualApplication" label="ServiceNow: Application Version Update">
+        <property name="scriptLocation" default="servicenow/application/update_application_version.py" hidden="true"/>
+        <property name="ciName" label="CI Name" category="input"/>
+        <property name="environment" category="input" required="false"/>
+        <property name="version" category="input" required="false"/>
+    </type>
 </synthetic>
 
