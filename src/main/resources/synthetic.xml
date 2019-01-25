@@ -25,8 +25,15 @@
         <property name="clientSecret" label="Client Secret" description="Mandatory if OAuth is enabled" required="false"
                   password="true" category="OAuth"/>
     </type>
-
-    <type type="servicenow.Task" extends="xlrelease.PythonScript" virtual="true">
+    
+    <!--
+       #######################################################################################################################
+       #    Basic fields for all types (Servicenow Base)
+       #    Basic task operations with standard task fields.
+       #######################################################################################################################
+   -->    
+    
+    <type type="servicenow.Base" extends="xlrelease.PythonScript" virtual="true">
         <property name="iconLocation" default="servicenow/servicenow-icon.png" hidden="true"/>
         <property name="servicenowServer" category="input" label="Server" referenced-type="servicenow.Server" required="true"
                   kind="ci"/>
@@ -34,74 +41,235 @@
         <property name="password" password="true" category="input" required="false"/>
         <property name="data" category="output" kind="map_string_string"/>
     </type>
+    
 
-    <type type="servicenow.CreateRecord" extends="servicenow.Task" label="ServiceNow: Create Record">
-        <property name="scriptLocation" default="servicenow/create_record.py" hidden="true"/>
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-        <property name="shortDescription" category="input" label="Short Description"/>
-        <property name="description" category="input"  required="false"/>
-        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false"/>
-        <property name="assignmentGroup" category="input" required="false"/>
-        <property name="comments" category="input" label="Comments" required="false"/>
-        <property name="additionalFields" category="input" required="false" kind="map_string_string"/>
-        <property name="sysId" category="output"/>
-        <property name="Ticket" category="output"/>
-    </type>
-
-    <type type="servicenow.CreateNewRecord" extends="servicenow.Task" label="ServiceNow: Create New Record">
-        <property name="scriptLocation" default="servicenow/create_new_record.py" hidden="true"/>
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-        <property name="content" category="input" label="Request Content" required="true" size="large"/>
-        <property name="sysId"   category="output"/>
-        <property name="Ticket"  category="output"/>
-    </type>
-
-    <type type="servicenow.UpdateRecord" extends="servicenow.Task" label="ServiceNow: Update Record">
-        <property name="scriptLocation" default="servicenow/update_record.py" hidden="true"/>
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+    <type type="servicenow.CreateTask" extends="servicenow.Base" label="ServiceNow: Create Task" virtual="true">
+        <property name="scriptLocation" default="servicenow/task/create_task.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="task" required="true"
                   hidden="true"/>
         <property name="sysId" category="input" required="true"/>
-        <property name="state" category="input" required="false"/>
-        <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="description" category="input"  required="false"/>
+        <property name="shortDescription" category="input" label="Short Description"/>
+        <property name="description" category="input" size="large" label="Description" required="false"/>
         <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false"/>
         <property name="assignmentGroup" category="input" required="false"/>
+        <property name="assignedTo" category="input" required="false"/>
+        <property name="state" category="input" required="false" kind="enum">
+            <enum-values>
+                <value>Pending</value>
+                <value>New</value>
+                <value>Assess</value>
+                <value>Closed</value>
+            </enum-values>
+        </property>
+        <property name="priority" category="input" required="false" kind="enum">
+            <enum-values>
+                <value>1 - Critical</value>
+                <value>2 - High</value>
+                <value>3 - Moderate</value>
+                <value>4 - Low</value>
+            </enum-values>
+        </property>
         <property name="comments" category="input" label="Comments" required="false"/>
-        <property name="additionalFields" category="input" required="false" kind="map_string_string"/>
+        <property name="additionalFields" category="input" required="false" description="Use Servicenow technical field name as 'key' and the corresponding value" kind="map_string_string"/>
+        
+        <!-- Next 3 lines need to be removed -->
+        <property name="content" category="input" label="Content" default="x" size="large" hidden="true"/>
+        <property name="taskId" category="output" default="x" hidden="true"/>
+        <property name="Task" category="output" default="x" hidden="true"/>
+        <!--end-->
+        
+        <property name="sysId" category="output" default="${sysId}"/>
+        <property name="number" category="output" default="${newNumber}"/>
     </type>
 
-    <type type="servicenow.FindRecordByTicket" extends="servicenow.Task" label="ServiceNow: Find Record By Ticket">
+    <type type="servicenow.UpdateTask" extends="servicenow.CreateTask" label="ServiceNow: Update Task" virtual="true">
+        <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
+        <property name="shortDescription" category="input" label="Short Description" required="false"/>
+        <property name="sysId" category="input" default="${sysId}" required="true"/>
+    </type>
+    
+    
+    <type type="servicenow.FindRecordByTicket" extends="servicenow.Base" label="ServiceNow: Find Record by Number" virtual="true">
         <property name="scriptLocation" default="servicenow/find_record.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="task" required="true"
+                  hidden="true"/>
+        <property name="number" category="input" default="${newNumber}" required="true"/>
+        <property name="sysId" category="output"/>
+    </type>
+    
+    <type type="servicenow.PollingCheckStatus" extends="servicenow.Base" label="ServiceNow: Wait for Status" virtual="false">
+        <property name="scriptLocation" default="servicenow/task/poll_status.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+                  hidden="false"/>
+        <property name="sysId" category="input" default="${sysId}" label="System ID" required="true"/>
+        <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true" description="polling interval in minutes."
+                  default="10"/>
+        <property name="statusField" category="input" label="Status Field" required="true" default="state"/>
+        <property name="checkForStatus" category="input" label="Status to check for" required="true"/>
+        <property name="status" category="output"/>
+        <property name="ticket" category="output"/>
+        <property name="data" category="output" kind="map_string_string"/>
+    </type>
+
+    <!--
+       #######################################################################################################################
+       #    Change Requests
+       #######################################################################################################################
+    -->
+    <type type="servicenow.CreateChangeRequest" extends="servicenow.CreateTask" label="ServiceNow: Create Change Request" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
-        <property name="ticket" category="input" required="true"/>
+        <property name="state" category="input" required="false" default="New" kind="enum">
+            <enum-values>
+                <value>New</value>
+                <value>Assess</value>
+            </enum-values>
+        </property>
+    </type>
+
+    <type type="servicenow.UpdateChangeRequest" extends="servicenow.UpdateTask" label="ServiceNow: Update Change Request" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+                  hidden="true"/>
+        <property name="state" category="input" required="false" kind="enum">
+            <enum-values>
+                <value>New</value>
+                <value>Assess</value>
+                <value>Closed</value>
+            </enum-values>
+        </property>
+    </type>
+
+    <type type="servicenow.FindChangeRequestByTicket" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Change Request" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+                  hidden="true"/>
+    </type>
+
+    <type type="servicenow.RequestApproval" extends="servicenow.Base" label="ServiceNow: Change Request Approval" virtual="true">
+        <property name="scriptLocation" default="servicenow/request_approval.py" hidden="true"/>
+        <property name="shortDescription" category="input" label="Short Description" required="true"/>
+        <property name="description" category="input" label="Description" required="true"/>        
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true" hidden="true"/>
+        <property name="sysId" category="output"/>
+        <property name="ticket" category="output"/>
+    </type>
+
+
+    <type type="servicenow.GetChangeRequest" extends="servicenow.Base" label="ServiceNow: Get Change Request" virtual="false">
+        <property name="scriptLocation" default="servicenow/get_change_request.py" hidden="true"/>
+        <property name="tableName" category="input" default="change_request" required="true" hidden="true"/>
+        <property name="number" category="input" label="Number" default="${newNumber}" required="true"/>
+        <property name="fieldNames" category="input" label="Field Names" required="true" kind="list_of_string"
+                  description="List of field names to be displayed"/>
+    </type>
+
+    <type type="servicenow.CheckChangeRequest" extends="servicenow.PollingCheckStatus" label="ServiceNow: Check Change Request" virtual="true">
+        <property name="tableName" category="input" default="change_request" required="true" hidden="true"/>
+        <property name="expectedStatus" category="input" default="Closed Complete,Closed Incomplete,Closed Skipped"
+                  hidden="true"/>
+        <property name="number" category="input" label="Number" required="true"/>
+    </type>
+    
+    
+    <!--
+       #######################################################################################################################
+       #    Change Request Tasks
+       #######################################################################################################################
+   -->
+        
+    <type type="servicenow.CreateChangeTask" extends="servicenow.CreateTask" label="ServiceNow: Create Change Task" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
+                  hidden="true"/>
+    </type>
+
+    <type type="servicenow.UpdateChangeTask" extends="servicenow.UpdateTask"  label="ServiceNow: Update Change Item" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
+                  hidden="true"/>
+    </type>
+
+    <type type="servicenow.FindChangeTaskByTaskId" extends="servicenow.FindRecordByTicket"  label="ServiceNow: Find Change Task" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
+                  hidden="true"/>
+    </type>
+
+    <!--
+       #######################################################################################################################
+       #    ServiceNow Business Applications
+       #######################################################################################################################
+   -->
+    
+    <type type="servicenow.UpdateCMDB" extends="servicenow.Base" label="ServiceNow: Update CMDB">
+        <property name="scriptLocation" default="servicenow/update_cmdb.py" hidden="true"/>
+        <property name="tableName" category="input" default="cmdb_ci_appl" required="true" hidden="true"/>
+        <property name="environment" category="input" required="true" label="Environment"/>
+        <property name="applicationName" category="input" required="true" label="Application Name"/>
+        <property name="company" category="input" required="true" label="Company"/>
+        <property name="configAdminGroup" category="input" required="true" label="Config Admin Group"/>
+        <property name="version" category="input" required="true" label="Version"/>
+        <property name="virtualMachine" category="input" required="false" label="Virtual Machine"/>
+        <property name="tomcat" category="input" required="false" label="Tomcat"/>
+        <property name="mysql" category="input" required="false" label="MySql"/>
+        <property name="cfSpace" category="input" required="false" label="CF Space"/>
+        <property name="sysId" category="output"/>
+    </type>
+    
+    <!-- adjust to proper base -->
+    
+    <type type="servicenow.VirtualApplication" extends="xlrelease.PythonScript" virtual="true">
+        <property name="iconLocation" default="servicenow/servicenow-icon.png" hidden="true"/>
+        <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
+        <property name="servicenowServer" category="input" label="Server" referenced-type="servicenow.Server" required="true"
+                  kind="ci"/>
+        <property name="username" category="input" required="false"/>
+        <property name="password" password="true" category="input" required="false"/>
+    </type>
+
+    <type type="servicenow.Application" extends="servicenow.VirtualApplication" label="ServiceNow:  Create Application">
+        <property name="ciName" label="CI Name" category="input"/>
+        <property name="environment" category="input" required="false"/>
+        <property name="version" category="input" required="false"/>
+        <property name="dependsOn" category="input" kind="set_of_string" required="false"/>
+        <property name="usedBy" category="input" kind="set_of_string" required="false"/>
+        <property name="runsOn" category="input" kind="set_of_string" required="false"/>
         <property name="sysId" category="output"/>
     </type>
 
+    <type type="servicenow.UpdateApplicationVersion" extends="servicenow.VirtualApplication" label="ServiceNow: Update Application Version">
+        <property name="scriptLocation" default="servicenow/application/update_application_version.py" hidden="true"/>
+        <property name="ciName" label="CI Name" category="input"/>
+        <property name="environment" category="input" required="false"/>
+        <property name="version" category="input" required="false"/>
+    </type>
 
+    <!--
+     #######################################################################################################################
+     #    ServiceNow Portal and KnowledgeBase
+     #######################################################################################################################
+    -->
+    <type type="servicenow.PublishArticle" extends="servicenow.VirtualApplication" label="ServiceNow: Publish Article">
+        <property name="scriptLocation" default="servicenow/kb/create_or_update_article.py" hidden="true"/>
+        <property name="articleCategory" category="input"/>
+        <property name="knowledgeBase" category="input"/>
+        <property name="shortDescription" category="input"/>
+        <property name="articleText" category="input" size="large"/>
+    </type>
+    
     <!--
        #######################################################################################################################
        #    Incident Requests
        #######################################################################################################################
    -->
-    <type type="servicenow.CreateIncident" extends="servicenow.CreateRecord" label="ServiceNow: Create Incident">
+    
+    <type type="servicenow.CreateIncident" extends="servicenow.CreateTask" label="ServiceNow: Create Incident" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="incident" required="true"
                   hidden="true"/>
     </type>
 
-    <type type="servicenow.CreateNewIncident" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New Incident">
+    <type type="servicenow.UpdateIncident" extends="servicenow.UpdateTask" label="ServiceNow: Update Incident" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="incident" required="true"
                   hidden="true"/>
     </type>
 
-    <type type="servicenow.UpdateIncident" extends="servicenow.UpdateRecord" label="ServiceNow: Update Incident">
-        <property name="tableName" category="input" label="Table Name" default="incident" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.FindIncidentByTicket" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Incident By Ticket">
+    <type type="servicenow.FindIncidentByTicket" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Incident" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="incident" required="true"
                   hidden="true"/>
     </type>
@@ -135,176 +303,121 @@
                   default="number:number,short_description:short_description,priority:priority,state:state,assigned_to:assigned_to.display_value"
                   description="Map of columns displayed in details view of tile. For a referenced type column, display_value should be in the value of key:value pair separated by . (eg. assigned_to:assigned_to.display_value)"/>
     </type>
-
+    
     <!--
-       #######################################################################################################################
-       #    Service Requests
-       #######################################################################################################################
+    #######################################################################################################################
+    #    Service Requests (no need for this yet... but can remain)
+    #######################################################################################################################
    -->
-    <type type="servicenow.CreateServiceRequest" extends="servicenow.CreateRecord" label="ServiceNow: Create ServiceRequest">
+    <type type="servicenow.CreateServiceRequest" extends="servicenow.CreateTask" label="ServiceNow: Create Service Request">
         <property name="tableName" category="input" default="sc_request" required="true" hidden="true"/>
     </type>
 
-    <type type="servicenow.CreateNewServiceRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ServiceRequest">
+    <type type="servicenow.UpdateServiceRequest" extends="servicenow.UpdateTask" label="ServiceNow: Update Service Request">
         <property name="tableName" category="input" default="sc_request" required="true" hidden="true"/>
     </type>
 
-    <type type="servicenow.UpdateServiceRequest" extends="servicenow.UpdateRecord" label="ServiceNow: Update ServiceRequest">
-        <property name="tableName" category="input" default="sc_request" required="true" hidden="true"/>
-    </type>
-
-    <type type="servicenow.FindServiceRequestItemByTicket" extends="servicenow.FindRecordByTicket"  label="ServiceNow: Find ServiceRequest">
+    <type type="servicenow.FindServiceRequestItemByTicket" extends="servicenow.FindRecordByTicket"  label="ServiceNow: Find Service Request">
         <property name="tableName" category="input" default="sc_request" required="true" hidden="true"/>
     </type>
 
     <!--
-       #######################################################################################################################
-       #    Service Request Items
-       #######################################################################################################################
+    #######################################################################################################################
+    #    Service Request Items (no need for this yet... but can remain)
+    #######################################################################################################################
    -->
-    <type type="servicenow.CreateRequestItem" extends="servicenow.CreateRecord" label="ServiceNow: Create Request Item">
+    <type type="servicenow.CreateRequestItem" extends="servicenow.CreateTask" label="ServiceNow: Create Request Item">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true"
                   hidden="true"/>
     </type>
 
-    <type type="servicenow.CreateNewRequestItem" extends="servicenow.CreateNewRecord"  label="ServiceNow: Create New Request Item">
+    <type type="servicenow.UpdateRequestItem" extends="servicenow.UpdateTask"  label="ServiceNow: Update Request Item">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true"
                   hidden="true"/>
     </type>
 
-    <type type="servicenow.UpdateRequestItem" extends="servicenow.UpdateRecord"  label="ServiceNow: Update Request Item">
+    <type type="servicenow.FindRequestItemByTicket" extends="servicenow.FindRecordByTicket"  label="ServiceNow: Find Request Item">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true"
                   hidden="true"/>
     </type>
-
-    <type type="servicenow.FindRequestItemByTicket" extends="servicenow.FindChangeRequestByTicket"  label="ServiceNow: Find Request Item">
-        <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true"
-                  hidden="true"/>
-    </type>
-
-    <!--
-       #######################################################################################################################
-       #    Change Request Tasks
-       #######################################################################################################################
-   -->
-    <type type="servicenow.CreateTask" extends="servicenow.Task" label="ServiceNow: Create Task">
-        <property name="scriptLocation" default="servicenow/create_task.py" hidden="true"/>
-        <property name="tableName" category="input" label="Table Name" required="true" default="change_task"
-                  hidden="true"/>
-        <property name="content" category="input" label="Task JSON Content" required="true" size="large"/>
-
-        <property name="taskId" category="output"/>
-        <property name="Task" category="output"/>
-    </type>
-
-    <type type="servicenow.UpdateTask" extends="servicenow.UpdateRecord" label="ServiceNow: Update Task">
-        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.CheckStatus" extends="servicenow.Task" label="ServiceNow: Check Status">
-        <property name="scriptLocation" default="servicenow/check_status.py" hidden="true"/>
-        <property name="statusField" category="input" label="Status Field" required="true"/>
-        <property name="tableName" category="input" label="Table Name" required="true"/>
-        <property name="sysId" category="input" label="System ID" required="true"/>
-
-        <property name="status" category="output"/>
-    </type>
-
-    <!--
-       #######################################################################################################################
-       #    Change Requests
-       #######################################################################################################################
-   -->
-    <type type="servicenow.CreateChangeRequest" extends="servicenow.CreateRecord" label="ServiceNow: Create ChangeRequest">
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.CreateNewChangeRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ChangeRequest">
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.UpdateChangeRequest" extends="servicenow.UpdateRecord" label="ServiceNow: Update ChangeRequest">
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.FindChangeRequestByTicket" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find ChangeRequest">
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.FindChangeTaskByTaskId" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find ChangeTask">
-        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
-                  hidden="true"/>
-    </type>
-
-    <type type="servicenow.RequestApproval" extends="servicenow.Task" label="ServiceNow: Request Approval">
-        <property name="scriptLocation" default="servicenow/request_approval.py" hidden="true"/>
-
-        <property name="shortDescription" category="input" label="Short Description" required="true"/>
-        <property name="description" category="input" label="Description" required="true"/>
-        <property name="content"
-                  default="{&quot;short_description&quot;:&quot;%s&quot;,&quot;description&quot;:&quot;%s&quot;,&quot;category&quot;:&quot;XLRelease&quot;,&quot;u_supporting_service&quot;:&quot;Exchange Support&quot;,&quot;assignment_group&quot;:&quot;Global Software Change Group&quot;,&quot;justification&quot;:&quot;XLDeploy&quot;,&quot;requested_by_date&quot;:&quot;08-08-2014&quot;}"
-                  category="input" hidden="true"/>
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-        <property name="sysId" category="output"/>
-        <property name="ticket" category="output"/>
-    </type>
-
-    <type type="servicenow.PollingCheckStatus" extends="servicenow.Task" label="ServiceNow: Poll ChangeRequest Status">
-        <property name="scriptLocation" default="servicenow/poll_change_request_status.py" hidden="true"/>
-
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="false"/>
-        <property name="sysId" category="input" label="System ID" required="true"/>
-        <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true"
-                  default="30"/>
-        <property name="statusField" category="input" label="Status Field" required="true" default="state"/>
-        <property name="checkForStatus" category="input" label="Status Value to check for" required="true"/>
-        <property name="status" category="output"/>
-        <property name="ticket" category="output"/>
+    
+    
+      <!--
+     #######################################################################################################################
+     #    Need to be removed
+     #######################################################################################################################
+    -->  
+    
+    <type type="servicenow.Task" extends="xlrelease.PythonScript" virtual="true">
+        <property name="iconLocation" default="servicenow/servicenow-icon.png" hidden="true"/>
+        <property name="servicenowServer" category="input" label="Server" referenced-type="servicenow.Server" required="true"
+                  kind="ci"/>
+        <property name="username" category="input" required="false"/>
+        <property name="password" password="true" category="input" required="false"/>
         <property name="data" category="output" kind="map_string_string"/>
     </type>
-
-    <type type="servicenow.GetChangeRequest" extends="servicenow.Task" label="ServiceNow: Get ChangeRequest">
-        <property name="scriptLocation" default="servicenow/get_change_request.py" hidden="true"/>
-
-        <property name="tableName" category="input" default="change_request" required="true" hidden="true"/>
-        <property name="number" category="input" label="Number" required="true"/>
-        <property name="fieldNames" category="input" label="Field Names" required="true" kind="list_of_string"
-                  description="List of field names to be displayed"/>
-    </type>
-
-    <type type="servicenow.CheckChangeRequest" extends="servicenow.Task" label="ServiceNow: Check ChangeRequest">
-        <property name="scriptLocation" default="servicenow/check_change_request.py" hidden="true"/>
-
-        <property name="tableName" category="input" default="change_request" required="true" hidden="true"/>
-        <property name="expectedStatus" category="input" default="Closed Complete,Closed Incomplete,Closed Skipped"
+    
+     <!--Record is default name for everything in servicenow, should not be used. -->
+    
+    <type type="servicenow.CreateRecord" extends="servicenow.Task" label="ServiceNow: Create Record" virtual="true">
+        <property name="scriptLocation" default="servicenow/create_record.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
-
-        <property name="number" category="input" label="Number" required="true"/>
-    </type>
-
-    <type type="servicenow.UpdateCMDB" extends="servicenow.Task" label="ServiceNow: Update CMDB">
-        <property name="scriptLocation" default="servicenow/update_cmdb.py" hidden="true"/>
-        <property name="tableName" category="input" default="cmdb_ci_appl" required="true" hidden="true"/>
-        <property name="environment" category="input" required="true" label="Environment"/>
-        <property name="applicationName" category="input" required="true" label="Application Name"/>
-        <property name="company" category="input" required="true" label="Company"/>
-        <property name="configAdminGroup" category="input" required="true" label="Config Admin Group"/>
-        <property name="version" category="input" required="true" label="Version"/>
-        <property name="virtualMachine" category="input" required="false" label="Virtual Machine"/>
-        <property name="tomcat" category="input" required="false" label="Tomcat"/>
-        <property name="mysql" category="input" required="false" label="MySql"/>
-        <property name="cfSpace" category="input" required="false" label="CF Space"/>
+        <property name="shortDescription" category="input" label="Short Description"/>
+        <property name="description" category="input"  required="false"/>
+        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false"/>
+        <property name="assignmentGroup" category="input" required="false"/>
+        <property name="comments" category="input" label="Comments" required="false"/>
+        <property name="additionalFields" category="input" required="false" kind="map_string_string"/>
         <property name="sysId" category="output"/>
+        <property name="Ticket" category="output"/>
     </type>
 
-    <type type="servicenow.ScheduleTask" extends="xlrelease.PythonScript" label="ServiceNow: Schedule Task">
+    <type type="servicenow.UpdateRecord" extends="servicenow.Task" label="ServiceNow: Update Record" virtual="true">
+        <property name="scriptLocation" default="servicenow/update_record.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+                  hidden="true"/>
+        <property name="sysId" category="input" required="true"/>
+        <property name="state" category="input" required="false"/>
+        <property name="shortDescription" category="input" label="Short Description" required="false"/>
+        <property name="description" category="input"  required="false"/>
+        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false"/>
+        <property name="assignmentGroup" category="input" required="false"/>
+        <property name="comments" category="input" label="Comments" required="false"/>
+        <property name="additionalFields" category="input" required="false" kind="map_string_string"/>
+    </type>
+    
+    <!-- Create and create new are exactly the same actions in ServiceNow, no use for double types. -->
+    
+    <type type="servicenow.CreateNewRecord" extends="servicenow.Task" label="ServiceNow: Create New Record" virtual="true">
+        <property name="scriptLocation" default="servicenow/create_new_record.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+                  hidden="true"/>
+        <property name="content" category="input" label="Request Content" required="true" size="large"/>
+        <property name="sysId"   category="output"/>
+        <property name="Ticket"  category="output"/>
+    </type>
+
+    <type type="servicenow.CreateNewIncident" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New Incident" virtual="true">
+        <property name="tableName" category="input" label="Table Name" default="incident" required="true"
+                  hidden="true"/>
+    </type>
+    
+    <type type="servicenow.CreateNewServiceRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ServiceRequest" virtual="true">
+        <property name="tableName" category="input" default="sc_request" required="true" hidden="true"/>
+    </type>
+    
+    <type type="servicenow.CreateNewRequestItem" extends="servicenow.CreateNewRecord"  label="ServiceNow: Create New Request Item" virtual="true">
+        <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true"
+                  hidden="true"/>
+    </type>
+    
+    <type type="servicenow.CreateNewChangeRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ChangeRequest" virtual="true">
+        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
+                  hidden="true"/>
+    </type>
+
+    <type type="servicenow.ScheduleTask" extends="xlrelease.PythonScript" label="ServiceNow: Schedule Task" virtual="true">
         <property name="iconLocation" default="servicenow/xebialabs-icon.png" hidden="true"/>
         <property name="scriptLocation" default="servicenow/schedule_task.py" hidden="true"/>
         <property name="startField" category="input" label="Start Date Field" required="true"/>
@@ -316,74 +429,4 @@
         <property name="snData" category="input" label="Service Now Data Key-Value Map" kind="map_string_string"
                   required="true"/>
     </type>
-
-    <!--
-        #######################################################################################################################
-        #
-        #                  Legacy Tasks that should be depricated in favor for more descriptive ones
-        #
-        #######################################################################################################################
-    -->
-
-    <type type="servicenow.CreateRequest" extends="servicenow.Task" label="ServiceNow: Create Request">
-        <property name="scriptLocation" default="servicenow/create_record.py" hidden="true"/>
-
-        <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
-                  hidden="true"/>
-        <property name="shortDescription" category="input" label="Short Description" required="true"/>
-        <property name="comments" category="input" label="Comments" required="true"/>
-
-        <property name="sysId" category="output"/>
-        <property name="Ticket" category="output"/>
-    </type>
-
-
-    <!--
-       #######################################################################################################################
-       #    ServiceNow Business Applications
-       #######################################################################################################################
-   -->
-
-    <type type="servicenow.VirtualApplication" extends="xlrelease.PythonScript" virtual="true">
-        <property name="iconLocation" default="servicenow/servicenow-icon.png" hidden="true"/>
-        <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
-
-        <property name="servicenowServer" category="input" label="Server" referenced-type="servicenow.Server" required="true"
-                  kind="ci"/>
-        <property name="username" category="input" required="false"/>
-        <property name="password" password="true" category="input" required="false"/>
-
-    </type>
-
-    <type type="servicenow.Application" extends="servicenow.VirtualApplication" label="ServiceNow: Application">
-        <property name="ciName" label="CI Name" category="input"/>
-        <property name="environment" category="input" required="false"/>
-        <property name="version" category="input" required="false"/>
-        <property name="dependsOn" category="input" kind="set_of_string" required="false"/>
-        <property name="usedBy" category="input" kind="set_of_string" required="false"/>
-        <property name="runsOn" category="input" kind="set_of_string" required="false"/>
-        <property name="sysId" category="output"/>
-    </type>
-
-    <type type="servicenow.UpdateApplicationVersion" extends="servicenow.VirtualApplication" label="ServiceNow: Application Version Update">
-        <property name="scriptLocation" default="servicenow/application/update_application_version.py" hidden="true"/>
-        <property name="ciName" label="CI Name" category="input"/>
-        <property name="environment" category="input" required="false"/>
-        <property name="version" category="input" required="false"/>
-    </type>
-
-    <!--
-     #######################################################################################################################
-     #    ServiceNow Portal and KnowledgeBase
-     #######################################################################################################################
-    -->
-    <type type="servicenow.PublishArticle" extends="servicenow.VirtualApplication" label="ServiceNow: Publish Article">
-        <property name="scriptLocation" default="servicenow/kb/create_or_update_article.py" hidden="true"/>
-        <property name="articleCategory" category="input"/>
-        <property name="knowledgeBase" category="input"/>
-        <property name="shortDescription" category="input"/>
-        <property name="articleText" category="input" size="large"/>
-    </type>
-
 </synthetic>
-
