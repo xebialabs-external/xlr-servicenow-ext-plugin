@@ -142,15 +142,6 @@ class ServiceNowClient(object):
     def find_by_name(self, name, table_name, fail_on_not_found=False):
         query = "name=%s" % name
         return self.query(table_name, query, fail_on_not_found)
-    
-    #Finding and validating a display value of a choicelist, will return value of teh choice.
-    def find_value_of_list(self, name, table_name, choice_field, fail_on_not_found=False):
-        query = "sysparm_query=name=%s^element=%s^label=%s" % (table_name, choice_field ,name)
-        return self.query('sys_choice', query, fail_on_not_found)
-    
-    def get_choices(self, table_name, field_name):
-        servicenow_api_url = '/api/now/table/sys_choice?sysparm_query=name=%s^element=%s&sysparm_fields=label' % (table_name, field_name, self.sysparms)
-        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
 
     def create_link(self, table_name, sys_id):
         return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
@@ -161,26 +152,7 @@ class ServiceNowClient(object):
         data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
         if data["sys_row_error"] != "":
             raise RuntimeError(data["sys_row_error"])
-        return data
-    
-    def wait_for_approval(self, table_name, sys_id):
-        is_clear = False
-        while not is_clear:
-            try:
-                data = self.get_change_request(table_name, sys_id)
-                status = data["approval"]
-                print "Found %s in Service Now as %s" % (data['number'], status)
-                if "Approved" == status:
-                    is_clear = True
-                    print "ServiceNow approval received."
-                elif "rejected" == status:
-                    print "Failed to get approval from ServiceNow"
-                    sys.exit(1)
-                else:
-                    time.sleep(5)
-            except:
-                print json.dumps(data, indent=4, sort_keys=True)
-                print "Error finding status for {}".format(sys_id)            
+        return data         
 
     def request(self, method, url, headers, content_type='application/json', body=None):
         print "Service Now URL = %s \n" % (url)
