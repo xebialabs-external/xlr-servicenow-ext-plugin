@@ -16,31 +16,9 @@ class ServiceNowApplicationClient(object):
         self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'],
                                                         task_vars['password'])
 
-    # Path for default client.  It uses v1 of the api which throws a 404 not found when nothing matchs. v2 doesn't.
-    def _find_record(self, table_name, query):
-        servicenow_api_url = '/api/now/table/%s?%s&%s' % (table_name, query, self.sn_client.sysparms)
-        return self.sn_client.request(method='GET', url=servicenow_api_url, headers=self.sn_client.headers)
-
-    def query(self, table_name, query, fail_on_not_found=False):
-        # check if application exists
-        result = self._find_record(table_name, query)
-        size = len(result)
-        if size is 1:
-            return result[0]
-        elif size > 1:
-            raise Exception("Expected to find only 1 entry with query '%s' but found %s" % (query, size))
-        if fail_on_not_found:
-            raise Exception("No resullts found for query '%s'." % query)
-        return None
-
-    def find_by_name(self, name, table_name, fail_on_not_found=False):
-        # check if application exists
-        query = "name=%s" % name
-        return self.query(table_name, query, fail_on_not_found)
-
     def find_relationship(self, parent_sys_id, child_sys_id, fail_on_not_found=False):
         query = "parent.sys_id=%s^child.sys_id=%s" % (parent_sys_id, child_sys_id)
-        return self.query('cmdb_rel_ci', query, fail_on_not_found)
+        return self.sn_client.query('cmdb_rel_ci', query, fail_on_not_found)
 
     def create_ci(self, table_name, content):
         record_data = self.sn_client.create_record(table_name, content)
@@ -61,7 +39,7 @@ class ServiceNowApplicationClient(object):
         return None
 
     def process_application_ci(self, name):
-        ci = self.find_by_name(name, self.table_cmdb_ci_app)
+        ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
         if ci is None:
             content = {'name': name}
             self.set_from_task_vars('environment', content)
@@ -72,7 +50,7 @@ class ServiceNowApplicationClient(object):
         return sys_id
 
     def process_app_server_ci(self, name):
-        ci = self.find_by_name(name, self.table_cmdb_ci_app_server)
+        ci = self..sn_client.find_by_name(name, self.table_cmdb_ci_app_server)
         if ci is None:
             content = {'name': name}
             self.set_from_task_vars('version', content)
@@ -132,7 +110,4 @@ class ServiceNowApplicationClient(object):
         self.print_links(sys_id)
         return sys_id
 
-
 sysId = ServiceNowApplicationClient(locals()).process()
-
-

@@ -9,9 +9,8 @@
                   required="false" hidden="true" default="change_request"/>
         <property name="changeTaskTableName" label="Change Task Table Name (Required for Generate Release)"
                   required="false" hidden="true" default="change_task"/>
-        <property name="sysparmDisplayValue" label="Retrieve display value" required="true" default="True"
-                  kind="boolean" description="If true returns display values for all of the fields"/>
-        <property name="sysparmInputDisplayValue" label="Input values are display values" required="true" default="True"
+        <property name="sysparmDisplayValue" label="Retrieve display value" required="false" default="False" kind="boolean" description="If true returns display values for all of the fields"/>
+        <property name="sysparmInputDisplayValue" label="Input values are display values" required="true" default="True" hidden="true"
                   kind="boolean" description="If true treats input values as display values"/>
         <property name="useOAuth" label="Use ServiceNow OAuth Resource Server"
                   description="Use OAuth instead of basic authentication" required="false" category="OAuth"
