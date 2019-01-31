@@ -9,7 +9,7 @@
                   required="false" hidden="true" default="change_request"/>
         <property name="changeTaskTableName" label="Change Task Table Name (Required for Generate Release)"
                   required="false" hidden="true" default="change_task"/>
-        <property name="sysparmDisplayValue" label="Retrieve display value" required="false" default="False" kind="boolean" description="If true returns display values for all of the fields"/>
+        <property name="sysparmDisplayValue" label="Retrieve display value" required="false" default="True" kind="boolean" description="If true returns display values for all of the fields"/>
         <property name="sysparmInputDisplayValue" label="Input values are display values" required="true" default="True" hidden="true"
                   kind="boolean" description="If true treats input values as display values"/>
         <property name="useOAuth" label="Use ServiceNow OAuth Resource Server"
@@ -52,16 +52,7 @@
         <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false"/>
         <property name="assignmentGroup" category="input" required="false"/>
         <property name="assignedTo" category="input" required="false"/>
-        <property name="state" category="input" required="false" kind="enum">
-            <enum-values>
-                <value>Pending</value>
-                <value>New</value>
-                <value>Assess</value>
-                <value>In Progress</value>
-                <value>Implement</value>
-                <value>Closed</value>
-            </enum-values>
-        </property>
+        <property name="state" category="input" required="false"/>
         <property name="priority" category="input" required="false" kind="enum">
             <enum-values>
                 <value>1 - Critical</value>
@@ -120,25 +111,11 @@
     <type type="servicenow.CreateChangeRequest" extends="servicenow.CreateTask" label="ServiceNow: Create Change Request" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
-        <property name="state" category="input" required="false" default="New" kind="enum">
-            <enum-values>
-                <value>New</value>
-                <value>Assess</value>
-            </enum-values>
-        </property>
     </type>
 
     <type type="servicenow.UpdateChangeRequest" extends="servicenow.UpdateTask" label="ServiceNow: Update Change Request" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
-        <property name="state" category="input" required="false" kind="enum">
-            <enum-values>
-                <value>New</value>
-                <value>Assess</value>
-                <value>Implement</value>
-                <value>Closed</value>
-            </enum-values>
-        </property>
     </type>
 
     <type type="servicenow.FindChangeRequestByTicket" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Change Request" virtual="false">
@@ -170,13 +147,6 @@
     <type type="servicenow.UpdateChangeTask" extends="servicenow.UpdateTask"  label="ServiceNow: Update Change Task" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
                   hidden="true"/>
-        <property name="state" category="input" required="false" kind="enum">
-            <enum-values>
-                <value>Pending</value>
-                <value>In Progress</value>
-                <value>Closed</value>
-            </enum-values>
-        </property>
     </type>
 
     <type type="servicenow.FindChangeTaskByTaskId" extends="servicenow.FindRecordByTicket"  label="ServiceNow: Find Change Task" virtual="false">
@@ -260,7 +230,56 @@
         <property name="tableName" category="input" label="Table Name" default="incident" required="true"
                   hidden="true"/>
     </type>
+    
+        <!--
+       #######################################################################################################################
+       #    Agile dev parts
+       #######################################################################################################################
+   -->
+    
+    <type type="servicenow.CreateStory" extends="servicenow.CreateTask" label="ServiceNow: Create Story" virtual="false">
+        <property name="scriptLocation" default="servicenow/agile/create_story.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
+                  hidden="true"/>
+        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false" hidden="true"/>
+        <property name="priority" category="input" required="false" kind="enum" hidden="true">
+            <enum-values>
+                <value>1 - Critical</value>
+                <value>2 - High</value>
+                <value>3 - Moderate</value>
+                <value>4 - Low</value>
+            </enum-values>
+        </property>
+        <property name="storyPoints" category="input" required="false"/>
+        <property name="epic" category="input" required="false"/>
+        <property name="product" category="input" required="false"/>
+        <property name="sprint" category="input" required="false"/>
+    </type>
 
+    <type type="servicenow.UpdateStory" extends="servicenow.UpdateTask" label="ServiceNow: Update Story" virtual="false">
+        <property name="scriptLocation" default="servicenow/agile/update_story.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
+                  hidden="true"/>
+        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false" hidden="true"/>
+        <property name="priority" category="input" required="false" kind="enum" hidden="true">
+            <enum-values>
+                <value>1 - Critical</value>
+                <value>2 - High</value>
+                <value>3 - Moderate</value>
+                <value>4 - Low</value>
+            </enum-values>
+        </property>
+        <property name="storyPoints" category="input" required="false"/>
+        <property name="epic" category="input" required="false"/>
+        <property name="product" category="input" required="false"/>
+        <property name="sprint" category="input" required="false"/>
+    </type>
+
+    <type type="servicenow.FindStory" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Story" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
+                  hidden="true"/>
+    </type>
+    
 
     <!--
        #######################################################################################################################

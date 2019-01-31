@@ -3,7 +3,7 @@ from servicenow.helper.helper import assert_not_null
 from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
 
 
-class ServiceNowUpdateRecordClient(object):
+class ServiceNowUpdateStoryClient(object):
 
     def __init__(self, task_vars):
         self.table_name = task_vars['tableName']
@@ -21,14 +21,14 @@ class ServiceNowUpdateRecordClient(object):
     def process_record(self):
         content = {'short_description': self.task_vars['shortDescription']}
         self.set_from_task_vars('description', content)
-        self.set_from_task_vars('assignedTo', content, self.task_vars['assigned_to'])
-        self.set_from_task_vars('description', content)
         self.set_from_task_vars('assignedTo', content, 'assigned_to')
-        self.set_from_task_vars('priority', content, 'priority')
         self.set_from_task_vars('state', content, 'state')
-        self.set_from_task_vars('ciSysId', content, 'cmdb_ci')
+        self.set_from_task_vars('storyPoints', content, 'story_points')
+        self.set_from_task_vars('epic', content, 'epic')
+        self.set_from_task_vars('product', content, 'product')
+        self.set_from_task_vars('sprint', content, 'sprint')
         self.set_from_task_vars('assignmentGroup', content, 'assignment_group')
-        self.set_from_task_vars('comments', content, 'comments')
+        self.set_from_task_vars('comments', content, 'work_notes')
         for k, v in self.task_vars['additionalFields'].items():
             content[k] = v
         response = self.sn_client.update_record(self.table_name, self.task_vars['sysId'], content, getCurrentTask().getId())
@@ -40,10 +40,6 @@ class ServiceNowUpdateRecordClient(object):
         mdl.print_header3("__Links__")
         url = '%s/%s.do?sys_id=%s' % (self.sn_client.service_now_url, self.table_name, sys_id)
         mdl.print_url("Record Form View", url)
-        #mdl.print_hr()
-        #mdl.print_hr()
-        #mdl.print_header3("__Details__")
-        #mdl.println(self.sn_client.format_record(data))
 
     def process(self):
         self.process_record()
@@ -51,4 +47,4 @@ class ServiceNowUpdateRecordClient(object):
         self.print_links(self.task_vars['sysId'], data['number'], data)
         return data
 
-data = ServiceNowUpdateRecordClient(locals()).process()
+data = ServiceNowUpdateStoryClient(locals()).process()

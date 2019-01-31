@@ -155,7 +155,7 @@ class ServiceNowClient(object):
         return data         
 
     def request(self, method, url, headers, content_type='application/json', body=None):
-        print "Service Now URL = %s \n" % (url)
+        #print "Service Now URL = %s \n" % (url)
         if self.useOAuth: self.issue_token()
         if method == 'GET':
             response = self.httpRequest.get(url, contentType=content_type, headers=headers)

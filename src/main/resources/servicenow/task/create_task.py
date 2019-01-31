@@ -38,10 +38,10 @@ class ServiceNowRecordClient(object):
         mdl.print_header3("__Links__")
         url = '%s/%s.do?sys_id=%s' % (self.sn_client.service_now_url, self.table_name, sys_id)
         mdl.print_url("Record Form View", url)
-        mdl.print_hr()
-        mdl.print_hr()
-        mdl.print_header3("__Details__")
-        mdl.println(self.sn_client.format_record(data))
+        #mdl.print_hr()
+        #mdl.print_hr()
+        #mdl.print_header3("__Details__")
+        #mdl.println(self.sn_client.format_record(data))
 
     def process(self):
         response = self.process_record()
