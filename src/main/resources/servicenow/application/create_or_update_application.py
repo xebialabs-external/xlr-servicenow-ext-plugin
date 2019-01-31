@@ -21,11 +21,12 @@ class ServiceNowApplicationClient(object):
         return self.sn_client.query('cmdb_rel_ci', query, fail_on_not_found)
 
     def create_ci(self, table_name, content):
-        record_data = self.sn_client.create_record(table_name, content)
+        record_data = self.sn_client.create_record(table_name, content, getCurrentTask().getId())
         return record_data["target_sys_id"]
 
     def update_ci(self, table_name, content, ticket):
-        self.sn_client.update_record(table_name, ticket, content)
+        record_data = self.sn_client.update_record(table_name, ticket, content , getCurrentTask().getId())
+        return record_data["target_sys_id"]
 
     def set_from_task_vars(self, source_name, target_object, target_name=None):
         if source_name in self.task_vars.keys() and self.task_vars[source_name]:
@@ -39,18 +40,22 @@ class ServiceNowApplicationClient(object):
         return None
 
     def process_application_ci(self, name):
-        ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
-        if ci is None:
-            content = {'name': name}
-            self.set_from_task_vars('environment', content)
-            self.set_from_task_vars('version', content)
+        create = self.get_optional_task_var("create")
+        content = {'name': name}
+        self.set_from_task_vars('environment', content)
+        self.set_from_task_vars('version', content)
+        if create:
             sys_id = self.create_ci(self.table_cmdb_ci_app, content)
         else:
-            sys_id = ci['sys_id']
+            ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
+            if ci is None:
+                raise Exception("No CI found")
+            else:
+                sys_id = self.update_ci(self.table_cmdb_ci_app, content, ci['sys_id'])
         return sys_id
 
     def process_app_server_ci(self, name):
-        ci = self..sn_client.find_by_name(name, self.table_cmdb_ci_app_server)
+        ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app_server)
         if ci is None:
             content = {'name': name}
             self.set_from_task_vars('version', content)

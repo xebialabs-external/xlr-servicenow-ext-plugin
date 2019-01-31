@@ -168,16 +168,6 @@
        #    ServiceNow CMDB info.
        #######################################################################################################################
    -->
-    
-    <type type="servicenow.UpdateCMDB" extends="servicenow.Base" label="ServiceNow: Update CMDB">
-        <property name="scriptLocation" default="servicenow/update_cmdb.py" hidden="true"/>
-        <property name="tableName" category="input" default="cmdb_ci" required="true" hidden="true"/>
-        <property name="environment" category="input" required="true" label="Environment"/>
-        <property name="applicationName" category="input" required="true" label="Application Name"/>
-        <property name="company" category="input" required="true" label="Company"/>
-        <property name="version" category="input" required="true" label="Version"/>
-        <property name="sysId" category="output"/>
-    </type>
 
     <type type="servicenow.Application" extends="servicenow.Base" label="ServiceNow: Create Application">
         <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
@@ -187,14 +177,13 @@
         <property name="dependsOn" category="input" kind="set_of_string" required="false"/>
         <property name="usedBy" category="input" kind="set_of_string" required="false"/>
         <property name="runsOn" category="input" kind="set_of_string" required="false"/>
+        <property name="create" label="Create" default="true" kind="boolean" category="input" hidden="true"/>
         <property name="sysId" category="output"/>
     </type>
-
-    <type type="servicenow.UpdateApplicationVersion" extends="servicenow.Base" label="ServiceNow: Update Application Version">
-        <property name="scriptLocation" default="servicenow/application/update_application_version.py" hidden="true"/>
-        <property name="ciName" label="CI Name" category="input"/>
-        <property name="environment" category="input" required="false"/>
-        <property name="version" category="input" required="false"/>
+    
+    <type type="servicenow.UpdateApplicationVersion" extends="servicenow.Application" label="ServiceNow: Update Application">
+        <property name="create" label="create" default="false" kind="boolean" category="input" hidden="true"/>
+        <property name="sysId" category="output"/>
     </type>
 
     <!--
@@ -354,6 +343,18 @@
      #######################################################################################################################
     --> 
     
+    <!-- No operations directly on cmdb -->
+    
+    <type type="servicenow.UpdateCMDB" extends="servicenow.Base" label="ServiceNow: Update CMDB" virtual="true">
+        <property name="scriptLocation" default="servicenow/update_cmdb.py" hidden="true"/>
+        <property name="tableName" category="input" default="cmdb_ci" required="true" hidden="true"/>
+        <property name="environment" category="input" required="true" label="Environment"/>
+        <property name="applicationName" category="input" required="true" label="Application Name"/>
+        <property name="company" category="input" required="true" label="Company"/>
+        <property name="version" category="input" required="true" label="Version"/>
+        <property name="sysId" category="output"/>
+    </type>
+
     <!-- Request approval is done by setting the correct state. -->
     
     <type type="servicenow.RequestApproval" extends="servicenow.Base" label="ServiceNow: Change Request Approval" virtual="true">

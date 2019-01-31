@@ -146,8 +146,8 @@ class ServiceNowClient(object):
     def create_link(self, table_name, sys_id):
         return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
 
-    def update_record(self, table_name, ticket, content, xlr_task_id):
-        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=ticket, xlr_task_id=xlr_task_id)
+    def update_record(self, table_name, sys_id, content, xlr_task_id):
+        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=sys_id, xlr_task_id=xlr_task_id)
         payload = self.create_payload(header=payload_header, data=content)
         data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
         if data["sys_row_error"] != "":
