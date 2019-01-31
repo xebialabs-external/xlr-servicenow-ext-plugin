@@ -98,11 +98,6 @@ class ServiceNowClient(object):
     def create_payload(self, header, data):
         return json.dumps({"payload": json.dumps({'header': header, 'data': data})})
 
-    def get_change_request_states(self):
-        servicenow_api_url = '/api/now/v1/table/%s?element=state&name=task&sysparm_fields=%s&%s' % (
-        'sys_choice', 'value,label', self.sysparms)
-        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
-
     def create_record(self, table_name, content, xlr_task_id):
         payload_header = self.create_payload_header(table_name=table_name, action="create", identifier="", xlr_task_id=xlr_task_id)
         payload = self.create_payload(header=payload_header, data=content)
@@ -110,28 +105,9 @@ class ServiceNowClient(object):
         if data["sys_row_error"] != "":
             raise RuntimeError(data["sys_row_error"])
         return data
-
-    def find_record(self, table_name, query):
-        servicenow_api_url = '/api/now/v1/table/%s?%s&%s' % (table_name, query, self.sysparms)
-        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
-
-    def update_record(self, table_name, ticket, content, xlr_task_id):
-        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=ticket, xlr_task_id=xlr_task_id)
-        payload = self.create_payload(header=payload_header, data=content)
-        data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
-        if data["sys_row_error"] != "":
-            raise RuntimeError(data["sys_row_error"])
-        return data
-
-    def create_link(self, table_name, sys_id):
-        return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
-
-    def get_change_request(self, table_name, sys_id):
-        servicenow_api_url = '/api/now/v1/table/{}/{}?{}'.format(table_name, sys_id, self.sysparms)
-        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
-
-    def get_change_request_with_fields(self, table_name, number, fields):
-        servicenow_api_url = '/api/now/v1/table/%s?number=%s&sysparm_fields=%s&%s' % (table_name, number, ",".join(fields), self.sysparms)
+    
+    def get_record_with_fields(self, table_name, sys_id, fields):
+        servicenow_api_url = '/api/now/table/%s?sys_id=%s&sysparm_fields=%s&%s' % (table_name, sys_id, ",".join(fields), self.sysparms)
         response = self.httpRequest.get(servicenow_api_url, contentType='application/json', headers = self.headers)
         if self.useOAuth :self.revoke_token()
 
@@ -140,25 +116,43 @@ class ServiceNowClient(object):
             if len(data['result']) == 1:
                 return data['result'][0]
         self.throw_error(response)
+    
+    def find_record(self, table_name, query):
+        servicenow_api_url = '/api/now/table/%s?%s&%s' % (table_name, query, self.sysparms)
+        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
+    
+    def query(self, table_name, query, fail_on_not_found=False):
+        # check if application exists
+        result = self.find_record(table_name, query)
+        size = len(result)
+        if size is 1:
+            return result[0]
+        elif size > 1:
+            raise Exception("Expected to find only 1 entry with query '%s' but found %s" % (query, size))
+        if fail_on_not_found:
+            raise Exception("No resullts found for query '%s'." % query)
+        return None
+    
+    #Finding and validating a display value of a ref field, will return sys_id of ref.
+    def get_record(self, table_name, sys_id, fail_on_not_found=False):
+        query = "sys_id=%s" % sys_id
+        return self.query(table_name, query, fail_on_not_found)
+    
+    #Finding and validating a display value of a ref field, will return sys_id of ref.
+    def find_by_name(self, name, table_name, fail_on_not_found=False):
+        query = "name=%s" % name
+        return self.query(table_name, query, fail_on_not_found)
 
-    def wait_for_approval(self, table_name, sys_id):
-        is_clear = False
-        while not is_clear:
-            try:
-                data = self.get_change_request(table_name, sys_id)
-                status = data["approval"]
-                print "Found %s in Service Now as %s" % (data['number'], status)
-                if "Approved" == status:
-                    is_clear = True
-                    print "ServiceNow approval received."
-                elif "rejected" == status:
-                    print "Failed to get approval from ServiceNow"
-                    sys.exit(1)
-                else:
-                    time.sleep(5)
-            except:
-                print json.dumps(data, indent=4, sort_keys=True)
-                print "Error finding status for {}".format(sys_id)
+    def create_link(self, table_name, sys_id):
+        return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
+
+    def update_record(self, table_name, ticket, content, xlr_task_id):
+        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=ticket, xlr_task_id=xlr_task_id)
+        payload = self.create_payload(header=payload_header, data=content)
+        data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
+        if data["sys_row_error"] != "":
+            raise RuntimeError(data["sys_row_error"])
+        return data         
 
     def request(self, method, url, headers, content_type='application/json', body=None):
         print "Service Now URL = %s \n" % (url)
