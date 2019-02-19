@@ -11,5 +11,3 @@ params = {
 
 sn_client = ServiceNowClient.create_client(params)
 content = None
-
-data = sn_client.get_change_request_states()

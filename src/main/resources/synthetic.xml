@@ -65,9 +65,9 @@
         <property name="additionalFields" category="input" required="false" description="Use Servicenow technical field name as 'key' and the corresponding value" kind="map_string_string"/>
         
         <!-- Next 3 lines need to be removed -->
-        <property name="content" category="input" label="Content" default="x" size="large" hidden="true"/>
-        <property name="taskId" category="output" default="x" hidden="true"/>
-        <property name="Task" category="output" default="x" hidden="true"/>
+        <property name="content" category="input" label="Content" required="false" default="" size="large" hidden="true"/>
+        <property name="taskId" category="output" default="" required="false" hidden="true"/>
+        <property name="Task" category="output" default="" required="false" hidden="true"/>
         <!--end-->
         
         <property name="sysId" category="output" default="${sysId}"/>
@@ -267,32 +267,28 @@
        #######################################################################################################################
    -->
 
-    <type type="servicenow.ServiceNowQueryTile" label="ServiceNow: Service Now query tile" extends="xlrelease.Tile">
+    <type type="servicenow.ServiceNowQueryTile" label="ServiceNow query" extends="xlrelease.Tile" description="Display information from ServiceNow based on an encoded query.">
         <property name="uri" hidden="true" default="include/ServiceNowQueryTile/servicenow-query-summary-view.html"/>
         <property name="detailsUri" hidden="true"
                   default="include/ServiceNowQueryTile/servicenow-query-details-view.html"/>
         <property name="title" description="Tile title" default="ServiceNow tickets"/>
-        <property name="embedded" kind="boolean" hidden="true" default="true"
-                  required="false"/>
         <property category="input" name="servicenowServer" referenced-type="servicenow.Server" kind="ci" label="Server"
                   description="ServiceNow server id to connect to"/>
         <property category="input" name="username" required="false"
                   description="Overrides the username used to connect to the server"/>
         <property category="input" name="password" password="true" required="false"
                   description="Overrides the password used to connect to the server"/>
-        <property category="input" name="authToken" required="false"
-                  description="Overrides the auth token used to connect to the server" default="None" hidden="true"/>
-        <property category="input" name="tableName" required="true" default="incident"
-                  description="ServiceNow table name (in lower case) (for example problem, change_request etc) Default value: incident"/>
-        <property category="input" name="query" required="false" size="large" description="ServiceNow query"/>
-        <property category="input" name="detailsViewColumns" hidden="false" kind="map_string_string"
-                  default="number:number,short_description:short_description,priority:priority,state:state,assigned_to:assigned_to.display_value"
-                  description="Map of columns displayed in details view of tile. For a referenced type column, display_value should be in the value of key:value pair separated by . (eg. assigned_to:assigned_to.display_value)"/>
+        <property category="input" name="tableName" required="true" default="change_request"
+                  description="ServiceNow table name (in lower case) (for example problem, change_request etc) Default value: change_request"/>
+        <property category="input" name="query" required="false" size="large" default="x_xlbv_xl_release_xl_release_templateISNOTEMPTY" description="ServiceNow encoded query"/>
+        <property category="input" name="detailsViewColumns" hidden="false" kind="map_string_string" default="number:number,short_description:short_description,priority:priority,state:state,assigned_to:assigned_to.display_value" description="Map of columns displayed in details view of tile. For a referenced type column, display_value should be in the value of key:value pair separated by . (eg. assigned_to:assigned_to.display_value)"/>
+        <property name="embedded" kind="boolean" hidden="true" default="true" required="false"/>
+        <property name="supportedScopes" kind="list_of_string" default="global,folder,release" hidden="true"/>
     </type>
     
     <!--
     #######################################################################################################################
-    #    Service Requests (no need for this yet... but can remain)
+    #    Service Requests
     #######################################################################################################################
    -->
     <type type="servicenow.CreateServiceRequest" extends="servicenow.CreateTask" label="ServiceNow: Create Service Request">
@@ -309,7 +305,7 @@
 
     <!--
     #######################################################################################################################
-    #    Service Request Items (no need for this yet... but can remain)
+    #    Service Request Items
     #######################################################################################################################
    -->
     <type type="servicenow.CreateRequestItem" extends="servicenow.CreateTask" label="ServiceNow: Create Request Item">
