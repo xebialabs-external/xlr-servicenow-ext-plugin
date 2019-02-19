@@ -56,10 +56,10 @@
 
         function getTitle(){
             if(vm.issuesSummaryData.total > 1){
-                return "tickets";
+                return "records";
             }
             else{
-                return "ticket";
+                return "record";
             }
         }
 
