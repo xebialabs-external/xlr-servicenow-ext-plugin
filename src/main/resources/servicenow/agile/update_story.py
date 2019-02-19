@@ -19,7 +19,9 @@ class ServiceNowUpdateStoryClient(object):
             target_object[target_name] = self.task_vars[source_name]
 
     def process_record(self):
-        content = {'short_description': self.task_vars['shortDescription']}
+        content = {'description': self.task_vars['description']}
+        if (self.task_vars['shortDescription']):
+            self.set_from_task_vars('shortDescription', content, 'short_description')
         self.set_from_task_vars('description', content)
         self.set_from_task_vars('assignedTo', content, 'assigned_to')
         self.set_from_task_vars('state', content, 'state')

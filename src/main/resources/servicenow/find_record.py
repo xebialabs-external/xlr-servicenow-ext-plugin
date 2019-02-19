@@ -3,14 +3,14 @@ from servicenow.helper.helper import assert_not_null
 
 assert_not_null(servicenowServer, "Server is mandatory")
 assert_not_null(tableName, "TableName is mandatory")
-assert_not_null(ticket, "Ticket is mandatory")
+assert_not_null(number, "Ticket is mandatory")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
 
-data = sn_client.find_record(tableName, "number=%s" % (ticket))
+data = sn_client.find_record(tableName, "number=%s" % (number))
 numRecords = len(data)
-print "Found %s records for %s" % (numRecords, ticket)
+print "Found %s records for %s" % (numRecords, number)
 data = data[0]
 sysId = data["sys_id"]
-print "Found %s in Service Now with sysId = %s.\n" % (ticket, sysId)
+print "Found %s in Service Now with sysId = %s.\n" % (number, sysId)
 print sn_client.format_record(data)
