@@ -22,19 +22,13 @@ class PublishArticleClient(object):
         mdl.print_hr()
 
     def publish_article(self):
-        kb_ci = self.sn_client.find_record("kb_knowledge_base", "name=%s" % self.task_vars['knowledgeBase'])[0]
-        category_ci = self.sn_client.find_record("kb_category", "name=%s" % self.task_vars['articleCategory'])[0]
-
-        content = {"kb_knowledge_base": kb_ci['sys_id'], "kb_category": category_ci['sys_id'],
-                   "short_description": self.task_vars['shortDescription'],
-                   "text": self.task_vars['articleText'], 'workflow_state': 'published'}
-        response = self.sn_client.create_record('kb_knowledge', content)
+        content = {"kb_knowledge_base": self.task_vars['knowledgeBase'], "kb_category": self.task_vars['articleCategory'],"short_description": self.task_vars['shortDescription'],
+                   "text": self.task_vars['articleText']}
+        response = self.sn_client.create_record('kb_knowledge', content, getCurrentTask().getId())
         return response["target_sys_id"]
 
     def process(self):
         sys_id = self.publish_article()
         self.print_links(sys_id)
 
-
 PublishArticleClient(locals()).process()
-
