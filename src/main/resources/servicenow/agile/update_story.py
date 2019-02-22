@@ -37,7 +37,7 @@ class ServiceNowUpdateStoryClient(object):
         return response
 
     def print_links(self, sys_id, ticket, data):
-        mdl.println("Update task '{}' with number '{}' in Service Now. \n".format(ticket, data['number']))
+        mdl.println("Updated '{}' with number '{}' in Service Now. \n".format(ticket, data['number']))
         mdl.print_hr()
         mdl.print_header3("__Links__")
         url = '%s/%s.do?sys_id=%s' % (self.sn_client.service_now_url, self.table_name, sys_id)

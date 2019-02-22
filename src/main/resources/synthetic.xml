@@ -144,7 +144,7 @@
                   hidden="true"/>
     </type>
 
-    <type type="servicenow.FindChangeTaskByParent" extends="servicenow.FindRecordByTicket"  label="ServiceNow: Find Change Task by Parent" virtual="false">
+    <type type="servicenow.FindChangeTaskByParent" extends="servicenow.Base"  label="ServiceNow: Find Change Task by Parent" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/change/find_by_parent.py" hidden="true"/>
@@ -230,57 +230,81 @@
             </enum-values>
         </property>
         <property name="storyPoints" category="input" required="false"/>
-        <property name="epic" category="input" required="false"/>
+        <property name="epic" category="input" default="${epicSysId}" required="false"/>
         <property name="product" category="input" required="false"/>
-        <property name="sprint" category="input" required="false"/>
+        <property name="sprint" category="input" default="${sprintSysId}" required="false"/>
+        <property name="sysId" category="output" default="${storySysId}"/>
     </type>
 
-    <type type="servicenow.UpdateStory" extends="servicenow.UpdateTask" label="ServiceNow: Update Story" virtual="false">
+    <type type="servicenow.UpdateStory" extends="servicenow.CreateStory" label="ServiceNow: Update Story" virtual="false">
         <property name="scriptLocation" default="servicenow/agile/update_story.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
                   hidden="true"/>
-        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false" hidden="true"/>
-        <property name="priority" category="input" required="false" kind="enum" hidden="true">
-            <enum-values>
-                <value>1 - Critical</value>
-                <value>2 - High</value>
-                <value>3 - Moderate</value>
-                <value>4 - Low</value>
-            </enum-values>
-        </property>
         <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="storyPoints" category="input" required="false"/>
-        <property name="epic" category="input" required="false"/>
-        <property name="product" category="input" required="false"/>
-        <property name="sprint" category="input" required="false"/>
+        <property name="sysId" category="input" default="${storySysId}" required="true"/>
     </type>
 
     <type type="servicenow.FindStory" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Story" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
                   hidden="true"/>
+        <property name="sysId" category="output" default="${storySysId}"/>
+    </type>
+    
+    <type type="servicenow.CreateScrumTask" extends="servicenow.CreateTask" label="ServiceNow: Create Scrum Task" virtual="false">
+        <property name="scriptLocation" default="servicenow/agile/create_scrum_task.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="rm_scrum_task" required="true"
+                  hidden="true"/>
+        <property name="ciSysId" category="input" label="Configuration Item" description="Related CMDB Configuration Item Id" required="false" hidden="true"/>
+        <property name="taskType" category="input" required="false" kind="enum">
+            <enum-values>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+                <value>4</value>
+            </enum-values>
+        </property>
+        <property name="plannedHours" category="input" required="false"/>
+        <property name="story" category="input" default="${storySysId}" required="true"/>
+        <property name="sysId" category="output" default="${scrumTaskSysId}"/>
+    </type>
+
+    <type type="servicenow.UpdateScrumTask" extends="servicenow.CreateScrumTask" label="ServiceNow: Update Scrum Task" virtual="false">
+        <property name="scriptLocation" default="servicenow/agile/update_scrum_task.py" hidden="true"/>
+        <property name="shortDescription" category="input" label="Short Description" required="false"/>
+        <property name="story" category="input" default="" required="false"/>
+        <property name="sysId" category="input" default="${scrumTaskSysId}" required="true"/>
+    </type>
+    
+    <type type="servicenow.FindScrumTaskByStory" extends="servicenow.Base"  label="ServiceNow: Find Scrum task by story" virtual="false">
+        <property name="tableName" category="input" label="Table Name" default="rm_scrum_task" required="true"
+                  hidden="true"/>
+        <property name="scriptLocation" default="servicenow/agile/find_by_story.py" hidden="true"/>
+        <property name="shortDescription" category="input" description="Multiple tasks can exists provide short description to look for." label="Short Description" default="Coding" required="false"/>
+        <property name="story" category="input" required="true" default="${storySysId}"/>
+        <property name="sysId" category="output" default="${scrumTaskSysId}"/>
     </type>
     
     <type type="servicenow.CreateEpic" extends="servicenow.CreateStory" label="ServiceNow: Create Epic" virtual="false">
-        <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true"
-                  hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true" hidden="true"/>
         <property name="storyPoints" category="input" required="false" hidden="true"/>
-        <property name="epic" category="input" required="false" hidden="true"/>
-        <property name="product" category="input" required="false"/>
-        <property name="sprint" category="input" required="false" hidden="true"/>
+        <property name="epic" category="input" default="" required="false" hidden="true"/>
+        <property name="sprint" category="input" default="" required="false" hidden="true"/>
+        <property name="sysId" category="output" default="${epicSysId}"/>
     </type>
 
     <type type="servicenow.UpdateEpic" extends="servicenow.UpdateStory" label="ServiceNow: Update Epic" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true"
                   hidden="true"/>
         <property name="storyPoints" category="input" required="false" hidden="true"/>
-        <property name="epic" category="input" required="false" hidden="true"/>
-        <property name="product" category="input" required="false"/>
-        <property name="sprint" category="input" required="false" hidden="true"/>
+        <property name="epic" category="input" default="" required="false" hidden="true"/>
+        <property name="sprint" category="input" default="" required="false" hidden="true"/>
+        <property name="sysId" category="input" default="${epicSysId}" required="true"/>
     </type>
 
     <type type="servicenow.FindEpic" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Epic" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true"
                   hidden="true"/>
+        <property name="sysId" category="output" default="${epicSysId}"/>
     </type>
     
     
