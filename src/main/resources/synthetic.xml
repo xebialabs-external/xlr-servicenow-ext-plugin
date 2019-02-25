@@ -69,14 +69,14 @@
         <property name="Task" category="output" default="" required="false" hidden="true"/>
         <!--end-->
         
-        <property name="sysId" category="output" default="${sysId}"/>
-        <property name="number" category="output" default="${newNumber}"/>
+        <property name="sysId" category="output"/>
+        <property name="number" category="output"/>
     </type>
 
     <type type="servicenow.UpdateTask" extends="servicenow.CreateTask" label="ServiceNow: Update Task" virtual="true">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
         <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="sysId" category="input" default="${sysId}" required="true"/>
+        <property name="sysId" category="input" required="true"/>
     </type>
     
     
@@ -84,15 +84,15 @@
         <property name="scriptLocation" default="servicenow/find_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="task" required="true"
                   hidden="true"/>
-        <property name="number" category="input" default="${newNumber}" required="true"/>
-        <property name="sysId" category="output" default="${foundSysId}"/>
+        <property name="number" category="input" required="true"/>
+        <property name="sysId" category="output"/>
     </type>
     
     <type type="servicenow.PollingCheckStatus" extends="servicenow.Base" label="ServiceNow: Wait for Status" virtual="false">
         <property name="scriptLocation" default="servicenow/task/poll_status.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="false"/>
-        <property name="sysId" category="input" default="${sysId}" label="System ID" required="true"/>
+        <property name="sysId" category="input" label="System ID" required="true"/>
         <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true" description="polling interval in minutes."
                   default="10"/>
         <property name="statusField" category="input" label="Status Field" required="true" default="state"/>
@@ -149,9 +149,9 @@
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/change/find_by_parent.py" hidden="true"/>
         <property name="shortDescription" category="input" description="Multiple tasks can exists provide short description to look for." label="Short Description" default="Implement" required="false"/>
-        <property name="number" category="input" default="" required="false" hidden="true"/>
-        <property name="parent" category="input" required="true" default="${sysId}"/>
-        <property name="sysId" category="output" default="${cTaskSysId}"/>
+        <property name="number" category="input" required="false" hidden="true"/>
+        <property name="parent" category="input" required="true"/>
+        <property name="sysId" category="output"/>
     </type>
     
     <!--
@@ -231,10 +231,10 @@
             </enum-values>
         </property>
         <property name="storyPoints" category="input" required="false"/>
-        <property name="epic" category="input" default="${epicSysId}" required="false"/>
+        <property name="epic" category="input" required="false"/>
         <property name="product" category="input" required="false"/>
-        <property name="sprint" category="input" default="${sprintSysId}" required="false"/>
-        <property name="sysId" category="output" default="${storySysId}"/>
+        <property name="sprint" category="input" required="false"/>
+        <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateStory" extends="servicenow.CreateStory" label="ServiceNow: Update Story" virtual="false">
@@ -242,13 +242,13 @@
         <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
                   hidden="true"/>
         <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="sysId" category="input" default="${storySysId}" required="true"/>
+        <property name="sysId" category="input" required="true"/>
     </type>
 
     <type type="servicenow.FindStory" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Story" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
                   hidden="true"/>
-        <property name="sysId" category="output" default="${storySysId}"/>
+        <property name="sysId" category="output"/>
     </type>
     
     <type type="servicenow.CreateScrumTask" extends="servicenow.CreateTask" label="ServiceNow: Create Scrum Task" virtual="false">
@@ -265,15 +265,15 @@
             </enum-values>
         </property>
         <property name="plannedHours" category="input" required="false"/>
-        <property name="story" category="input" default="${storySysId}" required="true"/>
-        <property name="sysId" category="output" default="${scrumTaskSysId}"/>
+        <property name="story" category="input" required="true"/>
+        <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateScrumTask" extends="servicenow.CreateScrumTask" label="ServiceNow: Update Scrum Task" virtual="false">
         <property name="scriptLocation" default="servicenow/agile/update_scrum_task.py" hidden="true"/>
         <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="story" category="input" default="" required="false"/>
-        <property name="sysId" category="input" default="${scrumTaskSysId}" required="true"/>
+        <property name="story" category="input" required="false"/>
+        <property name="sysId" category="input" required="true"/>
     </type>
     
     <type type="servicenow.FindScrumTaskByStory" extends="servicenow.Base"  label="ServiceNow: Find Scrum task by story" virtual="false">
@@ -281,32 +281,32 @@
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/agile/find_by_story.py" hidden="true"/>
         <property name="shortDescription" category="input" description="Multiple tasks can exists provide short description to look for." label="Short Description" default="Coding" required="false"/>
-        <property name="number" category="input" default="" required="false" hidden="true"/>
-        <property name="story" category="input" required="true" default="${storySysId}"/>
-        <property name="sysId" category="output" default="${scrumTaskSysId}"/>
+        <property name="number" category="input" required="false" hidden="true"/>
+        <property name="story" category="input" required="true"/>
+        <property name="sysId" category="output"/>
     </type>
     
     <type type="servicenow.CreateEpic" extends="servicenow.CreateStory" label="ServiceNow: Create Epic" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true" hidden="true"/>
         <property name="storyPoints" category="input" required="false" hidden="true"/>
-        <property name="epic" category="input" default="" required="false" hidden="true"/>
-        <property name="sprint" category="input" default="" required="false" hidden="true"/>
-        <property name="sysId" category="output" default="${epicSysId}"/>
+        <property name="epic" category="input" required="false" hidden="true"/>
+        <property name="sprint" category="input" required="false" hidden="true"/>
+        <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateEpic" extends="servicenow.UpdateStory" label="ServiceNow: Update Epic" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true"
                   hidden="true"/>
         <property name="storyPoints" category="input" required="false" hidden="true"/>
-        <property name="epic" category="input" default="" required="false" hidden="true"/>
-        <property name="sprint" category="input" default="" required="false" hidden="true"/>
-        <property name="sysId" category="input" default="${epicSysId}" required="true"/>
+        <property name="epic" category="input" required="false" hidden="true"/>
+        <property name="sprint" category="input" required="false" hidden="true"/>
+        <property name="sysId" category="input" required="true"/>
     </type>
 
     <type type="servicenow.FindEpic" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Epic" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_epic" required="true"
                   hidden="true"/>
-        <property name="sysId" category="output" default="${epicSysId}"/>
+        <property name="sysId" category="output"/>
     </type>
     
     
@@ -324,13 +324,13 @@
             </enum-values>
         </property>
         <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="sysId" category="input" default="${sprintSysId}" required="true"/>
+        <property name="sysId" category="input" required="true"/>
     </type>
 
     <type type="servicenow.FindSprint" extends="servicenow.FindRecordByTicket" label="ServiceNow: Find Sprint" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_sprint" required="true"
                   hidden="true"/>
-         <property name="sysId" category="output" default="${sprintSysId}"/>
+         <property name="sysId" category="output"/>
     </type>
     
     
@@ -408,7 +408,7 @@
     <type type="servicenow.GetChangeRequest" extends="servicenow.Base" label="ServiceNow: Get Change Request" virtual="true">
         <property name="scriptLocation" default="servicenow/get_change_request.py" hidden="true"/>
         <property name="tableName" category="input" default="change_request" required="true" hidden="true"/>
-        <property name="number" category="input" label="Number" default="${newNumber}" required="true"/>
+        <property name="number" category="input" label="Number" required="true"/>
         <property name="fieldNames" category="input" label="Field Names" required="true" kind="list_of_string"
                   description="List of field names to be displayed"/>
     </type>
