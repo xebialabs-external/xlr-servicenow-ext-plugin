@@ -149,6 +149,7 @@
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/change/find_by_parent.py" hidden="true"/>
         <property name="shortDescription" category="input" description="Multiple tasks can exists provide short description to look for." label="Short Description" default="Implement" required="false"/>
+        <property name="number" category="input" default="" required="false" hidden="true"/>
         <property name="parent" category="input" required="true" default="${sysId}"/>
         <property name="sysId" category="output" default="${cTaskSysId}"/>
     </type>
@@ -280,6 +281,7 @@
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/agile/find_by_story.py" hidden="true"/>
         <property name="shortDescription" category="input" description="Multiple tasks can exists provide short description to look for." label="Short Description" default="Coding" required="false"/>
+        <property name="number" category="input" default="" required="false" hidden="true"/>
         <property name="story" category="input" required="true" default="${storySysId}"/>
         <property name="sysId" category="output" default="${scrumTaskSysId}"/>
     </type>
