@@ -33,6 +33,8 @@ class ServiceNowPollStatusClient(object):
                 status = data[self.task_vars['statusField']]
                 print "Found [{}] in Service Now with status: [{}] Looking for {}\n".format(data['number'], status, self.task_vars['checkForStatus'])
                 if status == self.task_vars['checkForStatus']:
+                    status = data[self.task_vars['statusField']]
+                    ticket = data["number"]
                     break
             except Exception, e:
                 exc_info = sys.exc_info()

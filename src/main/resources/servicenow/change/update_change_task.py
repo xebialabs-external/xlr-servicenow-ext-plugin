@@ -27,8 +27,6 @@ class ServiceNowUpdateChangeTaskClient(object):
     def process_record(self):
         content = {'short_description': self.task_vars['shortDescription']}
         self.set_from_task_vars('description', content)
-        self.set_from_task_vars('assignedTo', content, self.task_vars['assigned_to'])
-        self.set_from_task_vars('description', content)
         self.set_from_task_vars('assignedTo', content, 'assigned_to')
         self.set_from_task_vars('priority', content, 'priority')
         self.set_from_task_vars('state', content, 'state')
@@ -52,6 +50,6 @@ class ServiceNowUpdateChangeTaskClient(object):
         self.process_record()
         data = self.sn_client.get_record(self.task_vars['tableName'],self.task_vars['sysId'])
         self.print_links(self.task_vars['sysId'], data['number'], data)
-        return data
+        return data, data['number']
 
-data = ServiceNowUpdateChangeTaskClient(locals()).process()
+data, number = ServiceNowUpdateChangeTaskClient(locals()).process()
