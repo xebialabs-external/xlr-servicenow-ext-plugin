@@ -15,6 +15,7 @@ class ServiceNowUpdateRecordClient(object):
         self.table_name = task_vars['tableName']
         self.task_vars = task_vars
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
+        assert_not_null(task_vars['sysId'], "Sys_id is mandatory when updating a task.")
         self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'],
                                                         task_vars['password'])
 

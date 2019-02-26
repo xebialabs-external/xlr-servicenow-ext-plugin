@@ -15,6 +15,7 @@ class ServiceNowRecordClient(object):
         self.table_name = task_vars['tableName']
         self.task_vars = task_vars
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
+        assert_not_null(task_vars['shortDescription'], "Short description is mandatory when creating a task.")
         self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'],
                                                         task_vars['password'])
 

@@ -297,10 +297,10 @@
                   label="Comments" required="false"/>
         <property name="taskType" category="input" required="false" kind="enum">
             <enum-values>
-                <value>1</value>
-                <value>2</value>
-                <value>3</value>
-                <value>4</value>
+                <value>Analysis</value>
+                <value>Coding</value>
+                <value>Documentation</value>
+                <value>Testing</value>
             </enum-values>
         </property>
         <property name="plannedHours" category="input" required="false"/>
