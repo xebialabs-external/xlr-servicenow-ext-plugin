@@ -26,8 +26,10 @@ plugins {
     id 'java'
     id 'com.moowork.node' version '0.12'
     id "com.github.rzabini.gradle-jython" version "1.0.0"
+    id "com.github.hierynomus.license" version "0.14.0"
 }
 
+apply plugin: 'com.github.hierynomus.license'
 apply plugin: 'xebialabs.root.opinions'
 apply plugin: 'xebialabs.opinions'
 apply plugin: 'com.xebialabs.dependency'
@@ -119,6 +121,22 @@ yarnRunBuild.dependsOn yarn_install, npmInstall
 compileJava.dependsOn unzipDist
 sourceSets.main.resources.srcDirs = ["src/main/resources"]
 sourceSets.test.resources.srcDirs = ["src/test/resources"]
+
+license {
+    header project.file('HEADER')
+    ignoreFailures false
+    excludes(["**/*.json", "**/*.yaml", "**/*.yml", "**/*.png"])
+}
+
+task licenseFormatJs(type: com.hierynomus.gradle.license.tasks.LicenseFormat) {
+    source = fileTree(dir: "src").include("**/*.js")
+}
+
+licenseFormat.dependsOn licenseFormatJs
+
+task licenseCheckJs(type: com.hierynomus.gradle.license.tasks.LicenseCheck) {
+    source = fileTree(dir: "src").include("**/*.js")
+}
 
 
 // Uncomment following line if you implement Java/Scala code depending on XL Release classes

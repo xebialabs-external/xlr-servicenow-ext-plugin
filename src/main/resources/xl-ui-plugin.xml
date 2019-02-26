@@ -1,3 +1,10 @@
+<!--
+
+    Copyright (c) 2019. All rights reserved.
+
+    This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
+
+-->
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.xebialabs.com/deployit/ui-plugin"
         xsi:schemaLocation="http://www.xebialabs.com/deployit/ui-plugin xl-ui-plugin.xsd">

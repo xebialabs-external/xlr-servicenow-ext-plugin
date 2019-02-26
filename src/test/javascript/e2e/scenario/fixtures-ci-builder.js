@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019. All rights reserved.
+ *
+ * This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
+ */
 const initReleaseDefaults = (function () {
     const RELEASE_TYPE = 'xlrelease.Release';
     const PHASE_TYPE = 'xlrelease.Phase';
