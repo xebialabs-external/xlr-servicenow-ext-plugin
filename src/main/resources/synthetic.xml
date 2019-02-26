@@ -57,7 +57,7 @@
         <property name="tableName" category="input" label="Table Name" default="task" required="true"
                   hidden="true"/>
         <property name="shortDescription" description="The short description of the task" category="input" required="true" label="Short Description"/>
-        <property name="description" escription="The complete description of the task" category="input" size="large" label="Description" required="false"/>
+        <property name="description" description="The complete description of the task" category="input" size="large" label="Description" required="false"/>
         <property name="ciSysId" category="input" label="Configuration Item"
                   description="Related CMDB Configuration Item (id or displayvalue)" required="false"/>
         <property name="assignmentGroup" description="The assignment group of the task" category="input" required="false"/>
@@ -104,7 +104,7 @@
                   description="polling interval in minutes."
                   default="10"/>
         <property name="statusField" description="The technical name of a field to check" category="input" label="Status Field" required="true" default="state"/>
-        <property name="checkForStatus" description="The dsiplay value to look for in teh field." category="input" label="Status to check for" required="true"/>
+        <property name="checkForStatus" description="The display value to look for in teh field." category="input" label="Status to check for" required="true"/>
         <property name="data" category="output" kind="map_string_string"/>
     </type>
 
