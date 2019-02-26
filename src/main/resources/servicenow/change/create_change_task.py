@@ -9,7 +9,7 @@ from servicenow.helper.helper import assert_not_null
 from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
 
 
-class ServiceNowRecordClient(object):
+class ServiceNowChangeTaskClient(object):
 
     def __init__(self, task_vars):
         self.table_name = task_vars['tableName']
@@ -33,17 +33,22 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('ciSysId', content, 'cmdb_ci')
         self.set_from_task_vars('assignmentGroup', content, 'assignment_group')
         self.set_from_task_vars('comments', content, 'comments')
+        self.set_from_task_vars('changeRequest', content, 'change_request')
         for k, v in self.task_vars['additionalFields'].items():
             content[k] = v
         response = self.sn_client.create_record(self.table_name, content, getCurrentTask().getId())
         return response
 
     def print_links(self, sys_id, ticket, data):
-        mdl.println("Created task '{}' with sysId '{}' in Service Now. \n".format(ticket, sys_id))
+        mdl.println("Created change task '{}' with sysId '{}' in Service Now. \n".format(ticket, sys_id))
         mdl.print_hr()
         mdl.print_header3("__Links__")
         url = '%s/%s.do?sys_id=%s' % (self.sn_client.service_now_url, self.table_name, sys_id)
         mdl.print_url("Record Form View", url)
+        #mdl.print_hr()
+        #mdl.print_hr()
+        #mdl.print_header3("__Details__")
+        #mdl.println(self.sn_client.format_record(data))
 
     def process(self):
         response = self.process_record()
@@ -52,5 +57,5 @@ class ServiceNowRecordClient(object):
         self.print_links(sys_id, number, data)
         return sys_id, number, data
 
-sysId, number, data = ServiceNowRecordClient(locals()).process()
+sysId, number, data = ServiceNowChangeTaskClient(locals()).process()
 

@@ -145,12 +145,16 @@
           virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
                   hidden="true"/>
+        <property name="scriptLocation" default="servicenow/change/create_change_task.py" hidden="true"/>
+        <property name="changeRequest" description="sys_id of the parent Change" category="input" required="false"/>
     </type>
 
     <type type="servicenow.UpdateChangeTask" extends="servicenow.UpdateTaskNew" label="ServiceNow: Update Change Task"
           virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
                   hidden="true"/>
+        <property name="scriptLocation" default="servicenow/change/update_change_task.py" hidden="true"/>
+        <property name="changeRequest" description="sys_id of the parent Change" category="input" required="false"/>
     </type>
 
     <type type="servicenow.FindChangeTaskByTaskId" extends="servicenow.FindRecordByTicketNo"
