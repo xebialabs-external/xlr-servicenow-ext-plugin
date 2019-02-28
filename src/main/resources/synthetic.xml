@@ -524,7 +524,22 @@
         <property name="xlFormat" category="input" label="XLR date format" default="yyyy-MM-dd'T'HH:mm:ss'Z'"/>
         <property name="snData" category="input" label="Service Now Data Key-Value Map" kind="map_string_string"
                   required="true"/>
-    </type>    
+    </type>
+    
+    <type type="servicenow.UpdateCMDB" extends="servicenow.Base" label="ServiceNow: Update CMDB">
+        <property name="scriptLocation" default="servicenow/legacy/update_cmdb.py" hidden="true"/>
+        <property name="tableName" category="input" default="cmdb_ci_appl" required="true" hidden="true"/>
+        <property name="environment" category="input" required="true" label="Environment"/>
+        <property name="applicationName" category="input" required="true" label="Application Name"/>
+        <property name="company" category="input" required="true" label="Company"/>
+        <property name="configAdminGroup" category="input" required="true" label="Config Admin Group"/>
+        <property name="version" category="input" required="true" label="Version"/>
+        <property name="virtualMachine" category="input" required="false" label="Virtual Machine"/>
+        <property name="tomcat" category="input" required="false" label="Tomcat"/>
+        <property name="mysql" category="input" required="false" label="MySql"/>
+        <property name="cfSpace" category="input" required="false" label="CF Space"/>
+        <property name="sysId" category="output"/>
+    </type>
     
     <!--
     #######################################################################################################################
@@ -585,20 +600,5 @@
         <property name="sysId" category="input" label="System ID" required="true"/>
 
         <property name="status" category="output"/>
-    </type>
-    
-    <type type="servicenow.UpdateCMDB" extends="servicenow.Base" label="ServiceNow: Update CMDB">
-        <property name="scriptLocation" default="servicenow/application/update_cmdb.py" hidden="true"/>
-        <property name="tableName" category="input" default="cmdb_ci_appl" required="true" hidden="true"/>
-        <property name="environment" category="input" required="true" label="Environment"/>
-        <property name="applicationName" category="input" required="true" label="Application Name"/>
-        <property name="company" category="input" required="true" label="Company"/>
-        <property name="configAdminGroup" category="input" required="true" label="Config Admin Group"/>
-        <property name="version" category="input" required="true" label="Version"/>
-        <property name="virtualMachine" category="input" required="false" label="Virtual Machine"/>
-        <property name="tomcat" category="input" required="false" label="Tomcat"/>
-        <property name="mysql" category="input" required="false" label="MySql"/>
-        <property name="cfSpace" category="input" required="false" label="CF Space"/>
-        <property name="sysId" category="output"/>
     </type>
 </synthetic>
