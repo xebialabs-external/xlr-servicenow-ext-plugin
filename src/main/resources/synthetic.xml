@@ -224,14 +224,56 @@
 
     <type type="servicenow.CreateIncident" extends="servicenow.CreateTaskNew" label="ServiceNow: Create Incident"
           virtual="false">
-        <property name="tableName" category="input" label="Table Name" default="incident" required="true"
-                  hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="incident" required="true" hidden="true"/>
+        <property name="priority" description="The priority of the incident." category="input" required="false" kind="enum" hidden="true">
+            <enum-values>
+                <value>1 - Critical</value>
+                <value>2 - High</value>
+                <value>3 - Moderate</value>
+                <value>4 - Low</value>
+            </enum-values>
+        </property>
+        <property name="impact" description="The impact of the incident." category="input" required="false" kind="enum">
+            <enum-values>
+                <value>1 - High</value>
+                <value>2 - Medium</value>
+                <value>3 - Low</value>
+            </enum-values>
+        </property>
+        <property name="urgency" description="The urgency of the incident." category="input" required="false">
+            <enum-values>
+                <value>1 - High</value>
+                <value>2 - Medium</value>
+                <value>3 - Low</value>
+            </enum-values>
+        </property>
     </type>
 
     <type type="servicenow.UpdateIncident" extends="servicenow.UpdateTaskNew" label="ServiceNow: Update Incident"
           virtual="false">
-        <property name="tableName" category="input" label="Table Name" default="incident" required="true"
-                  hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="incident" required="true" hidden="true"/>
+        <property name="priority" description="The priority of the incident." category="input" required="false" kind="enum" hidden="true">
+            <enum-values>
+                <value>1 - Critical</value>
+                <value>2 - High</value>
+                <value>3 - Moderate</value>
+                <value>4 - Low</value>
+            </enum-values>
+        </property>
+        <property name="impact" description="The impact of the incident." category="input" required="false" kind="enum">
+            <enum-values>
+                <value>1 - High</value>
+                <value>2 - Medium</value>
+                <value>3 - Low</value>
+            </enum-values>
+        </property>
+        <property name="urgency" description="The urgency of the incident." category="input" required="false">
+            <enum-values>
+                <value>1 - High</value>
+                <value>2 - Medium</value>
+                <value>3 - Low</value>
+            </enum-values>
+        </property>
     </type>
 
     <type type="servicenow.FindIncidentByTicket" extends="servicenow.FindRecordByTicket"

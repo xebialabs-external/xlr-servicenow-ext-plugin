@@ -31,8 +31,8 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('description', content)
         self.set_from_task_vars('assignmentGroup', content, 'assignment_group')
         self.set_from_task_vars('assignedTo', content, 'assigned_to')
-        self.set_from_task_vars('priority', content, 'priority')
-        self.set_from_task_vars('state', content, 'state')
+        self.set_from_task_vars('priority', content)
+        self.set_from_task_vars('state', content)
         self.set_from_task_vars('ciSysId', content, 'cmdb_ci')
         self.set_from_task_vars('comments', content, 'comments')
 
@@ -40,11 +40,13 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('workNotes', content, 'work_notes')
         self.set_from_task_vars('storyPoints', content, 'story_points')
         self.set_from_task_vars('epic', content, 'epic')
-        self.set_from_task_vars('product', content, 'product')
-        self.set_from_task_vars('sprint', content, 'sprint')
+        self.set_from_task_vars('product', content)
+        self.set_from_task_vars('sprint', content)
         self.set_from_task_vars('taskType', content, 'type')
         self.set_from_task_vars('plannedHours', content, 'planned_hours')
-        self.set_from_task_vars('story', content, 'story')
+        self.set_from_task_vars('story', content)
+        self.set_from_task_vars('impact', content)
+        self.set_from_task_vars('urgency', content)
 
         for k, v in self.task_vars['additionalFields'].items():
             content[k] = v
