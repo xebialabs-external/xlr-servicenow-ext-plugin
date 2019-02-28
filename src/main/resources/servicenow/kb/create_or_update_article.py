@@ -14,6 +14,9 @@ class PublishArticleClient(object):
     def __init__(self, task_vars):
         self.task_vars = task_vars
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
+        assert_not_null(task_vars['knowledgeBase'], "No knowledge base provided.")
+        assert_not_null(task_vars['shortDescription'], "No description provided.")
+        assert_not_null(task_vars['articleText'], "No text provided.")
         self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'],
                                                         task_vars['password'])
 

@@ -57,17 +57,17 @@
         <property name="scriptLocation" default="servicenow/task/create_task.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="task" required="true"
                   hidden="true"/>
-        <property name="shortDescription" description="The short description of the task" category="input"
+        <property name="shortDescription" description="The short description of the task." category="input"
                   required="true" label="Short Description"/>
-        <property name="description" description="The complete description of the task" category="input" size="large"
+        <property name="description" description="The complete description of the task." category="input" size="large"
                   label="Description" required="false"/>
         <property name="ciSysId" category="input" label="Configuration Item"
-                  description="Related CMDB Configuration Item (id or displayvalue)" required="false"/>
-        <property name="assignmentGroup" description="The assignment group of the task" category="input"
+                  description="Related CMDB Configuration Item (id or displayvalue)." required="false"/>
+        <property name="assignmentGroup" description="The assignment group of the task." category="input"
                   required="false"/>
-        <property name="assignedTo" description="The assignee of the task" category="input" required="false"/>
-        <property name="state" description="The display value of the tasks state" category="input" required="false"/>
-        <property name="priority" description="The priority of the task" category="input" required="false" kind="enum">
+        <property name="assignedTo" description="The assignee of the task." category="input" required="false"/>
+        <property name="state" description="The display value of the tasks state." category="input" required="false"/>
+        <property name="priority" description="The priority of the task." category="input" required="false" kind="enum">
             <enum-values>
                 <value>1 - Critical</value>
                 <value>2 - High</value>
@@ -75,10 +75,10 @@
                 <value>4 - Low</value>
             </enum-values>
         </property>
-        <property name="comments" description="Leave comments to the work note field." category="input" label="Comments"
+        <property name="comments" description="Leave comments to the comments (customer visible) field." category="input" label="Comments"
                   required="false"/>
         <property name="additionalFields" category="input" required="false"
-                  description="Use Servicenow technical field name as 'key' and the corresponding value"
+                  description="Use Servicenow technical field name as 'key' and the corresponding value."
                   kind="map_string_string"/>
         <property name="sysId" description="The technical ID of the task" category="output"/>
         <property name="Ticket" label="Number" description="The unique number of the task" category="output"/>
@@ -105,11 +105,8 @@
                   description="Supply the technical table name in which to search."
                   hidden="false"/>
         <property name="sysId" description="The technical ID of the task" category="input" required="true"/>
-        <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true"
-                  description="polling interval in minutes."
-                  default="10"/>
-        <property name="statusField" description="The technical name of a field to check" category="input"
-                  label="Status Field" required="true" default="state"/>
+        <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true" description="Polling interval in minutes." default="10"/>
+        <property name="statusField" description="The technical name of a field to check" category="input" label="Status Field" required="true" default="state"/>
         <property name="checkForStatus" description="The display value to look for in teh field." category="input"
                   label="Status to check for" required="true"/>
         <property name="status" category="output"/>
@@ -163,8 +160,7 @@
 
     <type type="servicenow.FindChangeTaskByTaskId" extends="servicenow.FindRecordByTicket"
           label="ServiceNow: Find Change Task" virtual="false">
-        <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
-                  hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="change_task" required="true" hidden="true"/>
     </type>
 
     <type type="servicenow.FindChangeTaskByParent" extends="servicenow.Base"
@@ -173,7 +169,7 @@
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/find/find_by_parent.py" hidden="true"/>
         <property name="shortDescription" category="input"
-                  description="Multiple tasks can exists provide short description to look for."
+                  description="Multiple tasks can exists. Please provide the start of the short description to look for."
                   label="Short Description" required="false"/>
         <property name="parent" category="input" required="true"/>
         <property name="sysId" category="output"/>
@@ -187,17 +183,16 @@
 
     <type type="servicenow.Application" extends="servicenow.Base" label="ServiceNow: Create Application">
         <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
-        <property name="ciName" label="CI Name" category="input"/>
-        <property name="environment" category="input" required="false"/>
-        <property name="version" category="input" required="false"/>
-        <property name="company" category="input" required="true"/>
-        <property name="dependsOn" category="input" kind="set_of_string" required="false"/>
-        <property name="usedBy" category="input" kind="set_of_string" required="false"/>
-        <property name="runsOn" category="input" kind="set_of_string" required="false"/>
+        <property name="ciName" label="CI Name" description="The name of the CI on the ServcieNow"  category="input"/>
+        <property name="environment" category="input" description="The environment of the CI" required="false"/>
+        <property name="version" category="input" description="The version of the CI." required="false"/>
+        <property name="company" category="input" description="The company of the CI." required="true"/>
+        <property name="dependsOn" category="input" description="Provide a CI sys_id on which it depends. A relation swill be created." kind="set_of_string" required="false"/>
+        <property name="usedBy" description="Provide a CI sys_id which it is being used by." category="input" kind="set_of_string" required="false"/>
+        <property name="runsOn" description="Provide a CI sys_id for a server it runs on."  category="input" kind="set_of_string" required="false"/>
         <property name="create" label="Create" default="true" kind="boolean" category="input" hidden="true"/>
         <property name="additionalFields" category="input" required="false"
-                  description="Use Servicenow technical field name as 'key' and the corresponding value"
-                  kind="map_string_string"/>
+                  description="Use Servicenow technical field name as 'key' and the corresponding value" kind="map_string_string"/>
         <property name="sysId" category="output"/>
     </type>
 
@@ -215,10 +210,10 @@
     -->
     <type type="servicenow.PublishArticle" extends="servicenow.Base" label="ServiceNow: Publish Article">
         <property name="scriptLocation" default="servicenow/kb/create_or_update_article.py" hidden="true"/>
-        <property name="articleCategory" category="input"/>
-        <property name="knowledgeBase" category="input"/>
-        <property name="shortDescription" category="input"/>
-        <property name="articleText" category="input" size="large"/>
+        <property name="knowledgeBase" description="Provide the knowledgebase to put the article in." category="input" required="true"/>
+        <property name="articleCategory" description="Provide the category to put the article in." category="input"/>
+        <property name="shortDescription" description="Provide the title of the article." category="input" required="true"/>
+        <property name="articleText" description="Provide the text of the article. HTML tagss can be used for nice markup in ServiceNow" category="input" size="large" required="true"/>
     </type>
 
     <!--
@@ -268,17 +263,17 @@
         <property name="comments" category="input" label="Comments" required="false" hidden="true"/>
         <property name="workNotes" description="Leave comments to the work note field." category="input"
                   label="Comments" required="false"/>
-        <property name="storyPoints" category="input" required="false"/>
-        <property name="epic" category="input" required="false"/>
-        <property name="product" category="input" required="false"/>
-        <property name="sprint" category="input" required="false"/>
+        <property name="storyPoints" description="Amount of points for the story." category="input" required="false"/>
+        <property name="epic" description="The epic the story belongs to, please provide sys_id." category="input" required="false"/>
+        <property name="product" description="The product the story belongs to, please provide sys_id or display value." category="input" required="false"/>
+        <property name="sprint" description="Thesprint the story belongs to, please provide sys_id." category="input" required="false"/>
         <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateStory" extends="servicenow.CreateStory" label="ServiceNow: Update Story"
           virtual="false">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
-        <property name="shortDescription" category="input" label="Short Description" required="false"/>
+        <property name="shortDescription" description="The short description of the story." category="input" label="Short Description" required="false"/>
         <property name="sysId" category="input" required="true"/>
     </type>
 
@@ -298,7 +293,7 @@
         <property name="comments" category="input" label="Comments" required="false" hidden="true"/>
         <property name="workNotes" description="Leave comments to the work note field." category="input"
                   label="Comments" required="false"/>
-        <property name="taskType" category="input" required="false" kind="enum">
+        <property name="taskType" description="The type of scrum task." category="input" required="false" kind="enum">
             <enum-values>
                 <value>Analysis</value>
                 <value>Coding</value>
@@ -306,16 +301,16 @@
                 <value>Testing</value>
             </enum-values>
         </property>
-        <property name="plannedHours" category="input" required="false"/>
-        <property name="story" category="input" required="true"/>
+        <property name="plannedHours" description="The planned hours of scrum task." category="input" required="false"/>
+        <property name="story" category="input" description="The the story the scrum task belongs to, please provide sys_id." required="true"/>
         <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateScrumTask" extends="servicenow.CreateScrumTask" label="ServiceNow: Update Scrum Task"
           virtual="false">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
-        <property name="shortDescription" category="input" label="Short Description" required="false"/>
-        <property name="story" category="input" required="false"/>
+        <property name="shortDescription" description="The short description of the scrum task." category="input" label="Short Description" required="false"/>
+        <property name="story" description="The the story the scrum task belongs to, please provide sys_id." category="input" required="false"/>
         <property name="sysId" category="input" required="true"/>
     </type>
 
@@ -325,7 +320,7 @@
                   hidden="true"/>
         <property name="scriptLocation" default="servicenow/find/find_by_story.py" hidden="true"/>
         <property name="shortDescription" category="input"
-                  description="Multiple tasks can exists provide short description to look for."
+                  description="Multiple tasks can exist, please provide teh start of the short description to look for."
                   label="Short Description" required="false"/>
         <property name="number" category="input" required="false" hidden="true"/>
         <property name="story" category="input" required="true"/>
@@ -341,7 +336,7 @@
         <property name="assignedTo" description="The assignee of the task" category="input" required="false" hidden="true"/>
         <property name="workNotes" description="Leave comments to the work note field." category="input"
                   label="Comments" required="false"/>
-        <property name="priority" category="input" required="false" kind="enum" hidden="true">
+        <property name="priority" description="The priority of the Epic." category="input" required="false" kind="enum" hidden="true">
             <enum-values>
                 <value>1 - Critical</value>
                 <value>2 - High</value>
@@ -381,9 +376,8 @@
             </enum-values>
         </property>
         <property name="comments" category="input" label="Comments" required="false" hidden="true"/>
-        <property name="workNotes" description="Leave comments to the work note field." category="input"
-                  label="Comments" required="false"/>
-        <property name="shortDescription" category="input" label="Short Description" required="false"/>
+        <property name="workNotes" description="Leave comments to the work note field." category="input" label="Comments" required="false"/>
+        <property name="shortDescription" description="The title of the sprint." category="input" label="Short Description" required="false"/>
         <property name="sysId" category="input" required="true"/>
     </type>
 

@@ -50,6 +50,7 @@ class ServiceNowApplicationClient(object):
         content = {'name': name}
         self.set_from_task_vars('environment', content)
         self.set_from_task_vars('version', content)
+        self.set_from_task_vars('company', content)
         if create:
             sys_id = self.create_ci(self.table_cmdb_ci_app, content)
         else:
