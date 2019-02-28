@@ -65,5 +65,5 @@ class ServiceNowRecordClient(object):
         self.print_links(sys_id, data['number'], data)
         return sys_id, data['number'], data
 
-sysId, number, data = ServiceNowRecordClient(locals()).process()
+sysId, Ticket, data = ServiceNowRecordClient(locals()).process()
 
