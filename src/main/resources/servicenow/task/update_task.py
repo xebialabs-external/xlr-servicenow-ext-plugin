@@ -40,11 +40,15 @@ class ServiceNowUpdateRecordClient(object):
         self.set_from_task_vars('workNotes', content, 'work_notes')
         self.set_from_task_vars('storyPoints', content, 'story_points')
         self.set_from_task_vars('epic', content, 'epic')
-        self.set_from_task_vars('product', content, 'product')
+        self.set_from_task_vars('product', content)
         self.set_from_task_vars('sprint', content, 'sprint')
         self.set_from_task_vars('taskType', content, 'type')
         self.set_from_task_vars('plannedHours', content, 'planned_hours')
-        self.set_from_task_vars('story', content, 'story')
+        self.set_from_task_vars('story', content)
+        self.set_from_task_vars('impact', content)
+        self.set_from_task_vars('urgency', content)
+        self.set_from_task_vars('closeCode', content, 'close_code')
+        self.set_from_task_vars('closeNotes', content, 'close_notes')
 
         for k, v in self.task_vars['additionalFields'].items():
             content[k] = v

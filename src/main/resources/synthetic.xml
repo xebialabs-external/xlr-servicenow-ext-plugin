@@ -129,6 +129,14 @@
           label="ServiceNow: Update Change Request" virtual="false">
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   hidden="true"/>
+        <property name="closeCode" description="When closing or resolving, please provide the close code of the change request." category="input" required="false" kind="enum">
+             <enum-values>
+                <value>succesful</value>
+                <value>successful_issues</value>
+                <value>unsuccessful</value>
+            </enum-values>
+        </property>
+        <property name="closeNotes" description="Provide the close notes of the change request." category="input" required="false"/>
     </type>
 
     <type type="servicenow.FindChangeRequestByTicket" extends="servicenow.FindRecordByTicket"
@@ -240,40 +248,29 @@
                 <value>3 - Low</value>
             </enum-values>
         </property>
-        <property name="urgency" description="The urgency of the incident." category="input" required="false">
+        <property name="urgency" description="The urgency of the incident." category="input" required="false" kind="enum">
             <enum-values>
                 <value>1 - High</value>
                 <value>2 - Medium</value>
                 <value>3 - Low</value>
             </enum-values>
         </property>
+        <property name="workNotes" description="Leave comments to the work notes field." category="input" required="false"/>
     </type>
 
-    <type type="servicenow.UpdateIncident" extends="servicenow.UpdateTaskNew" label="ServiceNow: Update Incident"
+    <type type="servicenow.UpdateIncident" extends="servicenow.CreateIncident" label="ServiceNow: Update Incident"
           virtual="false">
-        <property name="tableName" category="input" label="Table Name" default="incident" required="true" hidden="true"/>
-        <property name="priority" description="The priority of the incident." category="input" required="false" kind="enum" hidden="true">
-            <enum-values>
-                <value>1 - Critical</value>
-                <value>2 - High</value>
-                <value>3 - Moderate</value>
-                <value>4 - Low</value>
+        <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
+        <property name="closeCode" description="Provide the close code of the incident." category="input" required="false" kind="enum">
+             <enum-values>
+                <value>Solved (Work Around)</value>
+                <value>Solved (Permanently)</value>
+                <value>Solved Remotely (Work Around)</value>
+                <value>Solved Remotely (Permanently)</value>
             </enum-values>
         </property>
-        <property name="impact" description="The impact of the incident." category="input" required="false" kind="enum">
-            <enum-values>
-                <value>1 - High</value>
-                <value>2 - Medium</value>
-                <value>3 - Low</value>
-            </enum-values>
-        </property>
-        <property name="urgency" description="The urgency of the incident." category="input" required="false">
-            <enum-values>
-                <value>1 - High</value>
-                <value>2 - Medium</value>
-                <value>3 - Low</value>
-            </enum-values>
-        </property>
+        <property name="closeNotes" description="Provide the close notes of the incident." category="input" required="false"/>
+        <property name="sysId" description="The technical ID of the task that needs to be updated." category="input" required="true"/>
     </type>
 
     <type type="servicenow.FindIncidentByTicket" extends="servicenow.FindRecordByTicket"
