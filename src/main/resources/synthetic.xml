@@ -336,7 +336,7 @@
         <property name="assignedTo" description="The assignee of the task" category="input" required="false" hidden="true"/>
         <property name="workNotes" description="Leave comments to the work note field." category="input"
                   label="Comments" required="false"/>
-        <property name="priority" description="The priority of the Epic." category="input" required="false" kind="enum" hidden="true">
+        <property name="priority" description="The priority of the Epic." category="input" required="false" kind="enum">
             <enum-values>
                 <value>1 - Critical</value>
                 <value>2 - High</value>
