@@ -48,9 +48,10 @@ class ServiceNowApplicationClient(object):
     def process_application_ci(self, name):
         create = self.get_optional_task_var("create")
         content = {'name': name}
-        self.set_from_task_vars('environment', content)
+        self.set_from_task_vars('environment', content, 'category')
         self.set_from_task_vars('version', content)
         self.set_from_task_vars('company', content)
+        self.set_from_task_vars('description', content)
         if create:
             sys_id = self.create_ci(self.table_cmdb_ci_app, content)
         else:

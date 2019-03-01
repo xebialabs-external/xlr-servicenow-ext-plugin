@@ -57,8 +57,7 @@
         <property name="scriptLocation" default="servicenow/task/create_task.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="task" required="true"
                   hidden="true"/>
-        <property name="shortDescription" description="The short description of the task." category="input"
-                  required="true" label="Short Description"/>
+        <property name="shortDescription" description="The short description of the task." category="input" required="true" label="Short Description"/>
         <property name="description" description="The complete description of the task." category="input" size="large"
                   label="Description" required="false"/>
         <property name="ciSysId" category="input" label="Configuration Item"
@@ -87,7 +86,7 @@
     <type type="servicenow.UpdateTaskNew" extends="servicenow.CreateTaskNew" label="ServiceNow: Update Task"
           virtual="true">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
-        <property name="shortDescription" category="input" label="Short Description" required="false"/>
+        <property name="shortDescription" description="The short description of the task." category="input" required="false" label="Short Description"/>
         <property name="sysId" description="The technical ID of the task that needs to be updated." category="input" required="true"/>
     </type>
 
@@ -164,6 +163,7 @@
         <property name="tableName" category="input" label="Table Name" default="change_task" required="true"
                   hidden="true"/>
         <property name="changeRequest" description="sys_id of the parent Change" category="input" required="false"/>
+        <property name="closeNotes" description="Provide the close notes of the change request." category="input" required="false"/>
     </type>
 
     <type type="servicenow.FindChangeTaskByTaskId" extends="servicenow.FindRecordByTicket"
@@ -185,16 +185,17 @@
 
     <!--
        #######################################################################################################################
-       #    ServiceNow CMDB info.
+       #    ServiceNow CMDB info. (application only...)
        #######################################################################################################################
    -->
 
     <type type="servicenow.Application" extends="servicenow.Base" label="ServiceNow: Create Application">
         <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
-        <property name="ciName" label="CI Name" description="The name of the CI on the ServcieNow"  category="input"/>
-        <property name="environment" category="input" description="The environment of the CI" required="false"/>
+        <property name="ciName" label="CI Name" description="The name of the CI on the ServcieNow"  category="input" required="true"/>
+        <property name="description" description="The description of the CI on the ServcieNow"  category="input"/>
+        <property name="environment" category="input" description="The category of the CI" required="false" label="Category"/>
         <property name="version" category="input" description="The version of the CI." required="false"/>
-        <property name="company" category="input" description="The company of the CI." required="true"/>
+        <property name="company" category="input" description="The company of the CI." required="false"/>
         <property name="dependsOn" category="input" description="Provide a CI sys_id on which it depends. A relation swill be created." kind="set_of_string" required="false"/>
         <property name="usedBy" description="Provide a CI sys_id which it is being used by." category="input" kind="set_of_string" required="false"/>
         <property name="runsOn" description="Provide a CI sys_id for a server it runs on."  category="input" kind="set_of_string" required="false"/>
@@ -213,7 +214,7 @@
 
     <!--
      #######################################################################################################################
-     #    ServiceNow Portal and KnowledgeBase
+     #    ServiceNow knowledge
      #######################################################################################################################
     -->
     <type type="servicenow.PublishArticle" extends="servicenow.Base" label="ServiceNow: Publish Article">
@@ -226,7 +227,7 @@
 
     <!--
        #######################################################################################################################
-       #    Incident Requests
+       #    Incidents
        #######################################################################################################################
    -->
 
@@ -275,8 +276,7 @@
 
     <type type="servicenow.FindIncidentByTicket" extends="servicenow.FindRecordByTicket"
           label="ServiceNow: Find Incident" virtual="false">
-        <property name="tableName" category="input" label="Table Name" default="incident" required="true"
-                  hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="incident" required="true" hidden="true"/>
     </type>
 
     <!--
@@ -289,6 +289,7 @@
           virtual="false">
         <property name="tableName" category="input" label="Table Name" default="rm_story" required="true"
                   hidden="true"/>
+        <property name="shortDescription" description="The short description of the story." category="input" label="Short Description" required="true"/>
         <property name="ciSysId" category="input" label="Configuration Item"
                   description="Related CMDB Configuration Item Id" required="false" hidden="true"/>
         <property name="priority" category="input" required="false" kind="enum" hidden="true">
@@ -300,8 +301,7 @@
             </enum-values>
         </property>
         <property name="comments" category="input" label="Comments" required="false" hidden="true"/>
-        <property name="workNotes" description="Leave comments to the work note field." category="input"
-                  label="Comments" required="false"/>
+        <property name="workNotes" description="Leave comments to the work note field." category="input" label="Comments" required="false"/>
         <property name="storyPoints" description="Amount of points for the story." category="input" required="false"/>
         <property name="epic" description="The epic the story belongs to, please provide sys_id." category="input" required="false"/>
         <property name="product" description="The product the story belongs to, please provide sys_id or display value." category="input" required="false"/>
