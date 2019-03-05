@@ -27,6 +27,14 @@ class ServiceNowUpdateRecordClient(object):
 
     def process_record(self):
         contentx = {}
+        
+        #First old stuff so the newer fields will overwrite.
+        if content:
+            oldStuff = {}
+            oldStuff = json.loads(content)
+            for m, y in oldStuff.items():
+                contentx[m] = y
+
         self.set_from_task_vars('shortDescription', contentx, 'short_description')
         self.set_from_task_vars('description', contentx)
         self.set_from_task_vars('assignmentGroup', contentx, 'assignment_group')
@@ -52,12 +60,6 @@ class ServiceNowUpdateRecordClient(object):
 
         for k, v in self.task_vars['additionalFields'].items():
             contentx[k] = v
-        
-        if content:
-            oldStuff = {}
-            oldStuff = json.loads(content)
-            for m, y in oldStuff.items():
-                contentx[m] = y
             
         response = self.sn_client.update_record(self.table_name, self.task_vars['sysId'], contentx, getCurrentTask().getId())
         return response
