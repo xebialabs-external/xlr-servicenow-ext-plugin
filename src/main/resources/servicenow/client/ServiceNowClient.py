@@ -128,7 +128,6 @@ class ServiceNowClient(object):
         return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
     
     def query(self, table_name, query, fail_on_not_found=False):
-        # check if application exists
         result = self.find_record(table_name, query)
         size = len(result)
         if size is 1:
@@ -139,12 +138,10 @@ class ServiceNowClient(object):
             raise Exception("No resullts found for query '%s'." % query)
         return None
     
-    #Finding and validating a display value of a ref field, will return sys_id of ref.
     def get_record(self, table_name, sys_id, fail_on_not_found=False):
         query = "sys_id=%s" % sys_id
         return self.query(table_name, query, fail_on_not_found)
     
-    #Finding and validating a display value of a ref field, will return sys_id of ref.
     def find_by_name(self, name, table_name, fail_on_not_found=False):
         query = "name=%s" % name
         return self.query(table_name, query, fail_on_not_found)
