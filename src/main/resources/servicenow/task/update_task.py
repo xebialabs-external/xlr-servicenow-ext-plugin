@@ -3,7 +3,7 @@
 #
 # This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
 #
-
+import com.xhaus.jyson.JysonCodec as json
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
@@ -26,33 +26,40 @@ class ServiceNowUpdateRecordClient(object):
             target_object[target_name] = self.task_vars[source_name]
 
     def process_record(self):
-        content = {}
-        self.set_from_task_vars('shortDescription', content, 'short_description')
-        self.set_from_task_vars('description', content)
-        self.set_from_task_vars('assignmentGroup', content, 'assignment_group')
-        self.set_from_task_vars('assignedTo', content, 'assigned_to')
-        self.set_from_task_vars('priority', content)
-        self.set_from_task_vars('state', content)
-        self.set_from_task_vars('ciSysId', content, 'cmdb_ci')
-        self.set_from_task_vars('comments', content)
+        contentx = {}
+        self.set_from_task_vars('shortDescription', contentx, 'short_description')
+        self.set_from_task_vars('description', contentx)
+        self.set_from_task_vars('assignmentGroup', contentx, 'assignment_group')
+        self.set_from_task_vars('assignedTo', contentx, 'assigned_to')
+        self.set_from_task_vars('priority', contentx)
+        self.set_from_task_vars('state', contentx)
+        self.set_from_task_vars('ciSysId', contentx, 'cmdb_ci')
+        self.set_from_task_vars('comments', contentx)
 
-        self.set_from_task_vars('changeRequest', content, 'change_request')
-        self.set_from_task_vars('workNotes', content, 'work_notes')
-        self.set_from_task_vars('storyPoints', content, 'story_points')
-        self.set_from_task_vars('epic', content)
-        self.set_from_task_vars('product', content)
-        self.set_from_task_vars('sprint', content)
-        self.set_from_task_vars('taskType', content, 'type')
-        self.set_from_task_vars('plannedHours', content, 'planned_hours')
-        self.set_from_task_vars('story', content)
-        self.set_from_task_vars('impact', content)
-        self.set_from_task_vars('urgency', content)
-        self.set_from_task_vars('closeCode', content, 'close_code')
-        self.set_from_task_vars('closeNotes', content, 'close_notes')
+        self.set_from_task_vars('changeRequest', contentx, 'change_request')
+        self.set_from_task_vars('workNotes', contentx, 'work_notes')
+        self.set_from_task_vars('storyPoints', contentx, 'story_points')
+        self.set_from_task_vars('epic', contentx)
+        self.set_from_task_vars('product', contentx)
+        self.set_from_task_vars('sprint', contentx)
+        self.set_from_task_vars('taskType', contentx, 'type')
+        self.set_from_task_vars('plannedHours', contentx, 'planned_hours')
+        self.set_from_task_vars('story', contentx)
+        self.set_from_task_vars('impact', contentx)
+        self.set_from_task_vars('urgency', contentx)
+        self.set_from_task_vars('closeCode', contentx, 'close_code')
+        self.set_from_task_vars('closeNotes', contentx, 'close_notes')
 
         for k, v in self.task_vars['additionalFields'].items():
-            content[k] = v
-        response = self.sn_client.update_record(self.table_name, self.task_vars['sysId'], content, getCurrentTask().getId())
+            contentx[k] = v
+        
+        if content:
+            oldStuff = {}
+            oldStuff = json.loads(content)
+            for m, y in oldStuff.items():
+                contentx[m] = y
+            
+        response = self.sn_client.update_record(self.table_name, self.task_vars['sysId'], contentx, getCurrentTask().getId())
         return response
 
     def print_links(self, sys_id, ticket, data):

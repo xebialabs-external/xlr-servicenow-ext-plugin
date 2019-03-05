@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2019. All rights reserved.
+#
+# This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
+#
+
 import sys, traceback
 import com.xhaus.jyson.JysonCodec as json
 from servicenow.client.ServiceNowClient import ServiceNowClient
@@ -18,7 +24,7 @@ print "Sending content {}".format(content_json)
 
 try:
     # create a new record in service now using queue table
-    record_data = sn_client.create_record(tableName, json.loads(content_json))
+    record_data = sn_client.create_record(tableName, json.loads(content_json), getCurrentTask().getId())
     print "Returned DATA = {}".format(record_data)
     print json.dumps(record_data, indent=4, sort_keys=True)
     sysId = record_data["target_sys_id"]

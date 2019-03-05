@@ -66,6 +66,9 @@
     <type type="servicenow.UpdateTaskNew" extends="servicenow.CreateTaskNew" label="ServiceNow: Update Task" virtual="true">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
         <property name="shortDescription" description="The short description of the task." category="input" required="false" label="Short Description"/>
+<!-- Content property need to be migrated to additional fields! -->
+        <property name="content" category="input" label="Content of the record" description="DEPRECATED, please use additional fields instead." required="false" size="large"/>
+<!-- Content property need to be migrated to additional fields! -->        
         <property name="sysId" description="The technical ID of the task that needs to be updated." category="input" required="true"/>
     </type>
 
@@ -237,6 +240,10 @@
         </property>
         <property name="closeNotes" description="Provide the close notes of the incident." category="input" required="false"/>
         <property name="sysId" description="The technical ID of the task that needs to be updated." category="input" required="true"/>
+        
+<!-- Content property need to be migrated to additional fields! -->
+        <property name="content" category="input" label="Content of the record" description="DEPRECATED, please use additional fields instead." required="false" size="large"/>
+<!-- Content property need to be migrated to additional fields! -->    
     </type>
 
     <type type="servicenow.FindIncidentByTicket" extends="servicenow.FindRecordByTicket"
@@ -521,7 +528,7 @@
     #######################################################################################################################
    -->
     
-    <type type="servicenow.CreateRecord" extends="servicenow.Base" label="ServiceNow: Create Record">
+    <type type="servicenow.CreateRecord" extends="servicenow.Base" label="ServiceNow: Create Record (deprecated)">
         <property name="scriptLocation" default="servicenow/legacy/create_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true" hidden="true"/>
         <property name="shortDescription" category="input" label="Short Description" required="true"/>
@@ -530,7 +537,7 @@
         <property name="Ticket" category="output"/>
     </type>
 
-    <type type="servicenow.CreateNewRecord" extends="servicenow.Base" label="ServiceNow: Create New Record">
+    <type type="servicenow.CreateNewRecord" extends="servicenow.Base" label="ServiceNow: Create New Record (deprecated)">
         <property name="scriptLocation" default="servicenow/legacy/create_new_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true" hidden="true"/>
         <property name="content" category="input" label="Request Content" required="true" size="large"/>
@@ -538,7 +545,7 @@
         <property name="Ticket"  category="output"/>
     </type>
 
-    <type type="servicenow.UpdateRecord" extends="servicenow.Base" label="ServiceNow: Update Record">
+    <type type="servicenow.UpdateRecord" extends="servicenow.Base" label="ServiceNow: Update Record (deprecated)">
         <property name="scriptLocation" default="servicenow/legacy/update_record.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true" hidden="true"/>
         <property name="sysId" category="input" required="true"/>
@@ -546,35 +553,35 @@
     </type>
     
     
-    <type type="servicenow.CreateNewIncident" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New Incident">
+    <type type="servicenow.CreateNewIncident" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New Incident (deprecated)">
         <property name="tableName" category="input" label="Table Name" default="incident" required="true" hidden="true"/>
     </type>
     
-    <type type="servicenow.CreateNewServiceRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ServiceRequest">
+    <type type="servicenow.CreateNewServiceRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ServiceRequest (deprecated)">
         <property name="tableName" category="input" default="sc_request" required="true" hidden="true"/>
     </type>
     
-    <type type="servicenow.CreateNewRequestItem" extends="servicenow.CreateNewRecord"  label="ServiceNow: Create New Request Item">
+    <type type="servicenow.CreateNewRequestItem" extends="servicenow.CreateNewRecord"  label="ServiceNow: Create New Request Item (deprecated)">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true" hidden="true"/>
     </type>
     
-    <type type="servicenow.CreateNewChangeRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ChangeRequest">
+    <type type="servicenow.CreateNewChangeRequest" extends="servicenow.CreateNewRecord" label="ServiceNow: Create New ChangeRequest (deprecated)">
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true" hidden="true"/>
     </type>
     
-    <type type="servicenow.CreateTask" extends="servicenow.Base" label="ServiceNow: Create Task">
-        <property name="scriptLocation" default="servicenow/create_task.py" hidden="true"/>
+    <type type="servicenow.CreateTask" extends="servicenow.Base" label="ServiceNow: Create Task (deprecated)">
+        <property name="scriptLocation" default="servicenow/legacy/create_task.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" required="true" default="change_task" hidden="true"/>
         <property name="content" category="input" label="Task JSON Content" required="true" size="large"/>
         <property name="taskId" category="output"/>
         <property name="Task" category="output"/>
     </type>
 
-    <type type="servicenow.UpdateTask" extends="servicenow.UpdateRecord" label="ServiceNow: Update Task">
+    <type type="servicenow.UpdateTask" extends="servicenow.UpdateRecord" label="ServiceNow: Update Task (deprecated)">
         <property name="tableName" category="input" label="Table Name" default="change_task" required="true" hidden="true"/>
     </type>
     
-    <type type="servicenow.CreateRequest" extends="servicenow.Base" label="ServiceNow: Create Request">
+    <type type="servicenow.CreateRequest" extends="servicenow.Base" label="ServiceNow: Create Request (deprecated)">
         <property name="scriptLocation" default="servicenow/create_record.py" hidden="true"/>
 
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"  hidden="true"/>

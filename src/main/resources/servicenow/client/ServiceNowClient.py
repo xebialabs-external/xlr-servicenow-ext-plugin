@@ -113,7 +113,7 @@ class ServiceNowClient(object):
         return data
     
     def get_record_with_fields(self, table_name, sys_id, fields):
-        servicenow_api_url = '/api/now/table/%s?sys_id=%s&sysparm_fields=%s&%s' % (table_name, sys_id, ",".join(fields), self.sysparms)
+        servicenow_api_url = '/api/now/table/%s?number=%s&sysparm_fields=%s&%s' % (table_name, sys_id, ",".join(fields), self.sysparms)
         response = self.httpRequest.get(servicenow_api_url, contentType='application/json', headers = self.headers)
         if self.useOAuth :self.revoke_token()
 
