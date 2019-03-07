@@ -23,7 +23,7 @@ class ServiceNowApplicationClient(object):
         self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'], task_vars['password'])
 
     def find_relationship(self, parent_sys_id, child_sys_id, fail_on_not_found=False):
-        query = "parent=%s^child=%s" % (parent_sys_id, child_sys_id)
+        query = "parent=%s^ORparent.name=%s^child=%s^ORchild.name=%s" % (parent_sys_id, parent_sys_id, child_sys_id, child_sys_id)
         return self.sn_client.query('cmdb_rel_ci', query, fail_on_not_found)
 
     def create_ci(self, table_name, content):

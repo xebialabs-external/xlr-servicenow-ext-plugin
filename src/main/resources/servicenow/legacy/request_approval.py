@@ -41,4 +41,21 @@ except Exception, e:
     print "Failed to create record in Service Now"
     sys.exit(1)
 
-sn_client.wait_for_approval(tableName, sysId)
+    
+is_clear = False
+while not is_clear:
+    try:
+        data = sn_client.get_record(tableName, sysId)
+        status = data["approval"]
+        print "Found %s in Service Now as %s" % (data['number'], status)
+        if "Approved" == status:
+            is_clear = True
+            print "ServiceNow approval received."
+        elif "rejected" == status:
+            print "Failed to get approval from ServiceNow"
+            sys.exit(1)
+        else:
+            time.sleep(5)
+    except:
+        print json.dumps(data, indent=4, sort_keys=True)
+        print "Error finding status for {}".format(sys_id)

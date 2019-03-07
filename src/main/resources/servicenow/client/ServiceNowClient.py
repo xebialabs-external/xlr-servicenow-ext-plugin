@@ -27,8 +27,7 @@ class ServiceNowClient(object):
         if password:
             self.httpConnection['password'] = password
         self.httpRequest = HttpRequest(self.httpConnection, username, password)
-        self.sysparms = 'sysparm_display_value=%s&sysparm_input_display_value=%s' % (
-            self.httpConnection['sysparmDisplayValue'], self.httpConnection['sysparmInputDisplayValue'])
+        self.sysparms = 'sysparm_display_value=%s&sysparm_input_display_value=%s' % (self.httpConnection['sysparmDisplayValue'], self.httpConnection['sysparmInputDisplayValue'])
 
     @staticmethod
     def create_client(httpConnection, username=None, password=None):
@@ -124,7 +123,7 @@ class ServiceNowClient(object):
         self.throw_error(response)
     
     def find_record(self, table_name, query):
-        servicenow_api_url = '/api/now/table/%s?%s&%s' % (table_name, query, self.sysparms)
+        servicenow_api_url = '/api/now/table/%s?sysparm_query=%s&%s' % (table_name, query, self.sysparms)
         return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
     
     def query(self, table_name, query, fail_on_not_found=False):
