@@ -168,9 +168,9 @@
         <property name="environment" category="input" description="The category of the CI" required="false" label="Category"/>
         <property name="version" category="input" description="The version of the CI." required="false"/>
         <property name="company" category="input" description="The company of the CI." required="false"/>
-        <property name="dependsOn" category="input" description="Provide a CI sys_id on which it depends. A relation swill be created." kind="set_of_string" required="false"/>
-        <property name="usedBy" description="Provide a CI sys_id which it is being used by." category="input" kind="set_of_string" required="false"/>
-        <property name="runsOn" description="Provide a CI sys_id for a server it runs on."  category="input" kind="set_of_string" required="false"/>
+        <property name="dependsOn" category="input" description="Provide a CI name or sys_id on which it depends. A relation will be created." kind="set_of_string" required="false"/>
+        <property name="usedBy" description="Provide a CI name or sys_id which it is being used by. A relation will be created." category="input" kind="set_of_string" required="false"/>
+        <property name="runsOn" description="Provide a CI name or sys_id of the server it runs on.  A relation will be created."  category="input" kind="set_of_string" required="false"/>
         <property name="create" label="Create" default="true" kind="boolean" category="input" hidden="true"/>
         <property name="additionalFields" category="input" required="false" description="Use Servicenow technical field name as 'key' and the corresponding value" kind="map_string_string"/>
         <property name="sysId" category="output"/>
@@ -181,7 +181,14 @@
         <property name="sysId" category="output"/>
     </type>
     
-
+    <type type="servicenow.FindCIByName" extends="servicenow.Base" label="ServiceNow: Find CI by Name">
+        <property name="scriptLocation" default="servicenow/find/find_ci.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="cmdb_ci_app_server" required="true"/>
+        <property name="ciName" label="CI name" description="The name of the CI to search for" category="input" required="true"/>
+        <property name="sysId" description="The technical ID of the servcer if found" category="output"/>
+    </type>
+    
+    
     <!--
      #######################################################################################################################
      #    ServiceNow knowledge

@@ -18,12 +18,12 @@ class ServiceNowApplicationClient(object):
         self.depends_on_rel_typ_sys_id = '1a9cb166f1571100a92eb60da2bce5c5'
         self.runs_on_rel_typ_sys_id = '60bc4e22c0a8010e01f074cbe6bd73c3'
         self.task_vars = task_vars
+        assert_not_null(task_vars['ciName'], "No CI Name provided.")        
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
-        self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'],
-                                                        task_vars['password'])
+        self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'], task_vars['password'])
 
     def find_relationship(self, parent_sys_id, child_sys_id, fail_on_not_found=False):
-        query = "parent.sys_id=%s^child.sys_id=%s" % (parent_sys_id, child_sys_id)
+        query = "parent=%s^child=%s" % (parent_sys_id, child_sys_id)
         return self.sn_client.query('cmdb_rel_ci', query, fail_on_not_found)
 
     def create_ci(self, table_name, content):
@@ -53,23 +53,17 @@ class ServiceNowApplicationClient(object):
         self.set_from_task_vars('company', content)
         self.set_from_task_vars('description', content)
         if create:
-            sys_id = self.create_ci(self.table_cmdb_ci_app, content)
+            ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
+            if ci is None:
+                sys_id = self.create_ci(self.table_cmdb_ci_app, content)
+            else:
+                raise Exception("CI name alreeady used")
         else:
             ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
             if ci is None:
-                raise Exception("No CI found")
+                raise Exception("No CI found to update")
             else:
                 sys_id = self.update_ci(self.table_cmdb_ci_app, content, ci['sys_id'])
-        return sys_id
-
-    def process_app_server_ci(self, name):
-        ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app_server)
-        if ci is None:
-            content = {'name': name}
-            self.set_from_task_vars('version', content)
-            sys_id = self.create_ci(self.table_cmdb_ci_app_server, content)
-        else:
-            sys_id = ci['sys_id']
         return sys_id
 
     def process_depends_on_relationship(self, parent_sys_id, child_sys_id):
@@ -89,7 +83,7 @@ class ServiceNowApplicationClient(object):
         if not depends_on:
             return
         for app_name in depends_on:
-            child_sys_id = self.process_application_ci(app_name)
+            child_sys_id = app_name
             self.process_depends_on_relationship(parent_sys_id, child_sys_id)
 
     def process_used_by_relationships(self, child_sys_id):
@@ -97,7 +91,7 @@ class ServiceNowApplicationClient(object):
         if not used_by:
             return
         for app_name in used_by:
-            parent_sys_id = self.process_application_ci(app_name)
+            parent_sys_id = app_name
             self.process_depends_on_relationship(parent_sys_id, child_sys_id)
 
     def process_runs_on_relationships(self, parent_sys_id):
@@ -105,7 +99,7 @@ class ServiceNowApplicationClient(object):
         if not runs_on:
             return
         for app_name in runs_on:
-            child_sys_id = self.process_app_server_ci(app_name)
+            child_sys_id = app_name
             self.process_runs_on_relationship(parent_sys_id, child_sys_id)
 
     def print_links(self, sys_id):

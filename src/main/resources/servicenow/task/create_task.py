@@ -43,7 +43,7 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('epic', content, 'epic')
         self.set_from_task_vars('product', content)
         self.set_from_task_vars('sprint', content)
-        self.set_from_task_vars('acceptanceCriteria', contentx, 'acceptance_criteria')
+        self.set_from_task_vars('acceptanceCriteria', content, 'acceptance_criteria')
         self.set_from_task_vars('taskType', content, 'type')
         self.set_from_task_vars('plannedHours', content, 'planned_hours')
         self.set_from_task_vars('story', content)
