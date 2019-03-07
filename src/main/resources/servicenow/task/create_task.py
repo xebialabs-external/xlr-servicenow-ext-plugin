@@ -16,8 +16,9 @@ class ServiceNowRecordClient(object):
         self.task_vars = task_vars
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
         assert_not_null(task_vars['shortDescription'], "Short description is mandatory when creating a task.")
-        self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'],
-                                                        task_vars['password'])
+        self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'], task_vars['password'])
+        if 'acceptanceCriteria' in self.task_vars.keys():
+            assert_not_null(task_vars['acceptanceCriteria'], "Acceptance criteria are mandatory when creating a story.")
 
     def set_from_task_vars(self, source_name, target_object, target_name=None):
         if source_name in self.task_vars.keys() and self.task_vars[source_name]:
@@ -42,6 +43,7 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('epic', content, 'epic')
         self.set_from_task_vars('product', content)
         self.set_from_task_vars('sprint', content)
+        self.set_from_task_vars('acceptanceCriteria', contentx, 'acceptance_criteria')
         self.set_from_task_vars('taskType', content, 'type')
         self.set_from_task_vars('plannedHours', content, 'planned_hours')
         self.set_from_task_vars('story', content)

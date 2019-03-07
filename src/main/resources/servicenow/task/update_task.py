@@ -29,11 +29,12 @@ class ServiceNowUpdateRecordClient(object):
         contentx = {}
         
         #First old stuff so the newer fields will overwrite.
-        if content:
-            oldStuff = {}
-            oldStuff = json.loads(content)
-            for m, y in oldStuff.items():
-                contentx[m] = y
+        if 'content' in self.task_vars.keys():
+            if content:
+                oldStuff = {}
+                oldStuff = json.loads(content)
+                for m, y in oldStuff.items():
+                    contentx[m] = y
 
         self.set_from_task_vars('shortDescription', contentx, 'short_description')
         self.set_from_task_vars('description', contentx)
@@ -50,6 +51,7 @@ class ServiceNowUpdateRecordClient(object):
         self.set_from_task_vars('epic', contentx)
         self.set_from_task_vars('product', contentx)
         self.set_from_task_vars('sprint', contentx)
+        self.set_from_task_vars('acceptanceCriteria', contentx, 'acceptance_criteria')
         self.set_from_task_vars('taskType', contentx, 'type')
         self.set_from_task_vars('plannedHours', contentx, 'planned_hours')
         self.set_from_task_vars('story', contentx)

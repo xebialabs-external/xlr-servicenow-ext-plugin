@@ -275,13 +275,15 @@
         <property name="storyPoints" description="Amount of points for the story." category="input" required="false"/>
         <property name="epic" description="The epic the story belongs to, please provide sys_id." category="input" required="false"/>
         <property name="product" description="The product the story belongs to, please provide sys_id or display value." category="input" required="false"/>
-        <property name="sprint" description="Thesprint the story belongs to, please provide sys_id." category="input" required="false"/>
+        <property name="sprint" description="The sprint the story belongs to, please provide sys_id." category="input" required="false"/>
+        <property name="acceptanceCriteria" description="The acceptance criteria of the story." category="input" size="large" required="true"/>
         <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateStory" extends="servicenow.CreateStory" label="ServiceNow: Update Story" virtual="false">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
         <property name="shortDescription" description="The short description of the story." category="input" label="Short Description" required="false"/>
+        <property name="acceptanceCriteria" description="The acceptance criteria of the story." category="input" size="large" required="false"/>
         <property name="sysId" category="input" required="true"/>
     </type>
 
@@ -440,17 +442,17 @@
     #######################################################################################################################
    -->
     <type type="servicenow.CreateRequestItem" extends="servicenow.CreateTaskNew"
-          label="ServiceNow: Create Request Item">
+          label="ServiceNow: Create Requested Item">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true" hidden="true"/>
     </type>
 
     <type type="servicenow.UpdateRequestItem" extends="servicenow.UpdateTaskNew"
-          label="ServiceNow: Update Request Item">
+          label="ServiceNow: Update Requested Item">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true" hidden="true"/>
     </type>
 
     <type type="servicenow.FindRequestItemByTicket" extends="servicenow.FindRecordByTicket"
-          label="ServiceNow: Find Request Item">
+          label="ServiceNow: Find Requested Item">
         <property name="tableName" category="input" label="Table Name" default="sc_req_item" required="true" hidden="true"/>
     </type>
 
