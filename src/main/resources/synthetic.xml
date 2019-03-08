@@ -106,7 +106,7 @@
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true" hidden="true"/>
         <property name="closeCode" description="When closing or resolving, please provide the close code of the change request." category="input" required="false" kind="enum">
              <enum-values>
-                <value>succesful</value>
+                <value>successful</value>
                 <value>successful_issues</value>
                 <value>unsuccessful</value>
             </enum-values>
@@ -163,14 +163,14 @@
 
     <type type="servicenow.Application" extends="servicenow.Base" label="ServiceNow: Create Application">
         <property name="scriptLocation" default="servicenow/application/create_or_update_application.py" hidden="true"/>
-        <property name="ciName" label="CI Name" description="The name of the CI on the ServcieNow"  category="input" required="true"/>
-        <property name="description" description="The description of the CI on the ServcieNow"  category="input"/>
-        <property name="environment" category="input" description="The category of the CI" required="false" label="Category"/>
-        <property name="version" category="input" description="The version of the CI." required="false"/>
-        <property name="company" category="input" description="The company of the CI." required="false"/>
-        <property name="dependsOn" category="input" description="Provide a CI name or sys_id on which it depends. A relation will be created." kind="set_of_string" required="false"/>
-        <property name="usedBy" description="Provide a CI name or sys_id which it is being used by. A relation will be created." category="input" kind="set_of_string" required="false"/>
-        <property name="runsOn" description="Provide a CI name or sys_id of the server it runs on.  A relation will be created."  category="input" kind="set_of_string" required="false"/>
+        <property name="ciName" label="Name" description="The name of the configuration item on the ServcieNow"  category="input" required="true"/>
+        <property name="description" description="The description of the configuration item on the ServcieNow"  category="input"/>
+        <property name="environment" category="input" description="The category of the configuration item" required="false" label="Category"/>
+        <property name="version" category="input" description="The version of the configuration item." required="false"/>
+        <property name="company" category="input" description="The company of the configuration item." required="false"/>
+        <property name="dependsOn" category="input" description="Provide a configuration item name or sys_id on which it depends. A relation will be created." kind="set_of_string" required="false"/>
+        <property name="usedBy" description="Provide a configuration item name or sys_id which it is being used by. A relation will be created." category="input" kind="set_of_string" required="false"/>
+        <property name="runsOn" description="Provide a configuration item name or sys_id of the server it runs on.  A relation will be created."  category="input" kind="set_of_string" required="false"/>
         <property name="create" label="Create" default="true" kind="boolean" category="input" hidden="true"/>
         <property name="additionalFields" category="input" required="false" description="Use Servicenow technical field name as 'key' and the corresponding value" kind="map_string_string"/>
         <property name="sysId" category="output"/>
@@ -181,10 +181,10 @@
         <property name="sysId" category="output"/>
     </type>
     
-    <type type="servicenow.FindCIByName" extends="servicenow.Base" label="ServiceNow: Find CI by Name">
+    <type type="servicenow.FindCIByName" extends="servicenow.Base" label="ServiceNow: Find configuration item by Name">
         <property name="scriptLocation" default="servicenow/find/find_ci.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="cmdb_ci_app_server" required="true"/>
-        <property name="ciName" label="CI name" description="The name of the CI to search for" category="input" required="true"/>
+        <property name="ciName" label="Name" description="The name of the configuration item to search for" category="input" required="true"/>
         <property name="sysId" description="The technical ID of the servcer if found" category="output"/>
     </type>
     
@@ -225,7 +225,7 @@
                 <value>3 - Low</value>
             </enum-values>
         </property>
-        <property name="urgency" description="The urgency of the incident." category="input" required="false" kind="enum">
+        <property name="urgency" description="The urgency of the incident." category="input" required="false" kind="enum">  
             <enum-values>
                 <value>1 - High</value>
                 <value>2 - Medium</value>
@@ -316,14 +316,14 @@
             </enum-values>
         </property>
         <property name="plannedHours" description="The planned hours of scrum task." category="input" required="false"/>
-        <property name="story" category="input" description="The the story the scrum task belongs to, please provide sys_id." required="true"/>
+        <property name="story" category="input" description="The story theis scrum task belongs to, please provide sys_id." required="true"/>
         <property name="sysId" category="output"/>
     </type>
 
     <type type="servicenow.UpdateScrumTask" extends="servicenow.CreateScrumTask" label="ServiceNow: Update Scrum Task" virtual="false">
         <property name="scriptLocation" default="servicenow/task/update_task.py" hidden="true"/>
         <property name="shortDescription" description="The short description of the scrum task." category="input" label="Short Description" required="false"/>
-        <property name="story" description="The the story the scrum task belongs to, please provide sys_id." category="input" required="false"/>
+        <property name="story" description="The story theis scrum task belongs to, please provide sys_id." category="input" required="false"/>
         <property name="sysId" category="input" required="true"/>
     </type>
 
