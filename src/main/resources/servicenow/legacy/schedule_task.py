@@ -4,10 +4,8 @@
 # This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
 #
 
-from java.util import Date
 from java.text import ParseException
 from java.text import SimpleDateFormat
-from sets import Set
 from java.util import TimeZone
 import traceback, sys
 

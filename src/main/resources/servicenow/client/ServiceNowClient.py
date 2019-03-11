@@ -8,7 +8,7 @@ import sys
 import urllib
 import com.xhaus.jyson.JysonCodec as json
 from xlrelease.HttpRequest import HttpRequest
-import time
+
 SUCCESS_STATUS_CODE = 200
 RECORD_CREATED_STATUS = 201
 SERVICE_NOW_CREATE_URL = "/x_xlbv_xl_release_api_queue.do?JSONv2&sysparm_action=insert"
@@ -110,7 +110,7 @@ class ServiceNowClient(object):
         if data["sys_row_error"] != "":
             raise RuntimeError(data["sys_row_error"])
         return data
-    
+
     def get_record_with_fields(self, table_name, sys_id, fields):
         servicenow_api_url = '/api/now/table/%s?number=%s&sysparm_fields=%s&%s' % (table_name, sys_id, ",".join(fields), self.sysparms)
         response = self.httpRequest.get(servicenow_api_url, contentType='application/json', headers = self.headers)
@@ -121,11 +121,11 @@ class ServiceNowClient(object):
             if len(data['result']) == 1:
                 return data['result'][0]
         self.throw_error(response)
-    
+
     def find_record(self, table_name, query):
         servicenow_api_url = '/api/now/table/%s?sysparm_query=%s&%s' % (table_name, query, self.sysparms)
         return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
-    
+
     def query(self, table_name, query, fail_on_not_found=False):
         result = self.find_record(table_name, query)
         size = len(result)
@@ -136,11 +136,11 @@ class ServiceNowClient(object):
         if fail_on_not_found:
             raise Exception("No resullts found for query '%s'." % query)
         return None
-    
+
     def get_record(self, table_name, sys_id, fail_on_not_found=False):
         query = "sys_id=%s" % sys_id
         return self.query(table_name, query, fail_on_not_found)
-    
+
     def find_by_name(self, name, table_name, fail_on_not_found=False):
         query = "name=%s" % name
         return self.query(table_name, query, fail_on_not_found)
@@ -154,7 +154,7 @@ class ServiceNowClient(object):
         data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
         if data["sys_row_error"] != "":
             raise RuntimeError(data["sys_row_error"])
-        return data         
+        return data
 
     def request(self, method, url, headers, content_type='application/json', body=None):
         #print "Service Now URL = %s \n" % (url)

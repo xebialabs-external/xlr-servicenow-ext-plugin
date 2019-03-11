@@ -497,6 +497,7 @@
     </type>
 
     <type type="servicenow.ScheduleTask" extends="xlrelease.PythonScript" label="ServiceNow: Schedule Task (deprecated)">
+        <property name="iconLocation" default="servicenow/xebialabs-icon.png" hidden="true"/>
         <property name="scriptLocation" default="servicenow/legacy/schedule_task.py" hidden="true"/>
         <property name="startField" category="input" label="Start Date Field" required="true"/>
         <property name="targetPhase" category="input" label="Phase to start release window" required="true"/>
