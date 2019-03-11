@@ -144,13 +144,13 @@
                         field: "number",
                         cellTemplate: "static/@project.version@/include/ServiceNowQueryTile/grid/number-cell-template.html",
                         filterHeaderTemplate: filterHeaderTemplate,
-                        enableColumnMenu: true,
+                        enableColumnMenu: false,
                         width: '18%'
                     }
                 ];
             for (var key in config.detailsViewColumns['value']) {
                 if (key != "number") {
-                    columnDefs.push({displayName: key, field: key, filterHeaderTemplate: filterHeaderTemplate, enableColumnMenu: true})
+                    columnDefs.push({displayName: key, field: key, filterHeaderTemplate: filterHeaderTemplate, enableColumnMenu: false})
                 }
             };
             return XlrTileHelper.getGridOptions(serviceNowData, columnDefs);
