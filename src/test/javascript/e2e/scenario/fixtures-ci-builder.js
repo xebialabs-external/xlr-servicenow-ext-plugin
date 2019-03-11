@@ -123,8 +123,16 @@ const initReleaseDefaults = (function () {
         } else if (release.dueDate) {
             release.queryableEndDate = release.dueDate;
         }
-        if (_.isUndefined(release.owner))
+        if (_.isUndefined(release.owner)) {
             release.owner = 'Itchy'; // default release manager
+        }
+
+        if (_.isUndefined(release.scriptUsername)) {
+            release.scriptUsername = 'admin' //default script user
+        }
+        if (_.isUndefined(release.scriptUserPassword)) {
+            release.scriptUserPassword = 'admin'
+        }
 
         _.forEach(release.phases, function (phase, index) {
             processPhases(phase, release, index);
