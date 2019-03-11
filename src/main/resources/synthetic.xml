@@ -591,7 +591,7 @@
     </type>
 
     <type type="servicenow.CreateRequest" extends="servicenow.Base" label="ServiceNow: Create Request (deprecated)">
-        <property name="scriptLocation" default="servicenow/create_record.py" hidden="true"/>
+        <property name="scriptLocation" default="servicenow/legacy/create_record.py" hidden="true"/>
 
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"  hidden="true"/>
         <property name="shortDescription" category="input" label="Short Description" required="true"/>

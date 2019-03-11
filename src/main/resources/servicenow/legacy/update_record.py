@@ -21,7 +21,10 @@ record = sn_client.find_record(table_name=tableName, query="sys_id={}".format(sy
 ticket = record["number"]
 
 # Update Record using ticket number
-updated_record = sn_client.update_record(tableName, sysId, content=json.loads(content), getCurrentTask().getId())
+updated_record = sn_client.update_record(table_name=tableName,
+                                         sys_id=sysId,
+                                         content=json.loads(content),
+                                         xlr_task_id=getCurrentTask().getId())
 
 # Find updated record and show on UI
 data = sn_client.find_record(table_name=tableName, query="sys_id={}".format(sysId))[0]

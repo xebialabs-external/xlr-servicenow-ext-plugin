@@ -20,7 +20,7 @@ print "Sending content {}".format(content)
 
 try:
     # create record in service now using queue table
-    record_data = snClient.create_record(tableName, json.loads(content) getCurrentTask().getId())
+    record_data = snClient.create_record(tableName, json.loads(content), getCurrentTask().getId())
     taskId = record_data["target_sys_id"]
     Task = record_data["target_record_number"]
 
