@@ -23,7 +23,7 @@ def get_row_data(item):
 
 assert_not_null(servicenowServer, "Server is mandatory")
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
-results = sn_client.find_record(tableName, "sysparm_query=%s&sysparm_limit=1000"% ('' if query == None else query))
+results = sn_client.find_record(tableName, "%s&sysparm_limit=1000"% ('' if query == None else query))
 rows= {}
 for item in results:
     rows[item['number']] = get_row_data(item)
