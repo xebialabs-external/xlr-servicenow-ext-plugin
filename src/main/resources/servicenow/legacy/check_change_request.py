@@ -12,12 +12,11 @@ assert_not_null(servicenowServer, "No server provided.")
 assert_not_null(number, "No number provided.")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
-change_request = sn_client.find_record(tableName, 'number=%s' % number)
-print change_request
+change_request = sn_client.find_record(tableName, 'number=%s' % number)[0]
 status = change_request["approval"]
 print "Found {} in Service Now as {}".format(change_request['number'], status)
 
-if "approved" == status:
+if "approved" == status.lower():
     approval = False
     isClear = True
     print "ServiceNow approval received."
