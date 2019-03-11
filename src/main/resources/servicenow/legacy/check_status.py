@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2019. All rights reserved.
+#
+# This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
+#
+
 import sys
 import com.xhaus.jyson.JysonCodec as json
 from servicenow.client.ServiceNowClient import ServiceNowClient
@@ -12,7 +18,7 @@ assert_not_null(sysId, "No sysId provided.")
 snClient = ServiceNowClient.create_client(servicenowServer, username, password)
 
 try:
-    data = snClient.get_change_request(tableName, sysId)
+    data = snClient.get_record(tableName, sysId)
     status = data[statusField]
     ticket = data['number']
     print "Found {} in Service Now.".format(sysId)
