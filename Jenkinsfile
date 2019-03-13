@@ -24,7 +24,7 @@ pipeline {
     stages {
         stage('End-To-End Tests') {
             parallel {
-                stage('Linux Chrome') {
+                stage('Linux Firefox') {
                     agent {
                         label 'linux || xlp'
                     }
@@ -48,7 +48,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Linux Firefox') {
+                stage('Linux Chrome') {
                     agent {
                         label 'linux || xlp'
                     }
