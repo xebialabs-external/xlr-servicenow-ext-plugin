@@ -1,0 +1,33 @@
+# XL Release ServiceNow Integration
+
+## Preface
+
+This document describes the xlr-servicenow-plugin implementation.
+
+See the *XL Release Reference Manual* for background information on XL Release and release concepts.
+
+## Overview
+
+This plugin is primarily aimed to support ServiceNow ITSM and agile development. To use the plugin we need to add it to the plugins directory of xl-release.
+
+Once this plugin is added to xl-release, task specific to ServiceNow is available.
+
+*From Version 8.5.0 onwards, https://store.servicenow.com/sn_appstore_store.do#!/store/application/0cdefccddb30ef001a85a961ca9619cb[XL Release ServiceNow App] is required to be installed on your ServiceNow instance.*
+
+## Create Plugin JAR
+
+To build plugin
+
+[source,bash]
+----
+./gradlew clean licenseFormat build
+----
+
+## Run End-to-End test
+
+To run End-to-End test
+[source,bash]
+----
+./gradlew clean build testEndToEnd
+----
+

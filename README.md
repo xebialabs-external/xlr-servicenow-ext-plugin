@@ -1,2 +1,0 @@
-# xlr-servicenow-plugin
-
