@@ -24,30 +24,6 @@ pipeline {
     stages {
         stage('End-To-End Tests') {
             parallel {
-                stage('Linux Firefox') {
-                    agent {
-                        label 'linux || xlp'
-                    }
-
-                    environment {
-                        SELENIUM_TEST_BROWSER = 'firefox'
-                        SELENIUM_TEST_PLATFORM = 'linux'
-                        XL_RELEASE_LICENSE = credentials('xl-release-license')
-                        XL_RELEASE_PORT = allocatePort()
-                        HTTP_SERVER_PORT = allocatePort()
-                    }
-
-                    tools {
-                        jdk 'JDK 8u60'
-                    }
-
-                    steps {
-                        checkout scm
-                        throttle(["selenium-grid-${env.SELENIUM_TEST_PLATFORM}-${env.SELENIUM_TEST_BROWSER}"]) {
-                            sh "./gradlew clean build testEnd2End -PxlReleaseLicense=${env.XL_RELEASE_LICENSE} -PxlReleasePort=${env.XL_RELEASE_PORT} -PhttpServerPort=${HTTP_SERVER_PORT}"
-                        }
-                    }
-                }
                 stage('Linux Chrome') {
                     agent {
                         label 'linux || xlp'
