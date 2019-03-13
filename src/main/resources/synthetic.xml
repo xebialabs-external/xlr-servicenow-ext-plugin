@@ -75,7 +75,7 @@
         <property name="comments" description="Leave comments to the comments (customer visible) field."
                   category="input" label="Comments" required="false"/>
         <property name="additionalFields" category="input" required="false"
-                  description="Use servicenow technical field name as 'key' and the corresponding value."
+                  description="Use ServiceNow technical field name as 'key' and the corresponding value."
                   kind="map_string_string"/>
         <property name="sysId" description="The technical id of the task." category="output"/>
         <property name="Ticket" label="Number" description="The unique number of the task." category="output"/>
