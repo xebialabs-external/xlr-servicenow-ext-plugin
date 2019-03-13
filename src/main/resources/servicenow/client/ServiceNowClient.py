@@ -134,7 +134,7 @@ class ServiceNowClient(object):
         elif size > 1:
             raise Exception("Expected to find only 1 entry with query '%s' but found %s" % (query, size))
         if fail_on_not_found:
-            raise Exception("No resullts found for query '%s'." % query)
+            raise Exception("No results found for query '%s'." % query)
         return None
 
     def get_record(self, table_name, sys_id, fail_on_not_found=False):
