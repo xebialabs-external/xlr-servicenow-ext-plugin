@@ -1,6 +1,8 @@
 #!groovy
+@Library('jenkins-pipeline-libs@master')
 
-library 'jenkins-pipeline-libs@master'
+import groovy.transform.Field
+
 @Field def slackRoom = '#team-integration-jobs'
 
 pipeline {
