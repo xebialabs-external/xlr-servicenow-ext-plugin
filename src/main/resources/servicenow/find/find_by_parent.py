@@ -12,7 +12,11 @@ assert_not_null(parent, "Parent is mandatory")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
 
-data = sn_client.query(tableName, "change_request=%s^short_descriptionSTARTSWITH%s" % (parent, shortDescription))
+query = "change_request=%s" % (parent)
+if shortDescription:
+    query = query+ "^short_descriptionSTARTSWITH%s" % (shortDescription)
+
+data = sn_client.query(tableName, query)
 sysId = data["sys_id"]
 ticket = data["number"]
 mdl.println("Found '{}' with sysId '{}' in Service Now. \n".format(ticket, sysId))
