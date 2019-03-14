@@ -14,8 +14,7 @@ assert_not_null(ciName, "CI Name is mandatory")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
 
-data = sn_client.find_record(tableName, "name=%s" % (ciName))
-data = data[0]
+data = sn_client.query(tableName, "name=%s" % (ciName), True)
 sysId = data["sys_id"]
 mdl.println("Found '{}' with sysId '{}' in Service Now. \n".format(ciName, sysId))
 mdl.print_hr()

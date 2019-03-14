@@ -14,8 +14,7 @@ assert_not_null(ticket, "Number is mandatory")
 
 sn_client = ServiceNowClient.create_client(servicenowServer, username, password)
 
-data = sn_client.find_record(tableName, "number=%s" % (ticket))
-data = data[0]
+data = sn_client.query(tableName, "number=%s" % (ticket), True)
 sysId = data["sys_id"]
 mdl.println("Found '{}' with sysId '{}' in Service Now. \n".format(ticket, sysId))
 mdl.print_hr()

@@ -16,7 +16,7 @@ query = "story=%s" % (story)
 if shortDescription:
     query = query+ "^short_descriptionSTARTSWITH%s" % (shortDescription)
 
-data = sn_client.query(tableName, query)
+data = sn_client.query(tableName, query, True)
 sysId = data["sys_id"]
 ticket = data["number"]
 mdl.println("Found '{}' with sysId '{}' in Service Now. \n".format(ticket, sysId))
