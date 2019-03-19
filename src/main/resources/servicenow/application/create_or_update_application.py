@@ -57,7 +57,7 @@ class ServiceNowApplicationClient(object):
             if ci is None:
                 sys_id = self.create_ci(self.table_cmdb_ci_app, content)
             else:
-                raise Exception("CI name alreeady used")
+                raise Exception("CI name [%s] already in use in ServiceNow" % name)
         else:
             ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
             if ci is None:

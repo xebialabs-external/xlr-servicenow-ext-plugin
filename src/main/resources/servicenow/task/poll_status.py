@@ -31,7 +31,7 @@ class ServiceNowPollStatusClient(object):
             try:
                 data = self.sn_client.get_record(self.task_vars['tableName'], self.task_vars['sysId'])
                 status = data[self.task_vars['statusField']]
-                print "Found [{}] in Service Now with status: [{}] Looking for {}\n".format(data['number'], status, self.task_vars['checkForStatus'])
+                print "Found [{}] in Service Now with field value: [{}] Looking for [{}]\n".format(data['number'], status, self.task_vars['checkForStatus'])
                 if status == self.task_vars['checkForStatus']:
                     status = data[self.task_vars['statusField']]
                     ticket = data["number"]
