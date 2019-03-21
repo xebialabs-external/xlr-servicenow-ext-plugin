@@ -52,6 +52,11 @@ class ServiceNowApplicationClient(object):
         self.set_from_task_vars('version', content)
         self.set_from_task_vars('company', content)
         self.set_from_task_vars('description', content)
+        
+        #Also sending release info.
+        content['x_xlbv_xl_release_identifier'] = str(release.id)
+        content['x_xlbv_xl_release_state'] = str(release.status)
+        
         if create:
             ci = self.sn_client.find_by_name(name, self.table_cmdb_ci_app)
             if ci is None:

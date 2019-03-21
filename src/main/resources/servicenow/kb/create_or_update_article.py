@@ -33,6 +33,11 @@ class PublishArticleClient(object):
     def publish_article(self):
         content = {"kb_knowledge_base": self.task_vars['knowledgeBase'], "kb_category": self.task_vars['articleCategory'],"short_description": self.task_vars['shortDescription'],
                    "text": self.task_vars['articleText']}
+        
+        #Also sending release info.
+        content['x_xlbv_xl_release_identifier'] = str(release.id)
+        content['x_xlbv_xl_release_state'] = str(release.status)
+        
         response = self.sn_client.create_record('kb_knowledge', content, getCurrentTask().getId())
         return response["target_sys_id"]
 

@@ -60,6 +60,10 @@ class ServiceNowUpdateRecordClient(object):
         self.set_from_task_vars('closeCode', contentx, 'close_code')
         self.set_from_task_vars('closeNotes', contentx, 'close_notes')
 
+        #Also sending release info.
+        contentx['x_xlbv_xl_release_identifier'] = str(release.id)
+        contentx['x_xlbv_xl_release_state'] = str(release.status)
+        
         for k, v in self.task_vars['additionalFields'].items():
             contentx[k] = v
             

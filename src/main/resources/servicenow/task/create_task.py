@@ -49,6 +49,10 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('story', content)
         self.set_from_task_vars('impact', content)
         self.set_from_task_vars('urgency', content)
+        
+        #Also sending release info.
+        content['x_xlbv_xl_release_identifier'] = str(release.id)
+        content['x_xlbv_xl_release_state'] = str(release.status)
 
         for k, v in self.task_vars['additionalFields'].items():
             content[k] = v
