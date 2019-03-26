@@ -19,15 +19,16 @@ class ServiceNowPollStatusClient(object):
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
         assert_not_null(task_vars['sysId'], "No sysId provided.")
         assert_not_null(task_vars['tableName'], "No tableName provided.")
-        assert_not_null(task_vars['pollInterval'], "No pollInterval provided.")
+        #assert_not_null(task_vars['pollInterval'], "No pollInterval provided.")
         assert_not_null(task_vars['checkForStatus'], "No check status provided.")
         self.sn_client = ServiceNowClient.create_client(task_vars['servicenowServer'], task_vars['username'], task_vars['password'])
 
 
     def process_poll(self):
+        sleepTime = 300
         data = ""
-
-        while True:
+        i = 1
+        while i < 550:
             try:
                 data = self.sn_client.get_record(self.task_vars['tableName'], self.task_vars['sysId'])
                 status = data[self.task_vars['statusField']]
@@ -42,7 +43,18 @@ class ServiceNowPollStatusClient(object):
                 print e
                 print sn_client.print_error(e)
                 print "Error finding status for %s" % statusField
-            time.sleep(self.task_vars['pollInterval']*60)
+            if i == 97:
+                sleepTime = 600
+            if i == 199:
+                sleepTime = 1200
+            if i == 298:
+                sleepTime = 1800
+            if i > 400:
+                sleepTime = sleepTime + i - 200
+            time.sleep(sleepTime)
+            i += 1
+        if i == 549 and status != self.task_vars['checkForStatus']:
+            raise Exception("Timeout has been reached, more than 50 days have passed.")            
         print "\n"
         return data
 
