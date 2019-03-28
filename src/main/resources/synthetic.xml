@@ -101,6 +101,16 @@
                   category="input" required="true"/>
         <property name="sysId" description="The technical id of the task." category="output"/>
     </type>
+    
+    <type type="servicenow.FindRecordByQuery" extends="servicenow.Base" label="ServiceNow: Find Records by query">
+        <property name="scriptLocation" default="servicenow/find/find_query.py" hidden="true"/>
+        <property name="tableName" category="input" label="Table Name" default="incident" required="true"/>
+        <property name="query" label="Encoded query" description="Provide a servicenow encoded query to search." category="input" required="true"/>
+        <property name="failOnNotFound" category="input" label="Fail on not found" description="If no results are returned the task will be set to failed, if not looking for count." kind="boolean"/>
+        <property name="provideCount" category="input" description="If selected a number will be returned (also 0), else only 1 record is expected and will be returned." label="Provide Count" kind="boolean"/>
+        <property name="sysId" description="The technical id of the task." category="output"/>
+        <property name="numberFound" description="Number of records found." category="output"/>
+    </type>
 
     <type type="servicenow.PollingCheckStatus" extends="servicenow.Base" label="ServiceNow: Wait for Status"
           virtual="false">

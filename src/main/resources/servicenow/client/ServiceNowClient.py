@@ -129,7 +129,7 @@ class ServiceNowClient(object):
     def query(self, table_name, query, fail_on_not_found=False):
         result = self.find_record(table_name, query)
         size = len(result)
-        if size is 1:
+        if size == 1:
             return result[0]
         elif size > 1:
             raise Exception("Expected to find only 1 entry with query '%s' but found %s" % (query, size))
