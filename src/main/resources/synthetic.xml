@@ -19,9 +19,11 @@
                   required="false" hidden="true" default="change_task"/>
         <property name="sysparmDisplayValue" label="Retrieve display value" default="True"
                   kind="boolean" description="If true returns display values for all of the fields." hidden="true"/>
-        <property name="sysparmInputDisplayValue" label="Input values are display values" default="True" hidden="true" kind="boolean" description="If true treats input values as display values."/>
+        <property name="sysparmInputDisplayValue" label="Input values are display values" default="True" hidden="true"
+                  kind="boolean" description="If true treats input values as display values."/>
         <property name="useServicenowApp" label="Use ServiceNow App"
-                  description="Use the ServiceNow app that can be downloaded in ServiceNow store. If set to false create and Update actions will use direct REST API on tables and not the app." required="false" default="true" kind="boolean"/>
+                  description="Use the ServiceNow app that can be downloaded in ServiceNow store. If set to false create and Update actions will use direct REST API on tables and not the app."
+                  required="false" default="true" kind="boolean"/>
         <property name="useOAuth" label="Use ServiceNow OAuth Resource Server"
                   description="Use OAuth instead of basic authentication." required="false" category="OAuth"
                   kind="boolean"/>
@@ -33,6 +35,14 @@
                   category="OAuth"/>
         <property name="clientSecret" label="Client Secret" description="Mandatory if OAuth is enabled."
                   required="false" password="true" category="OAuth"/>
+        <property name="authenticationMethod" kind="enum"
+                  enum-class="com.xebialabs.xlrelease.domain.configuration.HttpConnection$AuthenticationMethod"
+                  hidden="true" default="None">
+            <enum-values>
+                <value>None</value>
+            </enum-values>
+        </property>
+        <property name="domain" default="empty" hidden="true"/>
     </type>
 
     <!--
@@ -102,13 +112,18 @@
                   category="input" required="true"/>
         <property name="sysId" description="The technical id of the task." category="output"/>
     </type>
-    
+
     <type type="servicenow.FindRecordByQuery" extends="servicenow.Base" label="ServiceNow: Find Records by query">
         <property name="scriptLocation" default="servicenow/find/find_query.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="incident" required="true"/>
-        <property name="query" label="Encoded query" description="Provide a servicenow encoded query to search." category="input" required="true"/>
-        <property name="failOnNotFound" category="input" label="Fail on not found" description="If no results are returned the task will be set to failed, if not looking for count." kind="boolean"/>
-        <property name="provideCount" category="input" description="If selected a number will be returned (also 0), else only 1 record is expected and will be returned." label="Provide Count" kind="boolean"/>
+        <property name="query" label="Encoded query" description="Provide a servicenow encoded query to search."
+                  category="input" required="true"/>
+        <property name="failOnNotFound" category="input" label="Fail on not found"
+                  description="If no results are returned the task will be set to failed, if not looking for count."
+                  kind="boolean"/>
+        <property name="provideCount" category="input"
+                  description="If selected a number will be returned (also 0), else only 1 record is expected and will be returned."
+                  label="Provide Count" kind="boolean"/>
         <property name="sysId" description="The technical id of the task." category="output"/>
         <property name="numberFound" description="Number of records found." category="output"/>
     </type>
@@ -119,7 +134,8 @@
         <property name="tableName" category="input" label="Table Name" default="change_request" required="true"
                   description="Supply the technical table name in which to search." hidden="false"/>
         <property name="sysId" description="The technical id of the task." category="input" required="true"/>
-        <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true" description="Polling interval in minutes." default="10" hidden="true"/>
+        <property name="pollInterval" category="input" kind="integer" label="Polling Interval" required="true"
+                  description="Polling interval in minutes." default="10" hidden="true"/>
         <property name="statusField" description="The technical name of a field to check." category="input"
                   label="Status Field" required="true" default="state"/>
         <property name="checkForStatus" description="The display value to look for in the field." category="input"

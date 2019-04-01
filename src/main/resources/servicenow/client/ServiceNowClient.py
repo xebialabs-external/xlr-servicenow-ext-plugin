@@ -105,7 +105,7 @@ class ServiceNowClient(object):
         return json.dumps({"payload": json.dumps({'header': header, 'data': data})})
 
     def create_record(self, table_name, content, xlr_task_id):
-        if self.useServicenowApp: 
+        if self.useServicenowApp:
             payload_header = self.create_payload_header(table_name=table_name, action="create", identifier="", xlr_task_id=xlr_task_id)
             payload = self.create_payload(header=payload_header, data=content)
             data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
@@ -122,7 +122,7 @@ class ServiceNowClient(object):
 
     def get_record_with_fields(self, table_name, sys_id, fields):
         servicenow_api_url = '/api/now/table/%s?number=%s&sysparm_fields=%s&%s' % (table_name, sys_id, ",".join(fields), self.sysparms)
-        response = self.httpRequest.get(servicenow_api_url, contentType='application/json', headers = self.headers)
+        response = self.httpRequest.get(servicenow_api_url, contentType='application/json', headers=self.headers)
         if self.useOAuth :self.revoke_token()
 
         if response.getStatus() == SUCCESS_STATUS_CODE:
@@ -158,7 +158,7 @@ class ServiceNowClient(object):
         return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
 
     def update_record(self, table_name, sys_id, content, xlr_task_id):
-        if self.useServicenowApp:        
+        if self.useServicenowApp:
             payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=sys_id, xlr_task_id=xlr_task_id)
             payload = self.create_payload(header=payload_header, data=content)
             data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
@@ -172,6 +172,15 @@ class ServiceNowClient(object):
             if data['sys_id']:
                 data['target_sys_id'] = data['sys_id']
             return data
+
+    def check_connection(self):
+        """
+        Currently, there is no direct way to check if connection is successful or not for ServiceNow.
+        As a solution, we are fetching single record from change_request table.
+        :return: First record from change_request table if connection is successful, else throw error.
+        """
+        servicenow_api_url = '/api/now/table/{}?{}&sysparm_limit={}'.format('change_request', self.sysparms, 1)
+        return self.request(method='GET', url=servicenow_api_url, headers=self.headers)
 
     def request(self, method, url, headers, content_type='application/json', body=None):
         #print "Service Now URL = %s \n" % (url)
