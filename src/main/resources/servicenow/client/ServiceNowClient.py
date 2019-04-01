@@ -20,6 +20,7 @@ class ServiceNowClient(object):
         self.accessToken = None
         self.refreshToken = None
         self.httpConnection = httpConnection
+        self.useServicenowApp = httpConnection['useServicenowApp']
         self.useOAuth = httpConnection['useOAuth']
         self.service_now_url = httpConnection['url'].rstrip("/")
         if username:
@@ -104,12 +105,20 @@ class ServiceNowClient(object):
         return json.dumps({"payload": json.dumps({'header': header, 'data': data})})
 
     def create_record(self, table_name, content, xlr_task_id):
-        payload_header = self.create_payload_header(table_name=table_name, action="create", identifier="", xlr_task_id=xlr_task_id)
-        payload = self.create_payload(header=payload_header, data=content)
-        data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
-        if data["sys_row_error"] != "":
-            raise RuntimeError(data["sys_row_error"])
-        return data
+        if self.useServicenowApp: 
+            payload_header = self.create_payload_header(table_name=table_name, action="create", identifier="", xlr_task_id=xlr_task_id)
+            payload = self.create_payload(header=payload_header, data=content)
+            data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
+            if data["sys_row_error"] != "":
+                raise RuntimeError(data["sys_row_error"])
+            return data
+        else:
+            servicenow_api_url = '/api/now/table/%s?%s' % (table_name, self.sysparms)
+            body = json.dumps(content)
+            data = self.request(method='POST', url=servicenow_api_url, body=body, headers=self.headers)
+            if data['sys_id']:
+                data['target_sys_id'] = data['sys_id']
+            return data
 
     def get_record_with_fields(self, table_name, sys_id, fields):
         servicenow_api_url = '/api/now/table/%s?number=%s&sysparm_fields=%s&%s' % (table_name, sys_id, ",".join(fields), self.sysparms)
@@ -149,12 +158,20 @@ class ServiceNowClient(object):
         return "%s/nav_to.do?uri=%s.do?sys_id=%s" % (self.service_now_url, table_name, sys_id)
 
     def update_record(self, table_name, sys_id, content, xlr_task_id):
-        payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=sys_id, xlr_task_id=xlr_task_id)
-        payload = self.create_payload(header=payload_header, data=content)
-        data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
-        if data["sys_row_error"] != "":
-            raise RuntimeError(data["sys_row_error"])
-        return data
+        if self.useServicenowApp:        
+            payload_header = self.create_payload_header(table_name=table_name, action="update", identifier=sys_id, xlr_task_id=xlr_task_id)
+            payload = self.create_payload(header=payload_header, data=content)
+            data = self.request(method='POST', url=SERVICE_NOW_CREATE_URL, body=payload, headers=self.headers)[0]
+            if data["sys_row_error"] != "":
+                raise RuntimeError(data["sys_row_error"])
+            return data
+        else:
+            servicenow_api_url = '/api/now/table/%s/%s?%s' % (table_name, sys_id, self.sysparms)
+            body = json.dumps(content)
+            data = self.request(method='PUT', url=servicenow_api_url, body=body, headers=self.headers)
+            if data['sys_id']:
+                data['target_sys_id'] = data['sys_id']
+            return data
 
     def request(self, method, url, headers, content_type='application/json', body=None):
         #print "Service Now URL = %s \n" % (url)

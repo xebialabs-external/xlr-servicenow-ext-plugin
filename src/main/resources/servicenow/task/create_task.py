@@ -56,6 +56,7 @@ class ServiceNowRecordClient(object):
 
         for k, v in self.task_vars['additionalFields'].items():
             content[k] = v
+            
         response = self.sn_client.create_record(self.table_name, content, getCurrentTask().getId())
         return response
 
@@ -69,9 +70,8 @@ class ServiceNowRecordClient(object):
     def process(self):
         response = self.process_record()
         sys_id = response['target_sys_id']
-        data = self.sn_client.find_record(table_name=self.table_name, query="sys_id={}".format(sys_id))[0]
+        data = self.sn_client.get_record(self.table_name,sys_id)
         self.print_links(sys_id, data['number'], data)
         return sys_id, data['number'], data
 
 sysId, Ticket, data = ServiceNowRecordClient(locals()).process()
-

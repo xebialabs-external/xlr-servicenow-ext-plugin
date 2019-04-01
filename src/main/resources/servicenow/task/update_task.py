@@ -79,7 +79,7 @@ class ServiceNowUpdateRecordClient(object):
 
     def process(self):
         self.process_record()
-        data = self.sn_client.get_record(self.task_vars['tableName'],self.task_vars['sysId'])
+        data = self.sn_client.get_record(self.table_name,self.task_vars['sysId'])
         self.print_links(self.task_vars['sysId'], data['number'], data)
         return data, data['number']
 
