@@ -40,7 +40,7 @@ exports.config = {
         global.moment = require('moment');
         global.EC = protractor.ExpectedConditions;
 
-        require('./e2e/scenario/fixtures-ci-builder.js');
+        require('./e2e/dsl/fixtures-ci-builder.js');
 
         let dslFiles = require("glob").sync("../../../build/e2e-dsl/**/*.js", {cwd: __dirname});
         _.each(dslFiles, require);
