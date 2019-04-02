@@ -22,8 +22,8 @@
         <property name="sysparmInputDisplayValue" label="Input values are display values" default="True" hidden="true"
                   kind="boolean" description="If true treats input values as display values."/>
         <property name="useServicenowApp" label="Use ServiceNow App"
-                  description="Use the ServiceNow app that can be downloaded in ServiceNow store. If set to false create and Update actions will use direct REST API on tables and not the app."
-                  required="false" default="true" kind="boolean"/>
+                  description="Use the ServiceNow app that can be downloaded in ServiceNow store. If set to false create and update actions will use direct REST API on tables and not the app."
+                  required="false" default="false" kind="boolean"/>
         <property name="useOAuth" label="Use ServiceNow OAuth Resource Server"
                   description="Use OAuth instead of basic authentication." required="false" category="OAuth"
                   kind="boolean"/>
