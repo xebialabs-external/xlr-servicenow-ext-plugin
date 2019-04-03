@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const requestItemsRelease = () => {
+const requestItemsRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseCreateServiceRequestItem',
+        id: releaseId,
         title: 'Create Service Item',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -67,8 +67,8 @@ const requestItemsRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseCreateServiceRequestItem');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Create New Service item');
 
     let task = release.openCustomScriptDetails('Create New Service item');
@@ -91,26 +91,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Service Item (without XL Release App)', function () {
+describe('Service Item (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        requestItemsRelease();
+        requestItemsRelease('ReleaseCreateServiceRequestItem');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find service request item', testSteps);
+    it('should create update find service request item', async () => {
+        await testSteps('ReleaseCreateServiceRequestItem');
+    });
 });
 
-describe('Service Item (with XL Release App)', function () {
+describe('Service Item (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        requestItemsRelease();
+        requestItemsRelease('ReleaseCreateServiceRequestItemWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find service request item', testSteps);
+    it('should create update find service request item', async () => {
+        await testSteps('ReleaseCreateServiceRequestItemWithApp');
+    });
 });

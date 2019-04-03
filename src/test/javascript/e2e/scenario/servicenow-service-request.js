@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const serviceRequestRelease = () => {
+const serviceRequestRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseCreateServiceItem',
+        id: releaseId,
         title: 'Create Service',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -67,8 +67,8 @@ const serviceRequestRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseCreateServiceItem');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Create New Service');
 
     let task = release.openCustomScriptDetails('Create New Service');
@@ -91,26 +91,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Service Request (without XL Release App)', function () {
+describe('Service Request (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        serviceRequestRelease();
+        serviceRequestRelease('ReleaseCreateServiceItem');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find service request', testSteps);
+    it('should create update find service request', async () => {
+        await testSteps('ReleaseCreateServiceItem');
+    });
 });
 
-describe('Service Request (with XL Release App)', function () {
+describe('Service Request (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        serviceRequestRelease();
+        serviceRequestRelease('ReleaseCreateServiceItemWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find service request', testSteps);
+    it('should create update find service request', async () => {
+        await testSteps('ReleaseCreateServiceItemWithApp');
+    });
 });

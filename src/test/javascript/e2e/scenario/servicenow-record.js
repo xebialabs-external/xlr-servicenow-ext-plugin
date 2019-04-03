@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const recordRelease = () => {
+const recordRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseRecord',
+        id: releaseId,
         title: 'Create Record ',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -42,31 +42,35 @@ const recordRelease = () => {
     });
 };
 
-const testSteps = () => {
-    let release = Page.openRelease('ReleaseRecord');
+const testSteps = (releaseId) => {
+    let release = Page.openRelease(releaseId);
     return release.start().waitForCompletion();
 };
 
-describe('Record (without XL Release App)', function () {
+describe('Record (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        recordRelease();
+        recordRelease('ReleaseRecord');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create record and request ', testSteps);
+    it('should create record and request ', async () => {
+        await testSteps('ReleaseRecord');
+    });
 });
 
-describe('Record (with XL Release App)', function () {
+describe('Record (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        recordRelease();
+        recordRelease('ReleaseRecordWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create record and request ', testSteps);
+    it('should create record and request ', async () => {
+        await testSteps('ReleaseRecordWithApp');
+    });
 });

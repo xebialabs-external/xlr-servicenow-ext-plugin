@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const scheduleTaskRelease = () => {
+const scheduleTaskRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseCreateScheduleTask',
+        id: releaseId,
         title: 'Create Schedule Task',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -49,8 +49,8 @@ const scheduleTaskRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseCreateScheduleTask');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Schedule Task');
 
     let task = release.openCustomScriptDetails('Update CMDB');
@@ -60,26 +60,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Schedule Task (without XL Release App)', function () {
+describe('Schedule Task (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        scheduleTaskRelease();
+        scheduleTaskRelease('ReleaseCreateScheduleTask');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create schedule task', testSteps);
+    it('should create schedule task', async () => {
+        await testSteps('ReleaseCreateScheduleTask');
+    });
 });
 
-describe('Schedule Task (with XL Release App)', function () {
+describe('Schedule Task (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        scheduleTaskRelease();
+        scheduleTaskRelease('ReleaseCreateScheduleTaskWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create schedule task', testSteps);
+    it('should create schedule task', async () => {
+        await testSteps('ReleaseCreateScheduleTaskWithApp');
+    });
 });

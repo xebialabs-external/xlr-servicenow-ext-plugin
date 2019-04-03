@@ -4,10 +4,11 @@
  * This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
  */
 'use strict';
-var os = require('os');
+const os = require('os');
+const { SpecReporter } = require('jasmine-spec-reporter');
 
-var DEFAULT_TIMEOUT = 12000000;
-var firefoxBinary = process.env.FIREFOX_BINARY || undefined;
+const DEFAULT_TIMEOUT = 12000000;
+const firefoxBinary = process.env.FIREFOX_BINARY || undefined;
 
 exports.config = {
     capabilities: {
@@ -30,7 +31,7 @@ exports.config = {
     },
     framework: 'jasmine2',
     seleniumAddress: (process.env.SELENIUM_TEST_ADDR || null),
-    onPrepare: function () {
+    onPrepare: () => {
         require('babel-polyfill');
         require('babel-register')({
             presets: ['es2015', 'stage-0']
@@ -40,19 +41,42 @@ exports.config = {
         global.moment = require('moment');
         global.EC = protractor.ExpectedConditions;
 
+        jasmine.getEnv().addReporter(new SpecReporter({
+            displayStacktrace: 'all',      // display stacktrace for each failed assertion, values: (all|specs|summary|none)
+            displaySuccessesSummary: false, // display summary of all successes after execution
+            displayFailuresSummary: true,   // display summary of all failures after execution
+            displayPendingSummary: true,    // display summary of all pending specs after execution
+            displaySuccessfulSpec: true,    // display each successful spec
+            displayFailedSpec: true,        // display each failed spec
+            displayPendingSpec: false,      // display each pending spec
+            displaySpecDuration: false,     // display each spec duration
+            displaySuiteNumber: false,      // display each suite number (hierarchical)
+            colors: {
+                success: 'green',
+                failure: 'red',
+                pending: 'yellow'
+            },
+            prefixes: {
+                success: '✓ ',
+                failure: '✗ ',
+                pending: '* '
+            },
+            customProcessors: []
+        }));
+
         require('./e2e/dsl/fixtures-ci-builder.js');
 
         let dslFiles = require("glob").sync("../../../build/e2e-dsl/**/*.js", {cwd: __dirname});
         _.each(dslFiles, require);
-        By.addLocator("$", function () {
-            var selector = arguments[0];
-            var using = arguments[1] || document;
-            var results = $(using).find(selector);
-            var matches = [];
+        By.addLocator("$", () => {
+            let selector = arguments[0];
+            let using = arguments[1] || document;
+            let results = $(using).find(selector);
+            let matches = [];
             if (!$.isArray(results)) {
                 matches.push(results.get(0));
             } else {
-                for (var i = 0; i < results.length; ++i) {
+                for (let i = 0; i < results.length; ++i) {
                     matches.push(results[i][0]);
                 }
             }
@@ -68,8 +92,8 @@ exports.config = {
         cleanFixtures: 'true',
         servicenow: {
             address: 'https://ven02515.service-now.com',
-            username: 'xlr',
-            password: 'xlr'
+            username: 'adm.mpl',
+            password: 'uUsXwssOMOR9'
         }
     }
 };

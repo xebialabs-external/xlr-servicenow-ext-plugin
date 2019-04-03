@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const cmdbRelease = () => {
+const cmdbRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseUpdateCMDB',
+        id: releaseId,
         title: 'Update CMDB',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -35,8 +35,8 @@ const cmdbRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseUpdateCMDB');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Update CMDB');
 
     let task = release.openCustomScriptDetails('Update CMDB');
@@ -46,26 +46,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Update CMDB (without XL Release App)', function () {
+describe('Update CMDB (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        cmdbRelease();
+        cmdbRelease('ReleaseUpdateCMDB');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update cmdb', testSteps);
+    it('should create update cmdb', async () => {
+        await testSteps('ReleaseUpdateCMDB');
+    });
 });
 
-describe('Update CMDB (with XL Release App)', function () {
+describe('Update CMDB (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        cmdbRelease();
+        cmdbRelease('ReleaseUpdateCMDBWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update cmdb', testSteps);
+    it('should create update cmdb', async () => {
+        await testSteps('ReleaseUpdateCMDBWithApp');
+    });
 });

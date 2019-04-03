@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const incidentRelease = () => {
+const incidentRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseCreateIncidentRequest',
+        id: releaseId,
         title: 'Create Incident',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -67,8 +67,8 @@ const incidentRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseCreateIncidentRequest');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Create New Incident Request');
 
     let task = release.openCustomScriptDetails('Create New Incident Request');
@@ -91,26 +91,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Incident Request (without XL Release App)', function () {
+describe('Incident Request (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        incidentRelease();
+        incidentRelease('ReleaseCreateIncidentRequest');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find incident request', testSteps);
+    it('should create update find incident request', async () => {
+        await testSteps('ReleaseCreateIncidentRequest');
+    });
 });
 
-describe('Incident Request (with XL Release App)', function () {
+describe('Incident Request (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        incidentRelease();
+        incidentRelease('ReleaseCreateIncidentRequestWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find incident request', testSteps);
+    it('should create update find incident request', async () => {
+        await testSteps('ReleaseCreateIncidentRequestWithApp');
+    });
 });

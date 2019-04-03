@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const agileDevRelease = () => {
+const agileDevRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseAgileDevelopment',
+        id: releaseId,
         title: 'Do Agile Development',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -210,8 +210,8 @@ const agileDevRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseAgileDevelopment');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Create Epic');
 
     let task = release.openCustomScriptDetails('Find Sprint');
@@ -306,26 +306,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Agile Development (without XL Release App)', function () {
+describe('Agile Development (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        agileDevRelease();
+        agileDevRelease('ReleaseAgileDevelopment');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should do agile development', testSteps);
+    it('should do agile development', async () => {
+        await testSteps('ReleaseAgileDevelopment');
+    });
 });
 
-describe('Agile Development (with XL Release App)', function () {
+describe('Agile Development (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        agileDevRelease();
+        agileDevRelease('ReleaseAgileDevelopmentWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should do agile development', testSteps);
+    it('should do agile development', async () => {
+        await testSteps('ReleaseAgileDevelopmentWithApp');
+    });
 });

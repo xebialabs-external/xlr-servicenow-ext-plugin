@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const changeRequestRelease = () => {
+const changeRequestRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseCreateChangeRequest',
+        id: releaseId,
         title: 'Create Change Request',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -89,8 +89,8 @@ const changeRequestRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseCreateChangeRequest');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Create New Change Request');
 
     let task = release.openCustomScriptDetails('Create New Change Request');
@@ -123,26 +123,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Change Request (without XL Release App)', function () {
+describe('Change Request (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        changeRequestRelease();
+        changeRequestRelease('ReleaseCreateChangeRequest');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find change request', testSteps);
+    it('should create update find change request', async () => {
+        await testSteps('ReleaseCreateChangeRequest');
+    });
 });
 
-describe('Change Request (with XL Release App)', function () {
+describe('Change Request (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        changeRequestRelease();
+        changeRequestRelease('ReleaseCreateChangeRequestWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find change request', testSteps);
+    it('should create update find change request', async () => {
+        await testSteps('ReleaseCreateChangeRequestWithApp');
+    });
 });

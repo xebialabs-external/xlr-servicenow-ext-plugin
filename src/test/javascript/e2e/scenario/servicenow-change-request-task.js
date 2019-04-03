@@ -5,9 +5,9 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const changeRequestTaskRelease = () => {
+const changeRequestTaskRelease = (releaseId) => {
     fixtures().release({
-        id: 'ReleaseCreateChangeRequestTask',
+        id: releaseId,
         title: 'Create Incident',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
@@ -58,8 +58,8 @@ const changeRequestTaskRelease = () => {
     });
 };
 
-const testSteps = async () => {
-    let release = Page.openRelease('ReleaseCreateChangeRequestTask');
+const testSteps = async (releaseId) => {
+    let release = Page.openRelease(releaseId);
     release.start().waitForTaskCompleted('Create Change Request Task');
 
     let task = release.openCustomScriptDetails('Create Change Request Task');
@@ -81,26 +81,30 @@ const testSteps = async () => {
     return release.waitForCompletion();
 };
 
-describe('Change Request Task (without XL Release App)', function () {
+describe('Change Request Task (without XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(false);
-        changeRequestTaskRelease();
+        changeRequestTaskRelease('ReleaseCreateChangeRequestTask');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find change request task', testSteps);
+    it('should create update find change request task', async () => {
+        await testSteps('ReleaseCreateChangeRequestTask');
+    });
 });
 
-describe('Change Request Task (with XL Release App)', function () {
+describe('Change Request Task (with XL Release App)', () => {
     globalForEach();
 
-    beforeEach(function () {
+    beforeEach(() => {
         createServiceNowCI(true);
-        changeRequestTaskRelease();
+        changeRequestTaskRelease('ReleaseCreateChangeRequestTaskWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create update find change request task', testSteps);
+    it('should create update find change request task', async () => {
+        await testSteps('ReleaseCreateChangeRequestTaskWithApp');
+    });
 });
