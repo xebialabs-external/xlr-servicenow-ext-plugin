@@ -1,0 +1,202 @@
+---
+apiVersion: xl-release/v1
+kind: Templates
+metadata:
+  home: ServiceNow
+spec:
+- template: ITSM & agile from ServiceNow
+  description: ITSM & agile started from a story in ServiceNow;
+  phases:
+  - phase: Devlopment
+    tasks:
+    - name: Inform Servicenow start Dev
+      type: servicenow.UpdateStory
+      state: Work in progress
+      workNotes: We started dev!
+      sysId: ${id}
+    - name: Find scrum task
+      type: servicenow.FindScrumTaskByStory
+      shortDescription: Coding
+      story: ${id}
+      variableMapping:
+        pythonScript.sysId: ${scrumTaskSysId}
+    - name: Deploy to Dev (XL Deploy)
+      type: xldeploy.Deploy
+      owner: admin
+    - name: Close scrum task
+      type: servicenow.UpdateScrumTask
+      state: Complete
+      workNotes: Coding done, deployed to dev
+      taskType: Coding
+      sysId: ${scrumTaskSysId}
+    color: '#0099CC'
+  - phase: Test
+    tasks:
+    - name: Deploy to TEST (XL Deploy)
+      type: xldeploy.Deploy
+      owner: admin
+    - name: Inform Servicenow ready for test
+      type: servicenow.UpdateStory
+      state: Ready for testing
+      workNotes: Deployment to Test started
+      sysId: ${id}
+    - name: Wait for story being  set to testing
+      type: servicenow.PollingCheckStatus
+      tableName: rm_story
+      sysId: ${id}
+      checkForStatus: Testing
+    - name: Functional testing
+      type: xlrelease.Task
+    - name: Close story
+      type: servicenow.UpdateStory
+      state: Complete
+      workNotes: All done.
+      sysId: ${id}
+    - name: Create change request
+      type: servicenow.CreateChangeRequest
+      shortDescription: New Coolstore deployment from story ${number}
+      ciSysId: Coolstore
+      assignmentGroup: Change Management
+      priority: 4 - Low
+      additionalFields:
+      variableMapping:
+        pythonScript.sysId: ${changeSysId}
+    - name: Ask for approval to move to PROD
+      type: servicenow.UpdateChangeRequest
+      state: Assess
+      sysId: ${changeSysId}
+    color: '#FD8D10'
+  - phase: Production
+    tasks:
+    - name: Wait for approval to deploy to PROD
+      type: servicenow.PollingCheckStatus
+      sysId: ${changeSysId}
+      statusField: approval
+      checkForStatus: Approved
+    - name: Set change to Implement
+      type: servicenow.UpdateChangeRequest
+      state: Implement
+      sysId: ${changeSysId}
+    - name: Find Change task
+      type: servicenow.FindChangeTaskByParent
+      shortDescription: Implement
+      parent: ${changeSysId}
+      variableMapping:
+        pythonScript.sysId: ${cTaskSysId}
+    - name: Deploy to PROD
+      type: xldeploy.Deploy
+      owner: admin
+    - name: Find Server
+      type: servicenow.FindCIByName
+      ciName: Apache server
+      variableMapping:
+        pythonScript.sysId: ${serverId}
+    - name: Update Coolstore applicationversion
+      type: servicenow.UpdateApplicationVersion
+      ciName: CoolStore
+      environment: Production
+      version: ${newCiVersion}
+      runsOn:
+      - ${serverId}
+      variableMapping:
+        pythonScript.sysId: ${ci_id}
+    - name: Create coolstore ${newCiName}
+      type: servicenow.Application
+      ciName: Coolstore ${newCiName}
+      environment: Production
+      version: ${newCiVersion}
+      dependsOn:
+      - ${ci_id}
+      runsOn:
+      - ${serverId}
+      variableMapping:
+        pythonScript.sysId: ${cartSysId}
+    - name: Close change task
+      type: servicenow.UpdateChangeTask
+      state: Closed Complete
+      sysId: ${cTaskSysId}
+      closeNotes: Finished by XL Release
+    - name: Close change
+      type: servicenow.UpdateChangeRequest
+      ciSysId: ${cartSysId}
+      state: Closed
+      sysId: ${changeSysId}
+      closeCode: successful
+      closeNotes: Successful by XL Release.
+    - name: Publish release notes
+      type: servicenow.PublishArticle
+      knowledgeBase: IT
+      articleCategory: Announcements
+      shortDescription: Release notes CoolStore ${newCiVersion}
+      articleText: |-
+        Release of CoolStore ${newCiVersion} done based on story: ${number}<br>
+        <br>
+        This ends the demo....<br>
+    color: '#08B153'
+  variables:
+  - type: xlrelease.StringVariable
+    key: id
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: number
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: ci_id
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: scrumTaskSysId
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: cartSysId
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: serverId
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: cTaskSysId
+    requiresValue: false
+    showOnReleaseStart: false
+  - type: xlrelease.StringVariable
+    key: newCiName
+    value: The HUB
+  - type: xlrelease.StringVariable
+    key: newCiVersion
+    value: "3.2"
+  - type: xlrelease.StringVariable
+    key: changeSysId
+    requiresValue: false
+    showOnReleaseStart: false
+  riskProfile: Default risk profile
+- type: xlrelease.Dashboard
+  owner: admin
+  tiles:
+  - name: Release progress
+    type: xlrelease.ReleaseProgressTile
+  - name: Release summary
+    type: xlrelease.ReleaseSummaryTile
+  - name: Resource usage
+    type: xlrelease.ResourceUsageTile
+  - name: Release timeline
+    type: xlrelease.TimelineTile
+  - name: Release health
+    type: xlrelease.ReleaseHealthTile
+  - name: ServiceNow linked tasks
+    type: servicenow.ServiceNowQueryTile
+    row: 2
+    col: 2
+    tableName: task
+    query: x_xlbv_xl_release_identifier=${release.id}
+    detailsViewColumns:
+      number: number
+      short_description: short_description
+      state: state
+      priority: priority
+      sys_class_name: sys_class_name
+      assigned_to: assigned_to.display_value
+  parentTemplate: ITSM & agile from ServiceNow
