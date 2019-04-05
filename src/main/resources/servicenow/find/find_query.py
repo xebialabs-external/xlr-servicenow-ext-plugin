@@ -28,8 +28,6 @@ if not provideCount:
         url = '%s/%s.do?sys_id=%s' % (sn_client.service_now_url, tableName, sysId)
         mdl.print_url("Record Form View", url)
     elif failOnNotFound:
-        print size
-        print result
-        raise Exception("No or multiple results found for query '%s'." % query)
+        raise Exception("%s results found for query '%s', while 1 expected." % (size, query)
 else:
     mdl.println("Found '{}' number of record in Service Now.".format(size))
