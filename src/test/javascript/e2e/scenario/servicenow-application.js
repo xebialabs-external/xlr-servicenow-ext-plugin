@@ -5,10 +5,21 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const recordRelease = (releaseId) => {
+const generateRandomString = (string_length) => {
+    let random_string = '';
+    let random_ascii;
+    for (let i = 0; i < string_length; i++) {
+        random_ascii = Math.floor((Math.random() * 25) + 97);
+        random_string += String.fromCharCode(random_ascii)
+    }
+    return random_string
+};
+
+const applicationRelease = (releaseId) => {
+    let randomAppName = generateRandomString(10);
     fixtures().release({
         id: releaseId,
-        title: 'Create Record',
+        title: 'ServiceNow Applications',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
         dueDate: moment().add(8, 'days'),
@@ -16,26 +27,32 @@ const recordRelease = (releaseId) => {
             title: 'Prod',
             status: 'planned',
             tasks: [{
-                title: 'Create Record Request',
+                title: 'Create Application',
                 type: 'xlrelease.CustomScriptTask',
                 status: 'planned',
                 owner: 'admin',
                 pythonScript: {
-                    type: 'servicenow.CreateRecord',
+                    type: 'servicenow.Application',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    shortDescription: 'description',
-                    comments: 'comments'
+                    ciName: randomAppName,
+                    description: 'Test App from XL Release',
+                    environment: 'Resource',
+                    version: '1.0.0',
+                    company: 'XebiaLabs'
                 }
             }, {
-                title: 'Create Request',
+                title: 'Create Application',
                 type: 'xlrelease.CustomScriptTask',
                 status: 'planned',
                 owner: 'admin',
                 pythonScript: {
-                    type: 'servicenow.CreateRequest',
+                    type: 'servicenow.UpdateApplicationVersion',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    shortDescription: 'description',
-                    comments: 'comments'
+                    ciName: randomAppName,
+                    description: 'Test App from XL Release',
+                    environment: 'Resource',
+                    version: '2.0.0',
+                    company: 'XebiaLabs B.V.'
                 }
             }]
         }]
@@ -47,30 +64,30 @@ const testSteps = (releaseId) => {
     return release.start().waitForCompletion();
 };
 
-describe('Record (without XL Release App)', () => {
+describe('Application (without XL Release App)', () => {
     globalForEach();
 
     beforeEach(() => {
         createServiceNowCI(false);
-        recordRelease('ReleaseRecord');
+        applicationRelease('ReleaseApplication');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create record and request ', async () => {
-        await testSteps('ReleaseRecord');
+    it('should create update application ', async () => {
+        await testSteps('ReleaseApplication');
     });
 });
 
-describe('Record (with XL Release App)', () => {
+describe('Application (with XL Release App)', () => {
     globalForEach();
 
     beforeEach(() => {
         createServiceNowCI(true);
-        recordRelease('ReleaseRecordWithApp');
+        applicationRelease('ReleaseApplicationWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create record and request ', async () => {
-        await testSteps('ReleaseRecordWithApp');
+    it('should create update application ', async () => {
+        await testSteps('ReleaseApplicationWithApp');
     });
 });

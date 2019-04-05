@@ -5,10 +5,10 @@
  */
 import {createServiceNowCI} from '../dsl/servicenow-ci';
 
-const recordRelease = (releaseId) => {
+const publishArticleRelease = (releaseId) => {
     fixtures().release({
         id: releaseId,
-        title: 'Create Record',
+        title: 'Publish Article',
         status: 'planned',
         scheduledStartDate: moment().subtract(3, 'days'),
         dueDate: moment().add(8, 'days'),
@@ -16,26 +16,17 @@ const recordRelease = (releaseId) => {
             title: 'Prod',
             status: 'planned',
             tasks: [{
-                title: 'Create Record Request',
+                title: 'Publish Article',
                 type: 'xlrelease.CustomScriptTask',
                 status: 'planned',
                 owner: 'admin',
                 pythonScript: {
-                    type: 'servicenow.CreateRecord',
+                    type: 'servicenow.PublishArticle',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    shortDescription: 'description',
-                    comments: 'comments'
-                }
-            }, {
-                title: 'Create Request',
-                type: 'xlrelease.CustomScriptTask',
-                status: 'planned',
-                owner: 'admin',
-                pythonScript: {
-                    type: 'servicenow.CreateRequest',
-                    servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    shortDescription: 'description',
-                    comments: 'comments'
+                    knowledgeBase: 'Knowledge',
+                    articleCategory: 'Release Notes',
+                    shortDescription: 'Test Article from XL Release',
+                    articleText: 'New <i>article</i> from <strong>xlr-servicenow-plugin</strong>'
                 }
             }]
         }]
@@ -47,30 +38,30 @@ const testSteps = (releaseId) => {
     return release.start().waitForCompletion();
 };
 
-describe('Record (without XL Release App)', () => {
+describe('Publish Article (without XL Release App)', () => {
     globalForEach();
 
     beforeEach(() => {
         createServiceNowCI(false);
-        recordRelease('ReleaseRecord');
+        publishArticleRelease('ReleasePublishArticle');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create record and request ', async () => {
-        await testSteps('ReleaseRecord');
+    it('should publish article ', async () => {
+        await testSteps('ReleasePublishArticle');
     });
 });
 
-describe('Record (with XL Release App)', () => {
+describe('Publish Article (with XL Release App)', () => {
     globalForEach();
 
     beforeEach(() => {
         createServiceNowCI(true);
-        recordRelease('ReleaseRecordWithApp');
+        publishArticleRelease('ReleasePublishArticleWithApp');
         return LoginPage.login('admin', 'admin');
     });
 
-    it('should create record and request ', async () => {
-        await testSteps('ReleaseRecordWithApp');
+    it('should publish article ', async () => {
+        await testSteps('ReleasePublishArticleWithApp');
     });
 });
