@@ -27,16 +27,6 @@ const changeRequestRelease = (releaseId) => {
                     comments: 'comments'
                 }
             }, {
-                title: 'Create New Change Request',
-                type: 'xlrelease.CustomScriptTask',
-                status: 'planned',
-                owner: 'admin',
-                pythonScript: {
-                    type: 'servicenow.CreateNewChangeRequest',
-                    servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"New","comments":"New"}'
-                }
-            }, {
                 title: 'Manual Task',
                 type: 'xlrelease.Task',
                 status: 'planned',
@@ -49,7 +39,11 @@ const changeRequestRelease = (releaseId) => {
                 pythonScript: {
                     type: 'servicenow.UpdateChangeRequest',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"Updated","comments":"Updated"}',
+                    shortDescription: 'Updated short description from XL Release',
+                    description: 'Updated description from XL Release',
+                    priority: '3 - Moderate',
+                    closeCode: 'successful',
+                    closeNotes: 'close notes from XL Release',
                     sysId: ''
                 }
             }, {
@@ -91,9 +85,9 @@ const changeRequestRelease = (releaseId) => {
 
 const testSteps = async (releaseId) => {
     let release = Page.openRelease(releaseId);
-    release.start().waitForTaskCompleted('Create New Change Request');
+    release.start().waitForTaskCompleted('Create Change Request');
 
-    let task = release.openCustomScriptDetails('Create New Change Request');
+    let task = release.openCustomScriptDetails('Create Change Request');
     var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
     var ticket = await task.taskDetails.element(By.$(`#Ticket .field-readonly`)).getText();
     task.close();

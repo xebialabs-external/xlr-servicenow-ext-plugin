@@ -61,26 +61,6 @@ class ServiceNowClient(object):
         servicenowApiUrl = "/oauth_revoke_token.do?token=%s" % self.refreshToken
         response = httpRequest.get(servicenowApiUrl)
 
-    def format_record(self, myObj, outStr="", prefix="", header=True):
-        if header:
-            outStr = "%s| Key | Value |\n" % (outStr)
-            outStr = "%s| --- | --- |\n" % (outStr)
-        if type(myObj) is dict:
-            for key in myObj.iterkeys():
-                value = myObj[key]
-                if type(value) is dict or type(value) is list:
-                    p = "%s%s." % (prefix, key)
-                    outStr = "%s| %s%s |\n%s" % (outStr, prefix, key, self.format_record(value, "", p, False))
-                else:
-                    p = "%s%s" % (prefix, key)
-                    outStr = "%s| %s%s |%s |\n" % (outStr, prefix, key, value)
-        elif type(myObj) is list:
-            for value in myObj:
-                outStr = "%s| | %s\n" % (outStr, value)
-        else:
-            outStr = "%s%s" % (outStr, myObj)
-        return outStr
-
     def print_table(self, headers, rows):
         print "\n|", "|".join(headers), "|"
         print "|", " ------ |" * len(headers)

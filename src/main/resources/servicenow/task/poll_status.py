@@ -54,12 +54,13 @@ class ServiceNowPollStatusClient(object):
             time.sleep(sleepTime)
             i += 1
         if i == 549 and status != self.task_vars['checkForStatus']:
-            raise Exception("Timeout has been reached, more than 50 days have passed.")            
+            raise Exception("Timeout has been reached, more than 50 days have passed.")
         print "\n"
-        return data
+        return data, status
 
     def process(self):
-        data = self.process_poll()
-        return data
+        data, status = self.process_poll()
+        ticket = data['number']
+        return status, ticket, data
 
-data = ServiceNowPollStatusClient(locals()).process()
+status, ticket, data = ServiceNowPollStatusClient(locals()).process()

@@ -23,18 +23,10 @@ const requestItemsRelease = (releaseId) => {
                 pythonScript: {
                     type: 'servicenow.CreateRequestItem',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    shortDescription: 'description',
-                    comments: 'comments'
-                }
-            }, {
-                title: 'Create New Service item',
-                type: 'xlrelease.CustomScriptTask',
-                status: 'planned',
-                owner: 'admin',
-                pythonScript: {
-                    type: 'servicenow.CreateNewRequestItem',
-                    servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"New","comments":"New"}'
+                    shortDescription: 'short description from XL Release',
+                    comments: 'comments',
+                    description: 'description from XL Release',
+                    priority: '1 - Critical'
                 }
             }, {
                 title: 'Manual Task',
@@ -49,7 +41,10 @@ const requestItemsRelease = (releaseId) => {
                 pythonScript: {
                     type: 'servicenow.UpdateRequestItem',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"Updated","comments":"Updated"}',
+                    shortDescription: 'Updated short description from XL Release',
+                    description: 'Updated description from XL Release',
+                    priority: '3 - Moderate',
+                    comments: 'close comments from XL Release',
                     sysId: ''
                 }
             }, {
@@ -69,9 +64,9 @@ const requestItemsRelease = (releaseId) => {
 
 const testSteps = async (releaseId) => {
     let release = Page.openRelease(releaseId);
-    release.start().waitForTaskCompleted('Create New Service item');
+    release.start().waitForTaskCompleted('Create Service item');
 
-    let task = release.openCustomScriptDetails('Create New Service item');
+    let task = release.openCustomScriptDetails('Create Service item');
     var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
     var ticket = await task.taskDetails.element(By.$(`#Ticket .field-readonly`)).getText();
     task.close();

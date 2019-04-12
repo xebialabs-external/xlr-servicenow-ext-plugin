@@ -21,9 +21,12 @@ const changeRequestTaskRelease = (releaseId) => {
                 status: 'planned',
                 owner: 'admin',
                 pythonScript: {
-                    type: 'servicenow.CreateTask',
+                    type: 'servicenow.CreateChangeTask',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"New","comments":"New"}'
+                    shortDescription: 'New Change Task from XL Release',
+                    description: 'Sample description',
+                    priority: '4 - Low',
+                    comments: 'Sample Comments from XL Release'
                 }
             }, {
                 title: 'Manual Task',
@@ -36,10 +39,12 @@ const changeRequestTaskRelease = (releaseId) => {
                 status: 'planned',
                 owner: 'admin',
                 pythonScript: {
-                    type: 'servicenow.UpdateTask',
+                    type: 'servicenow.UpdateChangeTask',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
                     sysId: '',
-                    content: '{"short_description":"Update","comments":"Update"}'
+                    shortDescription: 'Updated Change Task from XL Release',
+                    description: 'Updated Sample description',
+                    comments: 'Update : Sample Comments from XL Release'
                 }
             }, {
                 title: 'Check Status',
@@ -63,7 +68,7 @@ const testSteps = async (releaseId) => {
     release.start().waitForTaskCompleted('Create Change Request Task');
 
     let task = release.openCustomScriptDetails('Create Change Request Task');
-    var sysId = await task.taskDetails.element(By.$(`#taskId .field-readonly`)).getText();
+    var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
     task.close();
 
     task = release.openCustomScriptDetails('Update Task');

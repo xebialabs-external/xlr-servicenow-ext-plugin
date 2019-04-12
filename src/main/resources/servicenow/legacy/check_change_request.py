@@ -30,4 +30,4 @@ else:
     print "Change Request {} is NOT in required state\n".format(number)
     sys.exit(1)
 
-print sn_client.format_record(change_request)
+data = change_request

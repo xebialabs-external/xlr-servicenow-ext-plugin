@@ -27,16 +27,6 @@ const incidentRelease = (releaseId) => {
                     comments: 'comments'
                 }
             }, {
-                title: 'Create New Incident Request',
-                type: 'xlrelease.CustomScriptTask',
-                status: 'planned',
-                owner: 'admin',
-                pythonScript: {
-                    type: 'servicenow.CreateNewIncident',
-                    servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"New","comments":"New"}'
-                }
-            }, {
                 title: 'Manual Task',
                 type: 'xlrelease.Task',
                 status: 'planned',
@@ -49,7 +39,11 @@ const incidentRelease = (releaseId) => {
                 pythonScript: {
                     type: 'servicenow.UpdateIncident',
                     servicenowServer: 'Configuration/Custom/ConfigurationServiceNow',
-                    content: '{"short_description":"Updated","comments":"Updated"}',
+                    shortDescription: 'Updated short description for incident from XL Release',
+                    description: 'Updated description for incident from XL Release',
+                    priority: '3 - Moderate',
+                    closeCode: 'Solved (Permanently)',
+                    closeNotes: 'close notes for incident from XL Release',
                     sysId: ''
                 }
             }, {
@@ -69,9 +63,9 @@ const incidentRelease = (releaseId) => {
 
 const testSteps = async (releaseId) => {
     let release = Page.openRelease(releaseId);
-    release.start().waitForTaskCompleted('Create New Incident Request');
+    release.start().waitForTaskCompleted('Create Incident Request');
 
-    let task = release.openCustomScriptDetails('Create New Incident Request');
+    let task = release.openCustomScriptDetails('Create Incident Request');
     var sysId = await task.taskDetails.element(By.$(`#sysId .field-readonly`)).getText();
     var ticket = await task.taskDetails.element(By.$(`#Ticket .field-readonly`)).getText();
     task.close();
