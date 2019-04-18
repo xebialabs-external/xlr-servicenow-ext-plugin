@@ -41,7 +41,7 @@ class ServiceNowPollStatusClient(object):
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
                 print e
-                print sn_client.print_error(e)
+                print self.sn_client.print_error(e)
                 print "Error finding status for %s" % statusField
             if i == 97:
                 sleepTime = 600
