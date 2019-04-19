@@ -8,6 +8,34 @@ spec:
     type: servicenow.Server
     url: https://dev12345.service-now.com/
     useServicenowApp: true
+  - template: Demo prerequisites
+    scheduledStartDate: 2019-04-19T09:00:00+02:00
+    phases:
+    - phase: New Phase
+      tasks:
+      - name: Create app
+        type: servicenow.Application
+        servicenowServer: Dev
+        ciName: Coolstore
+        description: Coolstore
+        environment: Production
+        version: "2.0"
+        runsOn:
+        - Apache server
+        taskRecoverOp: RUN_SCRIPT
+      - name: If create fails, update!
+        type: servicenow.UpdateApplicationVersion
+        servicenowServer: Dev
+        ciName: Coolstore
+        description: Coolstore
+        version: "2.0"
+      - name: Create change
+        type: servicenow.CreateChangeRequest
+        servicenowServer: Dev
+        shortDescription: XL release demo change
+        assignmentGroup: Change Management
+    scriptUsername: admin
+    riskProfile: Default risk profile    
   - template: ITSM from ServiceNow
     description: ITSM started from a change request in ServiceNow;
     phases:

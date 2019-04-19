@@ -8,6 +8,50 @@ spec:
     type: servicenow.Server
     url: https://dev12345.service-now.com/
     useServicenowApp: true
+  - template: Demo prerequisites
+    scheduledStartDate: 2019-04-19T09:00:00+02:00
+    phases:
+    - phase: New Phase
+      tasks:
+      - name: Create app
+        type: servicenow.Application
+        servicenowServer: Dev
+        ciName: Coolstore
+        description: Coolstore
+        environment: Production
+        version: "2.0"
+        runsOn:
+        - Apache server
+        taskRecoverOp: RUN_SCRIPT
+      - name: If create fails, update!
+        type: servicenow.UpdateApplicationVersion
+        servicenowServer: Dev
+        ciName: Coolstore
+        description: Coolstore
+        version: "2.0"
+      - name: Create story
+        type: servicenow.CreateStory
+        servicenowServer: Dev
+        shortDescription: Demo XL Release story
+        product: CRM Portal
+        sprint: CRM-SPRNT 5
+        acceptanceCriteria: Dubble x
+        variableMapping:
+          pythonScript.sysId: ${storyID}
+      - name: Create scrum task
+        type: servicenow.CreateScrumTask
+        servicenowServer: Dev
+        shortDescription: Coding
+        taskType: Coding
+        plannedHours: "32"
+        story: ${storyID}
+    variables:
+    - type: xlrelease.StringVariable
+      key: storyID
+      requiresValue: false
+      showOnReleaseStart: false
+    scriptUsername: admin
+    riskProfile: Default risk profile
   - template: ITSM & agile from ServiceNow
     description: ITSM & agile started from a story in ServiceNow;
     phases:
