@@ -15,7 +15,7 @@ spec:
       tasks:
       - name: Create app
         type: servicenow.Application
-        servicenowServer: Dev
+        servicenowServer: Example
         ciName: Coolstore
         description: Coolstore
         environment: Production
@@ -25,13 +25,13 @@ spec:
         taskRecoverOp: RUN_SCRIPT
       - name: If create fails, update!
         type: servicenow.UpdateApplicationVersion
-        servicenowServer: Dev
+        servicenowServer: Example
         ciName: Coolstore
         description: Coolstore
         version: "2.0"
       - name: Create story
         type: servicenow.CreateStory
-        servicenowServer: Dev
+        servicenowServer: Example
         shortDescription: Demo XL Release story
         product: CRM Portal
         sprint: CRM-SPRNT 5
@@ -40,7 +40,7 @@ spec:
           pythonScript.sysId: ${storyID}
       - name: Create scrum task
         type: servicenow.CreateScrumTask
-        servicenowServer: Dev
+        servicenowServer: Example
         shortDescription: Coding
         taskType: Coding
         plannedHours: "32"

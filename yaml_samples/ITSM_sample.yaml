@@ -15,7 +15,7 @@ spec:
       tasks:
       - name: Create app
         type: servicenow.Application
-        servicenowServer: Dev
+        servicenowServer: Example
         ciName: Coolstore
         description: Coolstore
         environment: Production
@@ -25,13 +25,13 @@ spec:
         taskRecoverOp: RUN_SCRIPT
       - name: If create fails, update!
         type: servicenow.UpdateApplicationVersion
-        servicenowServer: Dev
+        servicenowServer: Example
         ciName: Coolstore
         description: Coolstore
         version: "2.0"
       - name: Create change
         type: servicenow.CreateChangeRequest
-        servicenowServer: Dev
+        servicenowServer: Example
         shortDescription: XL release demo change
         assignmentGroup: Change Management
     scriptUsername: admin
