@@ -7,15 +7,19 @@
 import sys
 import time
 import traceback
+
+from servicenow import get_deep_link_url, add_code_compliance_facet
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 
 
 class ServiceNowPollStatusClient(object):
 
-    def __init__(self, task_vars):
+    def __init__(self, task_vars, facet_api=None, task=None):
         self.table_name = task_vars['tableName']
         self.task_vars = task_vars
+        self.facet_api = facet_api
+        self.task = task
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
         assert_not_null(task_vars['sysId'], "No sysId provided.")
         assert_not_null(task_vars['tableName'], "No tableName provided.")
@@ -61,6 +65,15 @@ class ServiceNowPollStatusClient(object):
     def process(self):
         data, status = self.process_poll()
         ticket = data['number']
+
+        add_code_compliance_facet(table_name=self.table_name,
+                                  facet_api=self.facet_api,
+                                  task=self.task,
+                                  service_now_server=self.task_vars['servicenowServer'],
+                                  service_now_user=self.task_vars['username'],
+                                  data=data,
+                                  url=get_deep_link_url(self.sn_client.service_now_url, self.table_name, data['sys_id']))
+
         return status, ticket, data
 
-status, ticket, data = ServiceNowPollStatusClient(locals()).process()
+status, ticket, data = ServiceNowPollStatusClient(locals(), facet_api=facetApi, task=task).process()
