@@ -25,11 +25,3 @@ mdl.println("Found '{}' with sysId '{}' in Service Now. \n".format(ciName, sysId
 mdl.print_hr()
 mdl.print_header3("__Links__")
 mdl.print_url("Record Form View", url)
-
-add_code_compliance_facet(table_name=tableName,
-                          facet_api=facetApi,
-                          task=task,
-                          service_now_server=servicenowServer,
-                          service_now_user=username,
-                          data=data,
-                          url=url)
