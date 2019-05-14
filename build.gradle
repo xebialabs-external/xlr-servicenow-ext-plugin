@@ -36,6 +36,7 @@ apply plugin: 'com.xebialabs.dependency'
 
 apply plugin: 'com.xebialabs.xl-release.plugin'
 apply plugin: 'java'
+apply plugin: 'scala'
 apply plugin: 'maven'
 
 /* Configuration of Node */
@@ -51,15 +52,28 @@ def xlrBase = "xl-release-server"
 tasks.release.dependsOn tasks.clean
 tasks.prepare.mustRunAfter tasks.clean
 
+dependencyManagement {
+    importConf "com.xebialabs.xl-platform:xl-reference:${xlPlatformVersion}"
+    importConf rootProject.file('gradle/dependencies.conf')
+}
+
 configurations {
     xlrDist
     xlDslJs
 }
 
 dependencies {
+    compile 'org.scala-lang:scala-library'
     compile "com.xebialabs.deployit:udm-plugin-api"
+
     xlrDist "com.xebialabs.xlrelease:${distName}-base:${xlReleaseVersion}:server@zip"
     xlDslJs "com.xebialabs.xlrelease:e2e-dsl:${xlReleaseVersion}:@zip"
+
+    testCompile "com.xebialabs.xlrelease:xlr-server-test-utils:${xlReleaseVersion}"
+    testCompile "com.xebialabs.xlrelease.modules:xlr-dashboard-module:${xlReleaseVersion}"
+    testCompile "com.xebialabs.xlrelease.modules:xlr-activity-logs-module:${xlReleaseVersion}"
+    testCompile 'com.github.tomakehurst:wiremock'
+    testCompile 'com.google.code.gson:gson'
 }
 
 task yarnRunBuild(type: YarnTask) {

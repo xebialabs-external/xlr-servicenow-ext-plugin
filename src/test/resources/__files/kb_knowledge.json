@@ -1,0 +1,58 @@
+{
+  "result": {
+    "short_description": "Test Article from XL Release",
+    "roles": "",
+    "wiki": "",
+    "direct": "false",
+    "rating": "",
+    "description": "",
+    "source": "",
+    "sys_updated_on": "2019-05-14 03:40:19",
+    "disable_suggesting": "false",
+    "sys_class_name": "Knowledge",
+    "number": "KB0010134",
+    "sys_id": "f583cfd3db95b300cab6ee82ca96193b",
+    "use_count": "0",
+    "sys_updated_by": "xlr",
+    "flagged": "false",
+    "disable_commenting": "false",
+    "sys_created_on": "2019-05-14 03:40:19",
+    "sys_domain": {
+      "display_value": "global",
+      "link": "https://ven02515.service-now.com/api/now/table/sys_user_group/global"
+    },
+    "valid_to": "2020-01-01",
+    "retired": "",
+    "workflow_state": "Draft",
+    "text": "New <i>article</i> from <strong>xlr-servicenow-plugin</strong>",
+    "sys_created_by": "xlr",
+    "display_attachments": "false",
+    "image": "",
+    "sys_view_count": "0",
+    "article_type": "HTML",
+    "cmdb_ci": "",
+    "author": {
+      "display_value": "xl Release",
+      "link": "https://ven02515.service-now.com/api/now/table/sys_user/8870d290db7fa300cab6ee82ca9619aa"
+    },
+    "can_read_user_criteria": "",
+    "sys_mod_count": "0",
+    "active": "true",
+    "cannot_read_user_criteria": "",
+    "published": "",
+    "sys_domain_path": "/",
+    "sys_tags": "",
+    "meta_description": "",
+    "kb_knowledge_base": {
+      "display_value": "Knowledge",
+      "link": "https://ven02515.service-now.com/api/now/table/kb_knowledge_base/dfc19531bf2021003f07e2c1ac0739ab"
+    },
+    "meta": "",
+    "topic": "General",
+    "category": null,
+    "kb_category": {
+      "display_value": "Release Notes",
+      "link": "https://ven02515.service-now.com/api/now/table/kb_category/8479e962db60f380b5326ce2ca9619e8"
+    }
+  }
+}

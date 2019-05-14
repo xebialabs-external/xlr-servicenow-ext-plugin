@@ -656,4 +656,16 @@
         <property name="sysId" category="input" required="true"/>
         <property name="status" category="output"/>
     </type>
+
+    <!-- Remove 'udm.ItsmFacet' once it is merged to the XLR master and new alpha is built    -->
+    <type type="udm.ItsmFacet" extends="xlrelease.TaskFacet" label="ITSM" description="Unified Data Model for ITSM">
+        <property name="serverUrl" category="input" kind="string" required="true" label="Server URL" description="Server URL used to fetch this data."/>
+        <property name="serverUser" category="input" kind="string" required="true" label="Server User" description="User used to fetch this data."/>
+        <property name="recordNumber" category="input" kind="string" required="false" label="Record Number" description="Unique identifier in ITSM."/>
+        <property name="recordUrl" category="input" kind="string" required="false" label="Record URL" description="Link to the record in ITSM."/>
+        <property name="title" category="input" kind="string" required="false" label="Record Title" description="Title of the record in ITSM."/>
+        <property name="status" category="input" kind="string" required="false" label="Status" description="Status of the record."/>
+        <property name="priority" category="input" kind="string" required="false" label="Priority" description="Priority of the record."/>
+        <property name="createdBy" category="input" kind="string" required="false" label="Record Created By" description="Record created by."/>
+    </type>
 </synthetic>
