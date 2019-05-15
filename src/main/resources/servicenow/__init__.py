@@ -25,4 +25,5 @@ def add_code_compliance_facet(table_name, facet_api, task, service_now_server=No
             facet.recordUrl = url
             facet_api.createFacet(facet)
         except:
-            print sys.exc_info()
+            exctype, value = sys.exc_info()[:2]
+            print("{} occurred while creating `udm.ItsmFacet` - {}".format(exctype, value))
