@@ -12,7 +12,7 @@ from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
 
 class ServiceNowRecordClient(object):
 
-    def __init__(self, task_vars, facet_api=None, task=None):
+    def __init__(self, task_vars, facet_api, task):
         self.table_name = task_vars['tableName']
         self.task_vars = task_vars
         self.facet_api = facet_api

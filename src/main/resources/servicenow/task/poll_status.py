@@ -15,7 +15,7 @@ from servicenow.helper.helper import assert_not_null
 
 class ServiceNowPollStatusClient(object):
 
-    def __init__(self, task_vars, facet_api=None, task=None):
+    def __init__(self, task_vars, facet_api, task):
         self.table_name = task_vars['tableName']
         self.task_vars = task_vars
         self.facet_api = facet_api
