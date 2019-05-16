@@ -4,11 +4,14 @@
 # This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
 #
 
-import sys, traceback, time
 import com.xhaus.jyson.JysonCodec as json
+import sys
+import time
+import traceback
+
+from servicenow import get_deep_link_url, add_code_compliance_facet
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
-
 
 assert_not_null(servicenowServer, "Server is mandatory")
 assert_not_null(tableName, "TableName is mandatory")
@@ -36,7 +39,6 @@ except Exception as e:
     print "Failed to create record in Service Now"
     sys.exit(1)
 
-
 is_clear = False
 while not is_clear:
     try:
@@ -54,3 +56,11 @@ while not is_clear:
     except Exception as e:
         print sn_client.print_error(e)
         print "Error finding status for {}".format(sysId)
+
+add_code_compliance_facet(table_name=tableName,
+                          facet_api=facetApi,
+                          task=task,
+                          service_now_server=servicenowServer,
+                          service_now_user=username,
+                          data=data,
+                          url=get_deep_link_url(sn_client.service_now_url, tableName, data['sys_id']))

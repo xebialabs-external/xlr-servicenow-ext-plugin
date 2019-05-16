@@ -656,4 +656,5 @@
         <property name="sysId" category="input" required="true"/>
         <property name="status" category="output"/>
     </type>
+
 </synthetic>
