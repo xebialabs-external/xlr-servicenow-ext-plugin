@@ -16,7 +16,7 @@ import com.xebialabs.xlrelease.builder.TaskBuilder.newCustomScript
 import com.xebialabs.xlrelease.domain.CustomScriptTask
 import com.xebialabs.xlrelease.domain.configuration.HttpConnection
 import com.xebialabs.xlrelease.domain.status.TaskStatus.{IN_PROGRESS, PLANNED}
-import com.xebialabs.xlrelease.repository.TaskRepository
+import com.xebialabs.xlrelease.repository.FacetRepository
 import com.xebialabs.xlrelease.script.ScriptTestService
 import com.xebialabs.xlrelease.{TestIds, XLReleaseIntegrationScalaTest}
 import org.junit.runner.RunWith
@@ -38,7 +38,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
   }
 
   lazy val scriptTestService = springBean[ScriptTestService]
-  lazy val taskRepository = springBean[TaskRepository]
+  lazy val facetRepository = springBean[FacetRepository]
 
   describe("ItsmTask") {
     it("should invoke facet API when create_task is successful") {
@@ -267,12 +267,10 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
                                     priority: String,
                                     createdBy: String): Unit = {
     scriptTestService.executeCustomScriptTask(task)
-    val executedTask: CustomScriptTask = taskRepository.findById(task.getId)
-
-    val facets = executedTask.getFacets
+    val facets = facetRepository.findAllFacetsByTask(task)
     facets should have size (1)
 
-    val facet = facets.get(0)
+    val facet = facets.apply(0)
     facet.getType should equal(Type.valueOf("udm.ItsmFacet"))
     facet.getProperty[String]("serverUrl") shouldBe serverUrl
     facet.getProperty[String]("serverUser") shouldBe serverUser
