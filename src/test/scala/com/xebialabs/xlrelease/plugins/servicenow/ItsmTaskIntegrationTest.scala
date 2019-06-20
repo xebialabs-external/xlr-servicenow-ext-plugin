@@ -270,7 +270,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
     val facets = facetRepository.findAllFacetsByTask(task)
     facets should have size (1)
 
-    val facet = facets.get(0)
+    val facet = facets.apply(0)
     facet.getType should equal(Type.valueOf("udm.ItsmFacet"))
     facet.getProperty[String]("serverUrl") shouldBe serverUrl
     facet.getProperty[String]("serverUser") shouldBe serverUser
