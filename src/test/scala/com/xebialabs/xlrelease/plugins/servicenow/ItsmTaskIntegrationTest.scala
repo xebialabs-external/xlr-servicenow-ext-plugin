@@ -16,7 +16,7 @@ import com.xebialabs.xlrelease.builder.TaskBuilder.newCustomScript
 import com.xebialabs.xlrelease.domain.CustomScriptTask
 import com.xebialabs.xlrelease.domain.configuration.HttpConnection
 import com.xebialabs.xlrelease.domain.status.TaskStatus.{IN_PROGRESS, PLANNED}
-import com.xebialabs.xlrelease.repository.FacetRepository
+import com.xebialabs.xlrelease.repository.FacetRepositoryDispatcher
 import com.xebialabs.xlrelease.script.ScriptTestService
 import com.xebialabs.xlrelease.{TestIds, XLReleaseIntegrationScalaTest}
 import org.junit.runner.RunWith
@@ -38,7 +38,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
   }
 
   lazy val scriptTestService = springBean[ScriptTestService]
-  lazy val facetRepository = springBean[FacetRepository]
+  lazy val facetRepository = springBean[FacetRepositoryDispatcher]
 
   describe("ItsmTask") {
     it("should invoke facet API when create_task is successful") {
