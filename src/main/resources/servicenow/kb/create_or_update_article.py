@@ -4,7 +4,7 @@
 # This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
 #
 
-from servicenow import add_code_compliance_facet
+from servicenow import add_code_compliance_record
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
@@ -12,9 +12,9 @@ from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
 
 class PublishArticleClient(object):
 
-    def __init__(self, task_vars, facet_api, task):
+    def __init__(self, task_vars, task_reporting_api, task):
         self.task_vars = task_vars
-        self.facet_api = facet_api
+        self.task_reporting_api = task_reporting_api
         self.task = task
         assert_not_null(task_vars['servicenowServer'], "No server provided.")
         assert_not_null(task_vars['knowledgeBase'], "No knowledge base provided.")
@@ -49,8 +49,8 @@ class PublishArticleClient(object):
         data = self.sn_client.get_record('kb_knowledge', sys_id)
         self.print_links(sys_id)
 
-        add_code_compliance_facet(table_name='kb_knowledge',
-                                  facet_api=self.facet_api,
+        add_code_compliance_record(table_name='kb_knowledge',
+                                  task_reporting_api=self.task_reporting_api,
                                   task=self.task,
                                   service_now_server=self.task_vars['servicenowServer'],
                                   service_now_user=self.task_vars['username'],
@@ -58,4 +58,4 @@ class PublishArticleClient(object):
                                   url='%s/kb_view.do?sys_kb_id=%s' % (self.sn_client.service_now_url, sys_id))
         return data
 
-data = PublishArticleClient(locals(), facet_api=facetApi, task=task).process()
+data = PublishArticleClient(locals(), task_reporting_api=taskReportingApi, task=task).process()

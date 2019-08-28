@@ -41,12 +41,12 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
   lazy val facetRepository = springBean[FacetRepositoryDispatcher]
 
   describe("ItsmTask") {
-    it("should invoke facet API when create_task is successful") {
+    it("should invoke task reporting API when create_task is successful") {
       val task = createTask("servicenow.CreateChangeRequest",
         Map("servicenowServer" -> servicenowServer(),
           "shortDescription" -> "short description from XL Release"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CHG0030696",
@@ -57,13 +57,13 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         createdBy = "xlr")
     }
 
-    it("should invoke facet API when update_task is successful") {
+    it("should invoke task reporting API when update_task is successful") {
       val task = createTask("servicenow.UpdateIncident",
         Map("servicenowServer" -> servicenowServer(),
           "shortDescription" -> "update short description from XL Release",
           "sysId" -> "a5ac06cfdb997300cab6ee82ca96191f"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "INC0010340",
@@ -74,14 +74,14 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         createdBy = "xlr")
     }
 
-    it("should invoke facet API when poll_status is successful") {
+    it("should invoke task reporting API when poll_status is successful") {
       val task = createTask("servicenow.PollingCheckStatus",
         Map("servicenowServer" -> servicenowServer(),
           "statusField" -> "state",
           "sysId" -> "439c0e4fdb997300cab6ee82ca96196b",
           "checkForStatus" -> "New"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CHG0030696",
@@ -104,7 +104,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         Map("servicenowServer" -> servicenowServer(),
           "number" -> "CHG0030700"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CHG0030700",
@@ -123,7 +123,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
           "tableName" -> "change_task",
           "sysId" -> "34bc0e4bdbd97300b5326ce2ca96190d"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CTASK0010260",
@@ -141,7 +141,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
           "number" -> "CHG0030696",
           "fieldNames" -> "priority,state"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CHG0030696",
@@ -174,7 +174,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
           "shortDescription" -> "provide approval please",
           "description" -> "need your approval"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CHG0030700",
@@ -191,7 +191,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         Map("servicenowServer" -> servicenowServer(),
           "parent" -> "439c0e4fdb997300cab6ee82ca96196b"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CTASK0010260",
@@ -208,7 +208,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         Map("servicenowServer" -> servicenowServer(),
           "query" -> "number=INC0010340"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "INC0010340",
@@ -224,7 +224,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         Map("servicenowServer" -> servicenowServer(),
           "ticket" -> "CHG0030696"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "CHG0030696",
@@ -244,7 +244,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
           "shortDescription" -> "Test Article from XL Release",
           "articleText" -> "New <i>article</i> from <strong>xlr-servicenow-plugin"))
 
-      executeAndVerifyFacet(task = task,
+      executeAndVerifyRecord(task = task,
         serverUrl = s"http://localhost:${wireMockServer.port()}",
         serverUser = "xlr",
         record = "KB0010134",
@@ -257,7 +257,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
     }
   }
 
-  private def executeAndVerifyFacet(task: CustomScriptTask,
+  private def executeAndVerifyRecord(task: CustomScriptTask,
                                     serverUrl: String,
                                     serverUser: String,
                                     record: String,
@@ -267,19 +267,19 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
                                     priority: String,
                                     createdBy: String): Unit = {
     scriptTestService.executeCustomScriptTask(task)
-    val facets = facetRepository.findAllFacetsByTask(task)
-    facets should have size (1)
+    val records = facetRepository.findAllFacetsByTask(task)
+    records should have size (1)
 
-    val facet = facets.apply(0)
-    facet.getType should equal(Type.valueOf("udm.ItsmFacet"))
-    facet.getProperty[String]("serverUrl") shouldBe serverUrl
-    facet.getProperty[String]("serverUser") shouldBe serverUser
-    facet.getProperty[String]("record") shouldBe record
-    facet.getProperty[String]("record_url") shouldBe record_url
-    facet.getProperty[String]("title") shouldBe title
-    facet.getProperty[String]("status") shouldBe status
-    facet.getProperty[String]("priority") shouldBe priority
-    facet.getProperty[String]("createdBy") shouldBe createdBy
+    val record = records.apply(0)
+    record.getType should equal(Type.valueOf("udm.ItsmRecord"))
+    record.getProperty[String]("serverUrl") shouldBe serverUrl
+    record.getProperty[String]("serverUser") shouldBe serverUser
+    record.getProperty[String]("record") shouldBe record
+    record.getProperty[String]("record_url") shouldBe record_url
+    record.getProperty[String]("title") shouldBe title
+    record.getProperty[String]("status") shouldBe status
+    record.getProperty[String]("priority") shouldBe priority
+    record.getProperty[String]("createdBy") shouldBe createdBy
   }
 
   private def createTask(taskType: String, propertyMap: Map[String, _]): CustomScriptTask = {
