@@ -5,6 +5,8 @@
  */
 package com.xebialabs.xlrelease.plugins.servicenow
 
+import java.util.Date
+
 import akka.http.scaladsl.model.headers.LinkParams.title
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
@@ -270,16 +272,17 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
     val records = facetRepository.findAllFacetsByTask(task)
     records should have size (1)
 
-    val record = records.apply(0)
-    record.getType should equal(Type.valueOf("udm.ItsmRecord"))
-    record.getProperty[String]("serverUrl") shouldBe serverUrl
-    record.getProperty[String]("serverUser") shouldBe serverUser
-    record.getProperty[String]("record") shouldBe record
-    record.getProperty[String]("record_url") shouldBe record_url
-    record.getProperty[String]("title") shouldBe title
-    record.getProperty[String]("status") shouldBe status
-    record.getProperty[String]("priority") shouldBe priority
-    record.getProperty[String]("createdBy") shouldBe createdBy
+    val itsmRecord = records.apply(0)
+    itsmRecord.getType should equal(Type.valueOf("udm.ItsmRecord"))
+    itsmRecord.getProperty[String]("serverUrl") shouldBe serverUrl
+    itsmRecord.getProperty[String]("serverUser") shouldBe serverUser
+    itsmRecord.getProperty[String]("record") shouldBe record
+    itsmRecord.getProperty[String]("record_url") shouldBe record_url
+    itsmRecord.getProperty[String]("title") shouldBe title
+    itsmRecord.getProperty[String]("status") shouldBe status
+    itsmRecord.getProperty[String]("priority") shouldBe priority
+    itsmRecord.getProperty[String]("createdBy") shouldBe createdBy
+    itsmRecord.getProperty[Date]("creationDate") should not be null
   }
 
   private def createTask(taskType: String, propertyMap: Map[String, _]): CustomScriptTask = {
