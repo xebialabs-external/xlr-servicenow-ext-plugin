@@ -6,7 +6,7 @@
 
 import sys
 
-from servicenow import get_deep_link_url, add_code_compliance_facet
+from servicenow import get_deep_link_url, add_code_compliance_record
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 
@@ -32,8 +32,8 @@ else:
     print "Change Request {} is NOT in required state\n".format(number)
     sys.exit(1)
 
-add_code_compliance_facet(table_name=tableName,
-                          facet_api=facetApi,
+add_code_compliance_record(table_name=tableName,
+                          task_reporting_api=taskReportingApi,
                           task=task,
                           service_now_server=servicenowServer,
                           service_now_user=username,

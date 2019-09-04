@@ -4,7 +4,7 @@
 # This software and all trademarks, trade names, and logos included herein are the property of XebiaLabs, Inc. and its affiliates, subsidiaries and licensors.
 #
 
-from servicenow import get_deep_link_url, add_code_compliance_facet
+from servicenow import get_deep_link_url
 from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
