@@ -23,7 +23,7 @@ def add_code_compliance_record(table_name, task_reporting_api, task, service_now
             record.priority = data['priority'] if data and 'priority' in data else None
             record.createdBy = data['sys_created_by'] if data and 'sys_created_by' in data else None
             record.record_url = url
-            task_reporting_api.createRecord(record)
+            task_reporting_api.addRecord(record, True)
         except:
             exctype, value = sys.exc_info()[:2]
             print("{} occurred while creating `udm.ItsmRecord` - {}".format(exctype, value))
