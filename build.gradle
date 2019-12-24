@@ -70,8 +70,9 @@ dependencies {
     xlDslJs "com.xebialabs.xlrelease:e2e-dsl:${xlReleaseVersion}:@zip"
 
     testCompile "com.xebialabs.xlrelease:xlr-server-test-utils:${xlReleaseVersion}"
-    testCompile "com.xebialabs.xlrelease.modules:xlr-dashboard-module:${xlReleaseVersion}"
     testCompile "com.xebialabs.xlrelease.modules:xlr-activity-logs-module:${xlReleaseVersion}"
+    testCompile "com.xebialabs.xlrelease.modules:xlr-dashboard-module:${xlReleaseVersion}"
+    testCompile "com.xebialabs.xlrelease.modules:xlr-trigger-management-module:${xlReleaseVersion}"
     testCompile "com.xebialabs.xlrelease.modules:xlr-udm-reporting-module:${xlReleaseVersion}"
     testCompile 'com.github.tomakehurst:wiremock'
     testCompile 'com.google.code.gson:gson'
