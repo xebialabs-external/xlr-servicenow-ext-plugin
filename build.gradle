@@ -18,13 +18,12 @@ buildscript {
         classpath "com.xebialabs.gradle.plugins:gradle-xl-plugins-plugin:${xlPluginsPluginVersion}"
         classpath "com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:${xlReleasePluginPluginVersion}"
         classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${licenseGradlePluginVersion}"
-        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
     }
 }
 
 plugins {
     id 'java'
-    id 'com.moowork.node' version '0.12'
+    id "com.github.node-gradle.node" version "2.2.0"
     id "com.github.rzabini.gradle-jython" version "1.0.0"
     id "com.github.hierynomus.license" version "0.14.0"
 }
@@ -32,6 +31,7 @@ plugins {
 apply plugin: 'com.github.hierynomus.license'
 apply plugin: 'xebialabs.root.opinions'
 apply plugin: 'xebialabs.opinions'
+apply plugin: 'xebialabs.artifact'
 apply plugin: 'com.xebialabs.dependency'
 
 apply plugin: 'com.xebialabs.xl-release.plugin'
@@ -167,12 +167,6 @@ dependencies {
 
 uploadArchives {
     repositories {
-        maven {
-            credentials {
-                username nexusUserName
-                password nexusPassword
-            }
-            url "${nexusBaseUrl}/repositories/releases/"
-        }
+        mavenDeployer
     }
 }
