@@ -299,6 +299,7 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
 
   private def servicenowServer(): HttpConnection = {
     val server: HttpConnection = Type.valueOf("servicenow.Server").getDescriptor.newInstance(TestIds.CONFIGURATION1)
+    server.setProperty("title", "Mock ServiceNow Server")
     server.setProperty("url", s"http://localhost:${wireMockServer.port}")
     server.setUsername("xlr")
     server.setPassword("xlr")
