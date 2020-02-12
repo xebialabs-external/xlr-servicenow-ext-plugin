@@ -252,8 +252,8 @@ class ItsmTaskIntegrationTest extends XLReleaseIntegrationScalaTest {
         record = "KB0010134",
         record_url = s"http://localhost:${wireMockServer.port()}/kb_view.do?sys_kb_id=f583cfd3db95b300cab6ee82ca96193b",
         title = "Test Article from XL Release",
-        status = null,
-        priority = null,
+        status = "Not available",
+        priority = "Not available",
         createdBy = "xlr")
 
     }

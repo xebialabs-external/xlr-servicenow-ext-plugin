@@ -15,13 +15,13 @@ def add_code_compliance_record(table_name, task_reporting_api, task, service_now
         try:
             record = task_reporting_api.newItsmRecord()
             record.targetId = task.id
-            record.serverUrl = service_now_server['url'] if service_now_server else None
-            record.serverUser = service_now_user or (service_now_server['username'] if service_now_server else None)
-            record.record = data['number'] if data and 'number' in data else None
-            record.title = data['short_description'] if data and 'short_description' in data else None
-            record.status = data['state'] if data and 'state' in data else None
-            record.priority = data['priority'] if data and 'priority' in data else None
-            record.createdBy = data['sys_created_by'] if data and 'sys_created_by' in data else None
+            record.serverUrl = service_now_server['url'] if service_now_server else "Not available"
+            record.serverUser = service_now_user or (service_now_server['username'] if service_now_server else "Not available")
+            record.record = data['number'] if data and 'number' in data else "Not available"
+            record.title = data['short_description'] if data and 'short_description' in data else "Not available"
+            record.status = data['state'] if data and 'state' in data else "Not available"
+            record.priority = data['priority'] if data and 'priority' in data else "Not available"
+            record.createdBy = data['sys_created_by'] if data and 'sys_created_by' in data else "Not available"
             record.record_url = url
             task_reporting_api.addRecord(record, True)
         except:
