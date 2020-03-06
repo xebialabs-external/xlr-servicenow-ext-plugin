@@ -163,11 +163,7 @@ dependencies {
     xlReleaseAdditionalClasspath('com.xebialabs.deployit:udm-plugin-api:2015.2.13')
 }
 
-releasePlugin {
-  excludeFromVersionCheck = [
-      [groupId: 'org.apache.geronimo.specs']
-  ]
-}
+
 
 uploadArchives {
     repositories {
