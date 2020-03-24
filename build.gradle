@@ -13,6 +13,9 @@ buildscript {
         }
     }
     dependencies {
+        if (project.gradle.startParameter.taskNames.contains("final")) {
+            classpath "com.netflix.nebula:nebula-release-plugin:${nebulaReleasePluginVersion}"
+        }
         // xl plugins plugin is required by xl-release-plugin-plugin
         // it also pulls in release plugin and  opinion plugins that configure repositories and such
         classpath "com.xebialabs.gradle.plugins:gradle-xl-plugins-plugin:${xlPluginsPluginVersion}"
@@ -97,7 +100,7 @@ task fetchE2eDsl(type: Copy) {
     into "${buildDir}/e2e-dsl"
 }
 
-task overwriteLocalXldDsl(type: Copy, dependsOn: fetchE2eDsl){
+task overwriteLocalXldDsl(type: Copy, dependsOn: fetchE2eDsl) {
     from "${projectDir}/src/test/resources/e2e-dsl"
     into "${buildDir}/e2e-dsl"
 }
@@ -162,7 +165,6 @@ task licenseCheckJs(type: com.hierynomus.gradle.license.tasks.LicenseCheck) {
 dependencies {
     xlReleaseAdditionalClasspath('com.xebialabs.deployit:udm-plugin-api:2015.2.13')
 }
-
 
 
 uploadArchives {
