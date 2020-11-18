@@ -1,0 +1,369 @@
+[
+  {
+    "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7",
+    "type": "xlrelease.Release",
+    "title": "cherwell demo",
+    "scheduledStartDate": "2019-09-01T16:00:00Z",
+    "flagStatus": "OK",
+    "overdueNotified": false,
+    "maxConcurrentReleases": 100,
+    "releaseTriggers": [],
+    "teams": [
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Team32837ec874db4ce09b4149ccbbddbc32",
+        "type": "xlrelease.Team",
+        "teamName": "Template Owner",
+        "members": [
+          "admin"
+        ],
+        "roles": [],
+        "permissions": [
+          "template#edit",
+          "template#lock_task",
+          "template#view",
+          "template#edit_triggers",
+          "template#edit_security",
+          "template#create_release"
+        ]
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Teamd979d8758bba44ccaa067ff3c1266a9d",
+        "type": "xlrelease.Team",
+        "teamName": "Release Admin",
+        "members": [],
+        "roles": [],
+        "permissions": [
+          "release#edit",
+          "release#lock_task",
+          "release#start",
+          "release#reassign_task",
+          "release#edit_blackout",
+          "template#view",
+          "release#edit_security",
+          "release#abort",
+          "release#view",
+          "release#edit_task"
+        ]
+      }
+    ],
+    "memberViewers": [
+      "admin"
+    ],
+    "roleViewers": [],
+    "attachments": [],
+    "phases": [
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651",
+        "type": "xlrelease.Phase",
+        "title": "New Phase",
+        "flagStatus": "OK",
+        "overdueNotified": false,
+        "tasks": [
+          {
+            "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Taskd9cc15b3365b43409e7b08b88f2ad1a9",
+            "type": "xlrelease.CustomScriptTask",
+            "title": "Create Business Object",
+            "flagStatus": "OK",
+            "overdueNotified": false,
+            "comments": [],
+            "container": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651",
+            "facets": [],
+            "attachments": [],
+            "status": "PLANNED",
+            "waitForScheduledStartDate": true,
+            "delayDuringBlackout": false,
+            "postponedDueToBlackout": false,
+            "hasBeenFlagged": false,
+            "hasBeenDelayed": false,
+            "taskFailureHandlerEnabled": false,
+            "failuresCount": 0,
+            "variableMapping": {
+              "pythonScript.businessObjectRecId": "${createdBORecId}",
+              "pythonScript.businessObjectPublicId": "${createdBOPubId}"
+            },
+            "tags": [],
+            "dueSoonNotified": false,
+            "locked": false,
+            "checkAttributes": false,
+            "watchers": [],
+            "pythonScript": {
+              "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Taskd9cc15b3365b43409e7b08b88f2ad1a9/PythonScript",
+              "type": "cherwell.CreateBusinessObject",
+              "customScriptTask": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Taskd9cc15b3365b43409e7b08b88f2ad1a9",
+              "server": "Configuration/Custom/Cherwell Server",
+              "businessObjectJson": "{     \"busObId\": \"${busObId}\",     \"fields\": [         {         \"dirty\": true,         \"displayName\": \"string\",         \"fieldId\": \"93543f7fa541b6c5befc264642875724a8be1797d1\",         \"html\": \"string\",         \"name\": \"RequestedBy\",         \"value\": \"${requestedByValue}\"         },         {         \"dirty\": true,         \"displayName\": \"string\",         \"fieldId\": \"9407d01580d0329f81f00b42bb9d680962dad97aba\",         \"html\": \"string\",         \"name\": \"Title\",         \"value\": \"${titleValue}\"         },         {         \"dirty\": true,         \"displayName\": \"string\",         \"fieldId\": \"934fb3e2b82015e7ec07fa41098a9efcb20b1e49d6\",         \"html\": \"string\",         \"name\": \"Description\",         \"value\": \"${descriptionValue}\"         }     ] }"
+            },
+            "keepPreviousOutputPropertiesOnRetry": false
+          },
+          {
+            "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task566995adee4041418f046fa444af7ea5",
+            "type": "xlrelease.CustomScriptTask",
+            "title": "Poll Business Object",
+            "flagStatus": "OK",
+            "overdueNotified": false,
+            "comments": [],
+            "container": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651",
+            "facets": [],
+            "attachments": [],
+            "status": "PLANNED",
+            "waitForScheduledStartDate": true,
+            "delayDuringBlackout": false,
+            "postponedDueToBlackout": false,
+            "hasBeenFlagged": false,
+            "hasBeenDelayed": false,
+            "taskFailureHandlerEnabled": false,
+            "failuresCount": 0,
+            "variableMapping": {
+              "pythonScript.statusResult": "${finalRetreivedStatus}"
+            },
+            "tags": [],
+            "dueSoonNotified": false,
+            "locked": false,
+            "checkAttributes": false,
+            "watchers": [],
+            "pythonScript": {
+              "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task566995adee4041418f046fa444af7ea5/PythonScript",
+              "type": "cherwell.PollStatus",
+              "customScriptTask": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task566995adee4041418f046fa444af7ea5",
+              "server": "Configuration/Custom/Cherwell Server",
+              "businessObjectId": "${busObId}",
+              "businessObjectPublicId": "${createdBOPubId}",
+              "statusFieldName": "Status",
+              "expectedStatusList": [
+                "Scheduled"
+              ],
+              "pollInterval": 15,
+              "pollTimeoutCount": 10
+            },
+            "keepPreviousOutputPropertiesOnRetry": false
+          },
+          {
+            "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task7fa1228c9244498aadf575c3d632a2a5",
+            "type": "xlrelease.CustomScriptTask",
+            "title": "Update Business Object",
+            "flagStatus": "OK",
+            "overdueNotified": false,
+            "comments": [],
+            "container": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651",
+            "facets": [],
+            "attachments": [],
+            "status": "PLANNED",
+            "waitForScheduledStartDate": true,
+            "delayDuringBlackout": false,
+            "postponedDueToBlackout": false,
+            "hasBeenFlagged": false,
+            "hasBeenDelayed": false,
+            "taskFailureHandlerEnabled": false,
+            "failuresCount": 0,
+            "variableMapping": {
+              "pythonScript.updatedBusObjRecId": "${updatedBORecId}",
+              "pythonScript.updatedBusObjPubId": "${updatedBOPublicId}"
+            },
+            "tags": [],
+            "dueSoonNotified": false,
+            "locked": false,
+            "checkAttributes": false,
+            "watchers": [],
+            "pythonScript": {
+              "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task7fa1228c9244498aadf575c3d632a2a5/PythonScript",
+              "type": "cherwell.UpdateBusinessObject",
+              "customScriptTask": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task7fa1228c9244498aadf575c3d632a2a5",
+              "server": "Configuration/Custom/Cherwell Server",
+              "businessObjectId": "${busObId}",
+              "businessObjectRecId": "${createdBORecId}",
+              "fields": {
+                "Status": "New Value",
+                "Title": "New Title"
+              }
+            },
+            "keepPreviousOutputPropertiesOnRetry": false
+          },
+          {
+            "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task7a3b3b62e4214402b4db0ab76a0aa805",
+            "type": "xlrelease.CustomScriptTask",
+            "title": "Get Business Object",
+            "flagStatus": "OK",
+            "overdueNotified": false,
+            "comments": [],
+            "container": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651",
+            "facets": [],
+            "attachments": [],
+            "status": "PLANNED",
+            "waitForScheduledStartDate": true,
+            "delayDuringBlackout": false,
+            "postponedDueToBlackout": false,
+            "hasBeenFlagged": false,
+            "hasBeenDelayed": false,
+            "taskFailureHandlerEnabled": false,
+            "failuresCount": 0,
+            "variableMapping": {
+              "pythonScript.fields": "${getBOFields}",
+              "pythonScript.businessObjectPublicId": "${getBOPubId}"
+            },
+            "tags": [],
+            "dueSoonNotified": false,
+            "locked": false,
+            "checkAttributes": false,
+            "watchers": [],
+            "pythonScript": {
+              "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task7a3b3b62e4214402b4db0ab76a0aa805/PythonScript",
+              "type": "cherwell.GetBusinessObjectRecord",
+              "customScriptTask": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task7a3b3b62e4214402b4db0ab76a0aa805",
+              "server": "Configuration/Custom/Cherwell Server",
+              "businessObjectId": "${busObId}",
+              "businessObjectRecId": "${updatedBORecId}",
+              "fields": {}
+            },
+            "keepPreviousOutputPropertiesOnRetry": false
+          },
+          {
+            "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task8556f4ff2ff04678ad9de4152e8be3a8",
+            "type": "xlrelease.CustomScriptTask",
+            "title": "Get Teams",
+            "flagStatus": "OK",
+            "overdueNotified": false,
+            "comments": [],
+            "container": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651",
+            "facets": [],
+            "attachments": [],
+            "status": "PLANNED",
+            "waitForScheduledStartDate": true,
+            "delayDuringBlackout": false,
+            "postponedDueToBlackout": false,
+            "hasBeenFlagged": false,
+            "hasBeenDelayed": false,
+            "taskFailureHandlerEnabled": false,
+            "failuresCount": 0,
+            "variableMapping": {
+              "pythonScript.teams": "${getTeams}"
+            },
+            "tags": [],
+            "dueSoonNotified": false,
+            "locked": false,
+            "checkAttributes": false,
+            "watchers": [],
+            "pythonScript": {
+              "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task8556f4ff2ff04678ad9de4152e8be3a8/PythonScript",
+              "type": "cherwell.GetTeams",
+              "customScriptTask": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Phase5dfe3e64aa3b490abccc3d07d8f9c651/Task8556f4ff2ff04678ad9de4152e8be3a8",
+              "server": "Configuration/Custom/Cherwell Server",
+              "teams": {}
+            },
+            "keepPreviousOutputPropertiesOnRetry": false
+          }
+        ],
+        "release": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7",
+        "status": "PLANNED"
+      }
+    ],
+    "queryableStartDate": "2019-09-01T16:00:00Z",
+    "realFlagStatus": "OK",
+    "status": "TEMPLATE",
+    "tags": [],
+    "variables": [
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variablebfb521dd7e4645478c14886436936e00",
+        "type": "xlrelease.StringVariable",
+        "key": "busObId",
+        "requiresValue": true,
+        "showOnReleaseStart": true,
+        "label": "Business Object ID",
+        "value": "934ec7a1701c451ce57f2c43bfbbe2e46fe4843f81"
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable36091d152cf2475483952726ae4689e7",
+        "type": "xlrelease.StringVariable",
+        "key": "descriptionValue",
+        "requiresValue": true,
+        "showOnReleaseStart": true,
+        "value": "myDescription"
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable717a7c1db4964b0b9f98b7fc4f589809",
+        "type": "xlrelease.StringVariable",
+        "key": "requestedByValue",
+        "requiresValue": true,
+        "showOnReleaseStart": true,
+        "value": "myRequestedBy"
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variablefdb45a27be7946cc9207d3c25343f291",
+        "type": "xlrelease.StringVariable",
+        "key": "titleValue",
+        "requiresValue": true,
+        "showOnReleaseStart": true,
+        "value": "myTitle"
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable3dcb5895f3e84112ab7e5308ba70eac3",
+        "type": "xlrelease.StringVariable",
+        "key": "createdBORecId",
+        "requiresValue": false,
+        "showOnReleaseStart": false
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable6622f91b940d4a4fa0db3a1efc3430e9",
+        "type": "xlrelease.StringVariable",
+        "key": "createdBOPubId",
+        "requiresValue": false,
+        "showOnReleaseStart": false
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variablea0571010db65437e8166ce76603f104e",
+        "type": "xlrelease.StringVariable",
+        "key": "finalRetreivedStatus",
+        "requiresValue": false,
+        "showOnReleaseStart": false
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable62581a202869475aa4c6fa5b508069f3",
+        "type": "xlrelease.StringVariable",
+        "key": "updatedBOPublicId",
+        "requiresValue": false,
+        "showOnReleaseStart": false
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable2888d987e7224815b6e34046b1e590c5",
+        "type": "xlrelease.StringVariable",
+        "key": "updatedBORecId",
+        "requiresValue": false,
+        "showOnReleaseStart": false
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variablec3eb74572e5c4381ac40d270ebbbd9b8",
+        "type": "xlrelease.MapStringStringVariable",
+        "key": "getBOFields",
+        "requiresValue": false,
+        "showOnReleaseStart": false,
+        "value": {}
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable2970f41b9a940038a035cc9069bc93b",
+        "type": "xlrelease.StringVariable",
+        "key": "getBOPubId",
+        "requiresValue": false,
+        "showOnReleaseStart": false
+      },
+      {
+        "id": "Applications/Release3186fbe6fa547a5b22d64f5a03d85f7/Variable1149c86a38df4d5fb4b165cbb33810a0",
+        "type": "xlrelease.MapStringStringVariable",
+        "key": "getTeams",
+        "requiresValue": false,
+        "showOnReleaseStart": false,
+        "value": {}
+      }
+    ],
+    "calendarPublished": false,
+    "tutorial": false,
+    "abortOnFailure": false,
+    "allowConcurrentReleasesFromTrigger": true,
+    "runningTriggeredReleasesCount": 0,
+    "createdFromTrigger": false,
+    "extensions": [],
+    "autoStart": false,
+    "automatedResumeCount": 0,
+    "riskScore": "000",
+    "totalRiskScore": "0000",
+    "riskProfile": "Configuration/riskProfiles/Default risk profile"
+  }
+]
