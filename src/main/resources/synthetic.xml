@@ -21,7 +21,7 @@
     <type type="servicenow.CreateRTask" extends="servicenow.Base" label="ServiceNow: Create RTask">
         <property name="scriptLocation" default="servicenow/task/create_rtask.py" hidden="true"/>
         <property name="tableName" category="input" label="Table Name" default="u_request_task" required="true" hidden="true"/>
-        <property name="ticket_number" category="input" label="REQ Id" required="true" />
+        <property name="u_request" category="input" label="REQ SysId" required="true" />
         <property name="u_application_name" category="input" label="Application Name" />
         <property name="cmdb_ci" category="input" label="Configuration Item" description="Related CMDB configuration item (id or display value)." />
         <property name="priority" description="The priority of the task." category="input" required="false" kind="enum">

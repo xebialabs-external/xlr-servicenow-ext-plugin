@@ -11,7 +11,10 @@ from servicenow.client.ServiceNowClient import ServiceNowClient
 from servicenow.helper.helper import assert_not_null
 from servicenow.markdown.markdown_logger import MarkdownLogger as mdl
 
+from java.text import SimpleDateFormat
+
 import logging
+import logging.handlers
 import os
 
 LOG_FILENAME = 'log/snow-ext-plugin.log'
@@ -52,7 +55,7 @@ class ServiceNowRecordClient(object):
 
     def process_record(self):
         content = {}
-        self.set_from_task_vars('ticket_number', content)
+        self.set_from_task_vars('u_request', content)
         self.set_from_task_vars('u_application_name', content)
         self.set_from_task_vars('cmdb_ci', content)
         self.set_from_task_vars('priority', content)
@@ -62,6 +65,10 @@ class ServiceNowRecordClient(object):
         self.set_from_task_vars('due_date', content)
         self.set_from_task_vars('short_description', content)
         self.set_from_task_vars('description', content)
+
+        # Dates need to be converted
+        sdf = SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        content['due_date'] = sdf.format(self.task_vars['due_date'])
 
         # Also sending release info.
         content['x_xlbv_xl_release_identifier'] = str(release.id)
